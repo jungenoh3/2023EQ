@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "48453559325",
+    "project_id": "spring-firebase-28e22",
+    "storage_bucket": "spring-firebase-28e22.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:48453559325:android:699c7a8ee03cf9c6a992f4",
+        "android_client_info": {
+          "package_name": "com.example.api_test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "48453559325-gcki2tsca33q1pqkp1tco5ooh90epeak.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA45uSoFR036jYc-6xXc_fuNJUwmhRZzZQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "48453559325-gcki2tsca33q1pqkp1tco5ooh90epeak.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:48453559325:android:7d49f3baf3693dbba992f4",
+        "android_client_info": {
+          "package_name": "com.example.pushnotification_test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "48453559325-gcki2tsca33q1pqkp1tco5ooh90epeak.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA45uSoFR036jYc-6xXc_fuNJUwmhRZzZQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "48453559325-gcki2tsca33q1pqkp1tco5ooh90epeak.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
