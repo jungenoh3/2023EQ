@@ -24,8 +24,8 @@ class Setting extends StatelessWidget {
         bottom: false,
         child: Column(
           mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
               ElevatedButton(
                   onPressed: _LineFriends,

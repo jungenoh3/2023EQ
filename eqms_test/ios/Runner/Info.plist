@@ -52,5 +52,8 @@
       <string>https</string>
       <string>http</string>
     </array>
+    <string>위치 정보가 필요합니다.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>위치 정보가 필요합니다.</string>
 </dict>
 </plist>

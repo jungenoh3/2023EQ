@@ -82,12 +82,12 @@ class FirebaseApi {
     print('Token: ${fCMToken}');
     final url = Uri.parse('http://155.230.118.78:1234/FCMToken/check');
     final http.Response response = await http.post(url, body: fCMToken);
-
     if (response.statusCode < 200 || response.statusCode > 400){
-      print('something wrong');
+      print('error code: ${response.statusCode}');
+      return;
     } else {
       if (response.body == "subscribe"){
-        _firebaseMessaging.subscribeToTopic("EQMS");
+        _firebaseMessaging.subscribeToTopic("EQMS"); // void여서 뭘 반환할 수가 없어...
         print("subscribed");
       }
     }

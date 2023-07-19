@@ -67,16 +67,18 @@ public class FCMTokenController {
     }
 
     @GetMapping("/deprecated")
-    public List<String> CheckDeprecated() throws FirebaseMessagingException {
+    public void CheckDeprecated() throws FirebaseMessagingException {
         List<String> fcmTokenList = fcmTokenRep.findAllDeprecated();
         if (fcmTokenList != null ){
             TopicManagementResponse response = firebaseMessaging.unsubscribeFromTopic(
                     fcmTokenList, "EQMS"
             );
-            System.out.print("실패:" + response.getFailureCount());
-            System.out.print("성공한 것:" + response.getSuccessCount());
-            fcmTokenRep.deleteAllByIdInBatch(fcmTokenList);
+            if (response.getFailureCount() > 0 ){
+                System.out.print(response.getErrors());
+            } else {
+                fcmTokenRep.deleteAllByIdInBatch(fcmTokenList);
+                System.out.print("Success: " + response.getSuccessCount());
+            }
         }
-        return fcmTokenList;
     }
 }
