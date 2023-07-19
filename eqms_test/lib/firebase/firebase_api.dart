@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -76,10 +77,25 @@ class FirebaseApi {
     });
   }
 
-  Future<void> initNotifications() async {
-    await _firebaseMessaging.requestPermission();
+  Future<void> checkFCMToken() async {
     final fCMToken = await _firebaseMessaging.getToken();
     print('Token: ${fCMToken}');
+    final url = Uri.parse('http://155.230.118.78:1234/FCMToken/check');
+    final http.Response response = await http.post(url, body: fCMToken);
+
+    if (response.statusCode < 200 || response.statusCode > 400){
+      print('something wrong');
+    } else {
+      if (response.body == "subscribe"){
+        _firebaseMessaging.subscribeToTopic("EQMS");
+        print("subscribed");
+      }
+    }
+  }
+
+  Future<void> initNotifications() async {
+    await _firebaseMessaging.requestPermission();
+    checkFCMToken();
     initPushNotifications();
   }
 
