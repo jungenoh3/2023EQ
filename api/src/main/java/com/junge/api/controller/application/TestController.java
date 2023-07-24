@@ -1,29 +1,24 @@
-package com.junge.api.controller;
+package com.junge.api.controller.application;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.*;
-import com.junge.api.Model.FCMNotification;
-import com.junge.api.Model.SensorInfo;
-import com.junge.api.Repository.SensorInfoRep;
-import com.linecorp.bot.client.LineMessagingClient;
-import com.linecorp.bot.model.PushMessage;
-import com.linecorp.bot.model.message.TextMessage;
-import com.linecorp.bot.model.response.BotApiResponse;
+import com.junge.api.Model.application.SensorInfo;
+import com.junge.api.Repository.application.SensorInfoRep;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/sensor-info")
-public class SensorController {
+public class TestController {
     private final SensorInfoRep sensorInfoRep;
     private final FirebaseMessaging firebaseMessaging;
     private final List<SensorInfo> sensorDataList = new ArrayList<SensorInfo>();
 
-    public SensorController(SensorInfoRep sensorInfoRep, FirebaseMessaging firebaseMessaging) {
+    public TestController(SensorInfoRep sensorInfoRep, FirebaseMessaging firebaseMessaging) {
         this.sensorInfoRep = sensorInfoRep;
         this.firebaseMessaging = firebaseMessaging;
     }
@@ -49,18 +44,25 @@ public class SensorController {
         return sensorDataList;
     }
 
-    @PostMapping("/FCMTopic")
-    public String sendtoTopic() throws FirebaseMessagingException {
-        List<String> registationTokens = Arrays.asList(
-                "coRTOZiMQj-BbYzcasphxU:APA91bEwqxAB9_4gQnU8PkPW60vEqzVW-I80jHQ-GYqelB1XTnFMf0Nv-0z4nVm3LgdLw65UsFNoxu-JnK4Mw_a_ZGpXL39NXsmEkdwcWOp4YfK4a_uSl0Hy03yRre4mhDMTUD5shmXv"
-        );
-
-        TopicManagementResponse repsonse = firebaseMessaging.subscribeToTopic(
-             registationTokens, "EQMS"
-        );
-
-        return repsonse.getSuccessCount() + " tokens were subscribed successfully";
+    @PostMapping("/Real-time-test")
+    public void RealTimeDataBase(@RequestBody String data) {
+        final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference reference = firebaseDatabase.getReference("server/saving-data/fireblog");
+        reference.setValueAsync(data);
     }
+
+//    @PostMapping("/FCMTopic")
+//    public String sendtoTopic() throws FirebaseMessagingException {
+//        List<String> registationTokens = Arrays.asList(
+//                "coRTOZiMQj-BbYzcasphxU:APA91bEwqxAB9_4gQnU8PkPW60vEqzVW-I80jHQ-GYqelB1XTnFMf0Nv-0z4nVm3LgdLw65UsFNoxu-JnK4Mw_a_ZGpXL39NXsmEkdwcWOp4YfK4a_uSl0Hy03yRre4mhDMTUD5shmXv"
+//        );
+//
+//        TopicManagementResponse repsonse = firebaseMessaging.subscribeToTopic(
+//             registationTokens, "EQMS"
+//        );
+//
+//        return repsonse.getSuccessCount() + " tokens were subscribed successfully";
+//    }
 
 //    @PostMapping("FCMTopicmessage")
 //    public String sendFCMTopic() throws FirebaseMessagingException {

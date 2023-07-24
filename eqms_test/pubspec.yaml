@@ -39,10 +39,21 @@ dependencies:
   firebase_messaging: ^14.6.5
   flutter_local_notifications: ^15.1.0+1
   url_launcher: ^6.1.12
-  firebase_auth: ^4.7.1
   http: ^1.1.0
+  # http: ^0.13.5
   google_maps_flutter: ^2.3.1
   geolocator: ^9.0.2
+  firebase_database: ^10.2.4
+  dio: ^5.3.0
+  retrofit: ^4.0.1
+  retrofit_generator: ^7.0.8
+  build_runner: ^2.4.6
+  json_annotation: ^4.8.1
+  json_serializable: ^6.7.1
+  google_maps_flutter_android: ^2.4.15 # 오류 방지용
+  google_maps_flutter_platform_interface: ^2.4.0 # 오류 방지용
+  google_maps_cluster_manager: ^3.0.0+1
+  # sse_channel: ^0.0.3
 
 dev_dependencies:
   flutter_test:

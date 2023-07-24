@@ -1,6 +1,6 @@
-package com.junge.api.Model;
+package com.junge.api.Model.application;
 
-public interface SpecificOnly{
+public interface SensorInfoSpecific {
     Long getId();
     String getDeviceid();
     double getLatitude();

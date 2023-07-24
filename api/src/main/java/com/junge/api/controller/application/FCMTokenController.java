@@ -1,9 +1,9 @@
-package com.junge.api.controller;
+package com.junge.api.controller.application;
 
 import com.google.firebase.messaging.*;
-import com.junge.api.Model.FCMNotification;
-import com.junge.api.Model.FCMToken;
-import com.junge.api.Repository.FCMTokenRep;
+import com.junge.api.Model.server.FCMNotification;
+import com.junge.api.Model.application.FCMToken;
+import com.junge.api.Repository.application.FCMTokenRep;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -21,7 +21,7 @@ public class FCMTokenController {
         this.firebaseMessaging = firebaseMessaging;
     }
 
-    @PostMapping("/check-message")
+    @PostMapping("/check-message") // 메세지 잘 받는지 확인용
     public String EQMSFCMTopic() throws FirebaseMessagingException {
     FCMNotification fcmNotification = new FCMNotification();
 
@@ -49,7 +49,7 @@ public class FCMTokenController {
         }
     }
 
-    @PostMapping("/check")
+    @PostMapping("/check") // 토큰 받아서 DB로 보내기
     public String CheckToken(@RequestBody String token) {
         FCMToken response = fcmTokenRep.getReferenceBytoken(token);
 

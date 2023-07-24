@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class EQ_Info extends StatefulWidget {
-  const EQ_Info({super.key});
+class Google_Map extends StatefulWidget {
+  const Google_Map({super.key});
 
   @override
-  State<EQ_Info> createState() => _EQ_InfoState();
+  State<Google_Map> createState() => _Google_MapState();
 }
 
-class _EQ_InfoState extends State<EQ_Info> {
+class _Google_MapState extends State<Google_Map> {
   // latitude - 위도, longitude - 경도
   static final LatLng companyLatLng = LatLng(
       35.8881525,
@@ -19,6 +19,7 @@ class _EQ_InfoState extends State<EQ_Info> {
     target: companyLatLng,
     zoom: 15,
   );
+
   static final Circle circle = Circle(
     circleId: CircleId('circle'),
     center: companyLatLng,

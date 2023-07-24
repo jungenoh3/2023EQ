@@ -1,6 +1,6 @@
-package com.junge.api.Repository;
+package com.junge.api.Repository.application;
 
-import com.junge.api.Model.FCMToken;
+import com.junge.api.Model.application.FCMToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

@@ -1,4 +1,4 @@
-package com.junge.api.Model;
+package com.junge.api.Model.application;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

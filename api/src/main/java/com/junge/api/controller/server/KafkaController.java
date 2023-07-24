@@ -1,32 +1,46 @@
-//package com.junge.api.service;
+//
+//package com.junge.api.controller.server;
 //
 //
 //import com.fasterxml.jackson.databind.ObjectMapper;
+//import com.google.firebase.database.DatabaseReference;
+//import com.google.firebase.database.FirebaseDatabase;
 //import com.google.firebase.messaging.FirebaseMessaging;
 //import com.google.firebase.messaging.FirebaseMessagingException;
 //import com.google.firebase.messaging.Message;
 //import com.google.firebase.messaging.Notification;
-//import com.junge.api.Model.FCMNotification;
-//import com.junge.api.Model.KafkaModel;
+//import com.junge.api.Model.server.FCMNotification;
+//import com.junge.api.Model.server.RealTimeData;
 //import com.linecorp.bot.client.LineMessagingClient;
 //import com.linecorp.bot.model.PushMessage;
 //import com.linecorp.bot.model.message.TextMessage;
 //import com.linecorp.bot.model.response.BotApiResponse;
 //import org.apache.kafka.clients.consumer.ConsumerRecord;
-//import org.json.simple.parser.ParseException;
 //import org.springframework.kafka.annotation.KafkaListener;
 //import org.springframework.stereotype.Component;
 //
 //import java.io.IOException;
+//import java.util.Map;
 //import java.util.concurrent.ExecutionException;
 //
 //@Component
-//public class KafkaListeners {
-//    private final FirebaseMessaging firebaseMessaging;
+//public class KafkaController {
 //
-//    public KafkaListeners(FirebaseMessaging firebaseMessaging) {
+//    private final FirebaseDatabase firebaseDatabase;
+//    private final FirebaseMessaging firebaseMessaging;
+//    private final ObjectMapper mapper = new ObjectMapper();
+//
+//    public KafkaController(FirebaseDatabase firebaseDatabase, FirebaseMessaging firebaseMessaging) {
+//        this.firebaseDatabase = firebaseDatabase;
 //        this.firebaseMessaging = firebaseMessaging;
 //    }
+//
+//    public void RealTimeDataBase(RealTimeData realTimeData) {
+//        DatabaseReference reference = firebaseDatabase.getReference(String.format("server/EQMS/%s", realTimeData.getSensor_id()));
+//        Map mapdata = mapper.convertValue(realTimeData, Map.class);
+//        reference.setValueAsync(mapdata);
+//    }
+//
 //
 //    private String EQMSLineAPI(Double data){
 //        final LineMessagingClient client = LineMessagingClient
@@ -77,14 +91,14 @@
 //    }
 //
 //    private void kafkaMessageProcess(String kafkaData) throws IOException, FirebaseMessagingException {
-//        ObjectMapper mapper = new ObjectMapper();
-//        KafkaModel kafkaModel = mapper.readValue(kafkaData, KafkaModel.class);
+//        RealTimeData realTimeData = mapper.readValue(kafkaData, RealTimeData.class);
 //
-//        System.out.println("Data: " + kafkaModel.getSensor_id() + " " + kafkaModel.getAddress() + " " + kafkaModel.getValue());
+//        System.out.println("Data: " + realTimeData.getSensor_id());
 //
-//        if (kafkaModel.getValue() > 10){
-//            String LineAnswer = EQMSLineAPI(kafkaModel.getValue());
-//            String FCMAnswer = EQMSFCMTopic(kafkaModel.getValue());
+//        if (realTimeData.getAcc_x() > 10){
+//            RealTimeDataBase(realTimeData);
+//            String LineAnswer = EQMSLineAPI(realTimeData.getAcc_x());
+//            String FCMAnswer = EQMSFCMTopic(realTimeData.getAcc_x());
 //            System.out.println(LineAnswer + " " + FCMAnswer);
 //        }
 //
@@ -96,3 +110,4 @@
 //    }
 //
 //}
+//

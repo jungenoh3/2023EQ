@@ -1,4 +1,4 @@
-package com.junge.api.Model;
+package com.junge.api.Model.application;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;

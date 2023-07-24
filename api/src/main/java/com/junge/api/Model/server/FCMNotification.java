@@ -1,4 +1,4 @@
-package com.junge.api.Model;
+package com.junge.api.Model.server;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

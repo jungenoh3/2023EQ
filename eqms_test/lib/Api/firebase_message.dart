@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -9,7 +11,7 @@ Future<void> handleBackgroundMessage(RemoteMessage message) async {
   print('Payload: ${message?.data}');
 }
 
-class FirebaseApi {
+class FirebaseMessageApi {
   final _firebaseMessaging = FirebaseMessaging.instance;
   final _localNotifications = FlutterLocalNotificationsPlugin();
 
@@ -77,26 +79,41 @@ class FirebaseApi {
     });
   }
 
-  Future<void> checkFCMToken() async {
+  Future<void> check_initNotifiaction() async {
     final fCMToken = await _firebaseMessaging.getToken();
     print('Token: ${fCMToken}');
+
     final url = Uri.parse('http://155.230.118.78:1234/FCMToken/check');
-    final http.Response response = await http.post(url, body: fCMToken);
-    if (response.statusCode < 200 || response.statusCode > 400){
-      print('error code: ${response.statusCode}');
-      return;
-    } else {
+    try {
+      final http.Response response = await http
+          .post(url, body: fCMToken)
+          .timeout(const Duration(seconds: 3),
+          onTimeout: () { throw TimeoutException('3초가 지났습니다.');
+          });
       if (response.body == "subscribe"){
-        _firebaseMessaging.subscribeToTopic("EQMS"); // void여서 뭘 반환할 수가 없어...
+        _firebaseMessaging.subscribeToTopic("EQMS");
         print("subscribed");
       }
+      initPushNotifications();
+    } on TimeoutException {
+      print('Timeout Exception: $TimeoutException');
+      return;
+    } on SocketException {
+      print('Socket Exception. error code: $SocketException');
+      return;
     }
   }
 
   Future<void> initNotifications() async {
-    await _firebaseMessaging.requestPermission();
-    checkFCMToken();
-    initPushNotifications();
+    final isMessageEnabled = await _firebaseMessaging.requestPermission();
+    if (isMessageEnabled.authorizationStatus == AuthorizationStatus.authorized
+    || isMessageEnabled.authorizationStatus == AuthorizationStatus.provisional
+    ){
+      print('메세지 권한이 허가되었습니다.');
+      check_initNotifiaction();
+    } else {
+      print('메세지 권한을 허가해주세요.');
+    }
+    return;
   }
-
 }
