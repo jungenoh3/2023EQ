@@ -14,6 +14,6 @@ class EQ_Info extends StatefulWidget {
 class _EQ_InfoState extends State<EQ_Info> {
   @override
   Widget build(BuildContext context) {
-    return const Google_Map();
+    return const Google_Map(mode: 1,);
   }
 }

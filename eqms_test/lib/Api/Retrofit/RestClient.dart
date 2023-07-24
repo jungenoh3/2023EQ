@@ -4,12 +4,15 @@ import 'package:dio/dio.dart';
 
 part 'RestClient.g.dart';
 
-@RestApi(baseUrl: 'http://155.230.118.78:1234')
+@RestApi(baseUrl: 'http://155.230.118.78:1234/EQMS')
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
   @GET('/sensor-info/all')
   Future<List<SensorInfo>> getSensorInformation();
+
+  @GET('/shelter/specific')
+  Future<List<Shelter>> getShelter();
 }
 
 @JsonSerializable()
@@ -28,4 +31,18 @@ class SensorInfo {
 
   factory SensorInfo.fromJson(Map<String, dynamic> json) => _$SensorInfoFromJson(json);
   Map<String, dynamic> toJson() => _$SensorInfoToJson(this);
+}
+
+
+@JsonSerializable()
+class Shelter {
+  int id;
+  String dtl_adres;
+  double xcord;
+  double ycord;
+
+  Shelter({required this.id, required this.dtl_adres, required this.xcord, required this.ycord});
+
+  factory Shelter.fromJson(Map<String, dynamic> json) => _$ShelterFromJson(json);
+  Map<String, dynamic> toJson() => _$ShelterToJson(this);
 }

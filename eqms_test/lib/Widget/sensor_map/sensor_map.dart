@@ -11,6 +11,6 @@ class Sensor_Map extends StatefulWidget {
 class _Sensor_MapState extends State<Sensor_Map> {
   @override
   Widget build(BuildContext context) {
-    return const Google_Map();
+    return const Google_Map(mode: 3,);
   }
 }
