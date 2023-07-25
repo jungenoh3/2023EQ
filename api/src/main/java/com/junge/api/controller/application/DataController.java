@@ -14,13 +14,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/EQMS")
-public class TestController {
+public class DataController {
     private final SensorInfoRep sensorInfoRep;
     private final ShelterRep shelterRep;
     private final FirebaseMessaging firebaseMessaging;
     private final List<SensorInfo> sensorDataList = new ArrayList<SensorInfo>();
 
-    public TestController(SensorInfoRep sensorInfoRep, ShelterRep shelterRep, FirebaseMessaging firebaseMessaging) {
+    public DataController(SensorInfoRep sensorInfoRep, ShelterRep shelterRep, FirebaseMessaging firebaseMessaging) {
         this.sensorInfoRep = sensorInfoRep;
         this.shelterRep = shelterRep;
         this.firebaseMessaging = firebaseMessaging;

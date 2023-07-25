@@ -1,11 +1,34 @@
-// import 'package:flutter/material.dart';
-// import 'package:sse_channel/sse_channel.dart'; // < 사용하려면 http 다운그래이드 해야함
-//
-// void getData() {
-//   final channel =
-//   SseChannel.connect(Uri.parse('http://155.230.118.78:1234/server-events'));
-//
-//   channel.stream.listen((data) {
-//     print(data);
-//   });
-// }
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+import 'package:flutter/material.dart';
+
+Future<void> getData() async {
+  final url = Uri.parse('http://155.230.118.78:1234/server-events');
+  final client = http.Client();
+
+  try {
+    final response = await client.send(http.Request('GET', url));
+    if (response.statusCode == 200){
+      final stream = response.stream;
+      stream.transform(utf8.decoder).listen((data) {
+        print('Received data: $data');
+      }, onError: (error) {
+        print('Error occurred: $error');
+      }, cancelOnError: true
+      );
+    } else {
+      print('Request failed with status: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('Error occurred: $e');
+  }
+
+  // final channel =
+  // SseChannel.connect(Uri.parse('http://155.230.118.78:1234/server-events'));
+
+  // channel.stream.listen((data) {
+  //   print(data);
+  // });
+}
