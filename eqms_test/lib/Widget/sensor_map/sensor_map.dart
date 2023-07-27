@@ -9,8 +9,16 @@ class Sensor_Map extends StatefulWidget {
 }
 
 class _Sensor_MapState extends State<Sensor_Map> {
+
+
   @override
   Widget build(BuildContext context) {
     return const Google_Map(mode: 3,);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    print('Sensor_map initState');
   }
 }

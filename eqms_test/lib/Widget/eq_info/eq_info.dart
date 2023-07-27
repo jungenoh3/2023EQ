@@ -1,7 +1,8 @@
 import 'package:eqms_test/Widget/google_map.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 
 
 class EQ_Info extends StatefulWidget {
@@ -11,8 +12,26 @@ class EQ_Info extends StatefulWidget {
   State<EQ_Info> createState() => _EQ_InfoState();
 }
 
-class _EQ_InfoState extends State<EQ_Info> {
+class _EQ_InfoState extends State<EQ_Info> with AutomaticKeepAliveClientMixin {
   int mode = 1;
+  final url = Uri.parse('http://155.230.118.78:1234/server-events');
+  final client = http.Client();
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    getServerData();
+    print('EQ_Info initState');
+  }
+
+  @override
+  void dispose() {
+    client.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,5 +72,29 @@ class _EQ_InfoState extends State<EQ_Info> {
       ),
       body: Google_Map(mode: mode,),
     );
+  }
+
+  Future<void> getServerData() async {
+    try {
+      final response = await client.send(http.Request('GET', url));
+      if (response.statusCode == 200){
+        final stream = response.stream;
+        stream.transform(utf8.decoder).listen((data) {
+          if (data.contains("Earthquake")){
+            setState(() {
+              mode = 0;
+            });
+          }
+          print('Received data: $data');
+        }, onError: (error) {
+          print('onError occurred: $error');
+        }, cancelOnError: true
+        );
+      } else {
+        print('Request failed with status: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error occurred: $e');
+    }
   }
 }

@@ -6,6 +6,7 @@ import com.google.firebase.messaging.*;
 import com.junge.api.Model.application.SensorInfo;
 import com.junge.api.Repository.application.SensorInfoRep;
 import com.junge.api.Repository.application.ShelterRep;
+import com.junge.api.Repository.server.EarthQuakeDataRep;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,12 +18,14 @@ import java.util.List;
 public class DataController {
     private final SensorInfoRep sensorInfoRep;
     private final ShelterRep shelterRep;
+    private final EarthQuakeDataRep earthQuakeDataRep;
     private final FirebaseMessaging firebaseMessaging;
     private final List<SensorInfo> sensorDataList = new ArrayList<SensorInfo>();
 
-    public DataController(SensorInfoRep sensorInfoRep, ShelterRep shelterRep, FirebaseMessaging firebaseMessaging) {
+    public DataController(SensorInfoRep sensorInfoRep, ShelterRep shelterRep, EarthQuakeDataRep earthQuakeDataRep, FirebaseMessaging firebaseMessaging) {
         this.sensorInfoRep = sensorInfoRep;
         this.shelterRep = shelterRep;
+        this.earthQuakeDataRep = earthQuakeDataRep;
         this.firebaseMessaging = firebaseMessaging;
     }
 
@@ -46,6 +49,10 @@ public class DataController {
     public ResponseEntity getSpecificShelter(){
         return ResponseEntity.ok(this.shelterRep.getNeed());
     }
+    @GetMapping("/earthquake/all")
+    public ResponseEntity getEarthQuakeData() { return ResponseEntity.ok(this.earthQuakeDataRep.findAll());}
+    @GetMapping("/earthquake/specific")
+    public ResponseEntity getSpecificEarthQuakeData() { return ResponseEntity.ok(this.earthQuakeDataRep.findAllOngoing());}
 
     @PostMapping("/post")
     public void PostData(@RequestBody SensorInfo sensorInfo) throws Exception {

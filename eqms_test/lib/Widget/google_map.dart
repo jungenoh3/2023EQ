@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
@@ -32,11 +33,13 @@ class Google_MapState extends State<Google_Map> {
   final CameraPosition _CameraPosition =
   CameraPosition(target: LatLng(35.8881525, 128.6109335), zoom: 6.8);
 
-  List<Place> items = [];
+  List<Place> marker_items = [];
+  List<Circle> circle_items = [];
 
   @override
   void initState() {
     super.initState();
+    print('google_map initState');
     _updateClusterData();
     checkPermission().then((value){
       setState(() {
@@ -50,7 +53,7 @@ class Google_MapState extends State<Google_Map> {
 
   ClusterManager _initClusterManager() {
     return ClusterManager<Place>(
-        items,
+        marker_items,
         _updateMarkers,
         markerBuilder: _markerBuilder,
         levels: [1, 3, 6.8, 9, 11, 13, 15, 17, 19, 20],
@@ -64,8 +67,16 @@ class Google_MapState extends State<Google_Map> {
     });
   }
 
+  // void _updateCircles(Set<Circle> circles) {
+  //   print('_updateCircles: $circles');
+  //   setState(() {
+  //     this.circles = circles;
+  //   });
+  // }
+
   @override
   Widget build(BuildContext context) {
+    print('google_map build');
     return _isPermissionGranted ? buildGoogleMap() : buildPermissionDenied();
   }
 
@@ -82,7 +93,13 @@ class Google_MapState extends State<Google_Map> {
           _manager.setMapId(controller.mapId);
         },
         onCameraMove: _manager.onCameraMove,
-        onCameraIdle: _manager.updateMap);
+        onCameraIdle: _manager.updateMap,
+        gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+          Factory<OneSequenceGestureRecognizer>(
+              () => EagerGestureRecognizer(),
+          ),
+        },
+    );
   }
 
   Widget buildPermissionDenied() {
@@ -115,6 +132,7 @@ class Google_MapState extends State<Google_Map> {
   @override
   void didUpdateWidget(covariant Google_Map oldWidget) {
     super.didUpdateWidget(oldWidget);
+    print('google_map didUpdateWidget');
     if(widget.mode != oldWidget.mode){
       _updateClusterData();
     }
@@ -125,14 +143,32 @@ class Google_MapState extends State<Google_Map> {
     client = RestClient(dio);
     if (widget.mode == 0) {
       setState(() {
-        items = [];
-        _manager.setItems(items);
+        circles.clear();
+        client.getEarthQuake().then((value) {
+          if(value.length > 0){
+            for(int i =0; i< value.length; i++){
+              circles.add(
+                Circle(
+                  circleId: CircleId(value[i].id.toString()),
+                  center: LatLng(value[i].latitude, value[i].longitude),
+                  fillColor: Colors.blue.withOpacity(0.5),
+                  radius: value[i].magnitude * 10000,
+                  strokeColor: Colors.blueAccent,
+                  strokeWidth: 1,
+                )
+              );
+            }
+          }
+        });
+        marker_items.clear();
+        _manager.setItems(marker_items);
       });
     }
     else if (widget.mode == 1){
       client.getShelter().then((value){
         setState(() {
-          items = [
+          circles.clear();
+          marker_items = [
             for (int i = 0; i< value.length; i++)
               Place(
                   id: value[i].id.toString(),
@@ -140,20 +176,22 @@ class Google_MapState extends State<Google_Map> {
                   latLng: LatLng(value[i].ycord, value[i].xcord)
               ),
           ];
-          _manager.setItems(items);
+          _manager.setItems(marker_items);
         });
       });
     }
     else if (widget.mode == 2){
       setState(() {
-        items = [];
-        _manager.setItems(items);
+        circles.clear();
+        marker_items.clear();
+        _manager.setItems(marker_items);
       });
     }
     else if (widget.mode == 3){
       client.getSensorInformation().then((value){
         setState(() {
-          items = [
+          circles.clear();
+          marker_items = [
             for (int i = 0; i< value.length; i++)
               Place(
                   id: value[i].deviceid,
@@ -161,7 +199,7 @@ class Google_MapState extends State<Google_Map> {
                   latLng: LatLng(value[i].latitude, value[i].longitude)
               ),
           ];
-          _manager.setItems(items);
+          _manager.setItems(marker_items);
         });
       });
     }

@@ -13,6 +13,9 @@ abstract class RestClient {
 
   @GET('/shelter/specific')
   Future<List<Shelter>> getShelter();
+
+  @GET('/earthquake/specific')
+  Future<List<EarthQuake>> getEarthQuake();
 }
 
 @JsonSerializable()
@@ -45,4 +48,18 @@ class Shelter {
 
   factory Shelter.fromJson(Map<String, dynamic> json) => _$ShelterFromJson(json);
   Map<String, dynamic> toJson() => _$ShelterToJson(this);
+}
+
+@JsonSerializable()
+class EarthQuake {
+  int id;
+  double magnitude;
+  double latitude;
+  double longitude;
+  DateTime update_time;
+
+  EarthQuake({required this.id, required this.magnitude, required this.latitude, required this.longitude, required this.update_time});
+
+  factory EarthQuake.fromJson(Map<String, dynamic> json) => _$EarthQuakeFromJson(json);
+  Map<String, dynamic> toJson() => _$EarthQuakeToJson(this);
 }

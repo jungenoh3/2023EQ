@@ -43,6 +43,23 @@ Map<String, dynamic> _$ShelterToJson(Shelter instance) => <String, dynamic>{
       'ycord': instance.ycord,
     };
 
+EarthQuake _$EarthQuakeFromJson(Map<String, dynamic> json) => EarthQuake(
+      id: json['id'] as int,
+      magnitude: (json['magnitude'] as num).toDouble(),
+      latitude: (json['latitude'] as num).toDouble(),
+      longitude: (json['longitude'] as num).toDouble(),
+      update_time: DateTime.parse(json['update_time'] as String),
+    );
+
+Map<String, dynamic> _$EarthQuakeToJson(EarthQuake instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'magnitude': instance.magnitude,
+      'latitude': instance.latitude,
+      'longitude': instance.longitude,
+      'update_time': instance.update_time.toIso8601String(),
+    };
+
 // **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
@@ -115,6 +132,35 @@ class _RestClient implements RestClient {
             ))));
     var value = _result.data!
         .map((dynamic i) => Shelter.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
+  Future<List<EarthQuake>> getEarthQuake() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<List<dynamic>>(_setStreamType<List<EarthQuake>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/earthquake/specific',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    var value = _result.data!
+        .map((dynamic i) => EarthQuake.fromJson(i as Map<String, dynamic>))
         .toList();
     return value;
   }
