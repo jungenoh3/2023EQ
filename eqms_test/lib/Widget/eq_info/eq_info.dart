@@ -1,3 +1,4 @@
+import 'package:eqms_test/Widget/GoogleMapMode.dart';
 import 'package:eqms_test/Widget/google_map.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -13,7 +14,7 @@ class EQ_Info extends StatefulWidget {
 }
 
 class _EQ_InfoState extends State<EQ_Info> with AutomaticKeepAliveClientMixin {
-  int mode = 1;
+  GoogleMapMode mode = GoogleMapMode.shelter;
   final url = Uri.parse('http://155.230.118.78:1234/server-events');
   final client = http.Client();
 
@@ -47,23 +48,19 @@ class _EQ_InfoState extends State<EQ_Info> with AutomaticKeepAliveClientMixin {
               label: Text('지진 정보'),
               onPressed: () {
                 setState(() {
-                  if (mode != 0) mode = 0;
-                });
-              },
-            ),
+                  if (mode != GoogleMapMode.EQinfo) mode = GoogleMapMode.EQinfo;});
+                }),
             ActionChip(
               label: Text('대피소 정보'),
               onPressed: () {
                 setState(() {
-                  if (mode != 1) mode = 1;
-                });
-              },
-            ),
-            ActionChip(
+                  if (mode != GoogleMapMode.shelter) mode = GoogleMapMode.shelter;});
+                }),
+               ActionChip(
               label: Text('내진 설계'),
               onPressed: () {
                 setState(() {
-                  if (mode != 2) mode = 2;
+                  if (mode != GoogleMapMode.empty) mode = GoogleMapMode.empty;
                 });
               },
             ),
@@ -82,14 +79,13 @@ class _EQ_InfoState extends State<EQ_Info> with AutomaticKeepAliveClientMixin {
         stream.transform(utf8.decoder).listen((data) {
           if (data.contains("Earthquake")){
             setState(() {
-              mode = 0;
+              mode = GoogleMapMode.EQupdate;
             });
           }
           print('Received data: $data');
         }, onError: (error) {
           print('onError occurred: $error');
-        }, cancelOnError: true
-        );
+        }, cancelOnError: true);
       } else {
         print('Request failed with status: ${response.statusCode}');
       }

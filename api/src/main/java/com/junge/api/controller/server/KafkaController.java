@@ -8,7 +8,7 @@ import com.google.firebase.messaging.Notification;
 import com.junge.api.Model.server.Earthquake;
 import com.junge.api.Model.server.FCMNotification;
 import com.junge.api.Model.server.SensorData;
-import com.junge.api.Repository.server.EarthQuakeDataRep;
+import com.junge.api.Repository.server.EarthquakeDataRep;
 import com.junge.api.Repository.server.SensorDataRep;
 import com.linecorp.bot.client.LineMessagingClient;
 import com.linecorp.bot.model.PushMessage;
@@ -31,13 +31,13 @@ import java.util.concurrent.ExecutionException;
 @RequestMapping()
 public class KafkaController {
     private final SensorDataRep sensorDataRep;
-    private final EarthQuakeDataRep earthQuakeDataRep;
+    private final EarthquakeDataRep earthQuakeDataRep;
     private final FirebaseMessaging firebaseMessaging;
     private final ObjectMapper mapper = new ObjectMapper();
     private Sinks.Many<String> realTimeDataMany = Sinks.many().multicast().onBackpressureBuffer();
 
 
-    public KafkaController(SensorDataRep sensorDataRep, EarthQuakeDataRep earthQuakeDataRep, FirebaseMessaging firebaseMessaging) {
+    public KafkaController(SensorDataRep sensorDataRep, EarthquakeDataRep earthQuakeDataRep, FirebaseMessaging firebaseMessaging) {
         this.sensorDataRep = sensorDataRep;
         this.earthQuakeDataRep = earthQuakeDataRep;
         this.firebaseMessaging = firebaseMessaging;
@@ -98,7 +98,6 @@ public class KafkaController {
 
         // sensorDataRep.save(sensorData);
 
-        System.out.println("Data: " + sensorData.getDeviceid());
         if (sensorData.getAcc_x() > 10){
             Earthquake earthQuake = new Earthquake(sensorData.getLatitude(), sensorData.getLongitude(),
                     ts, sensorData.getAcc_x()/10);

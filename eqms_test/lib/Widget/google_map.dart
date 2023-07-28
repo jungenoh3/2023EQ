@@ -10,9 +10,10 @@ import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:ui' as ui;
 import '../Api/Retrofit/RestClient.dart';
+import 'GoogleMapMode.dart';
 
 class Google_Map extends StatefulWidget {
-  final int mode;
+  final GoogleMapMode mode;
 
   const Google_Map({
     required this.mode,
@@ -66,13 +67,6 @@ class Google_MapState extends State<Google_Map> {
       this.markers = markers;
     });
   }
-
-  // void _updateCircles(Set<Circle> circles) {
-  //   print('_updateCircles: $circles');
-  //   setState(() {
-  //     this.circles = circles;
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -136,16 +130,19 @@ class Google_MapState extends State<Google_Map> {
     if(widget.mode != oldWidget.mode){
       _updateClusterData();
     }
+    else if (widget.mode == GoogleMapMode.EQupdate){
+      _updateClusterData();
+    }
   }
 
   void _updateClusterData(){
     final dio = Dio();
     client = RestClient(dio);
-    if (widget.mode == 0) {
+    if (widget.mode == GoogleMapMode.EQinfo || widget.mode == GoogleMapMode.EQupdate) {
       setState(() {
         circles.clear();
         client.getEarthQuake().then((value) {
-          if(value.length > 0){
+          if(value.isNotEmpty){
             for(int i =0; i< value.length; i++){
               circles.add(
                 Circle(
@@ -164,7 +161,7 @@ class Google_MapState extends State<Google_Map> {
         _manager.setItems(marker_items);
       });
     }
-    else if (widget.mode == 1){
+    else if (widget.mode == GoogleMapMode.shelter){
       client.getShelter().then((value){
         setState(() {
           circles.clear();
@@ -180,14 +177,14 @@ class Google_MapState extends State<Google_Map> {
         });
       });
     }
-    else if (widget.mode == 2){
+    else if (widget.mode == GoogleMapMode.empty){
       setState(() {
         circles.clear();
         marker_items.clear();
         _manager.setItems(marker_items);
       });
     }
-    else if (widget.mode == 3){
+    else if (widget.mode == GoogleMapMode.sensor){
       client.getSensorInformation().then((value){
         setState(() {
           circles.clear();

@@ -6,7 +6,7 @@ import com.google.firebase.messaging.*;
 import com.junge.api.Model.application.SensorInfo;
 import com.junge.api.Repository.application.SensorInfoRep;
 import com.junge.api.Repository.application.ShelterRep;
-import com.junge.api.Repository.server.EarthQuakeDataRep;
+import com.junge.api.Repository.server.EarthquakeDataRep;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,11 +18,11 @@ import java.util.List;
 public class DataController {
     private final SensorInfoRep sensorInfoRep;
     private final ShelterRep shelterRep;
-    private final EarthQuakeDataRep earthQuakeDataRep;
+    private final EarthquakeDataRep earthQuakeDataRep;
     private final FirebaseMessaging firebaseMessaging;
     private final List<SensorInfo> sensorDataList = new ArrayList<SensorInfo>();
 
-    public DataController(SensorInfoRep sensorInfoRep, ShelterRep shelterRep, EarthQuakeDataRep earthQuakeDataRep, FirebaseMessaging firebaseMessaging) {
+    public DataController(SensorInfoRep sensorInfoRep, ShelterRep shelterRep, EarthquakeDataRep earthQuakeDataRep, FirebaseMessaging firebaseMessaging) {
         this.sensorInfoRep = sensorInfoRep;
         this.shelterRep = shelterRep;
         this.earthQuakeDataRep = earthQuakeDataRep;

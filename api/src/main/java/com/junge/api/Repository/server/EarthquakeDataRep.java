@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface EarthQuakeDataRep extends JpaRepository<Earthquake, Long> {
+public interface EarthquakeDataRep extends JpaRepository<Earthquake, Long> {
 
     @Query(value = "SELECT * FROM earthquake WHERE now() - update_time < interval '30 minute';", nativeQuery = true)
     List<Earthquake> findAllOngoing();
