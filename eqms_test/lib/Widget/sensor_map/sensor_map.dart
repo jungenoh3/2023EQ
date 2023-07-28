@@ -1,7 +1,7 @@
-import 'package:eqms_test/Widget/google_map.dart';
+import 'package:eqms_test/Widget/google_map/google_map.dart';
 import 'package:flutter/material.dart';
 
-import 'package:eqms_test/Widget/GoogleMapMode.dart';
+import 'package:eqms_test/Widget/google_map/models/GoogleMapMode.dart';
 
 class Sensor_Map extends StatefulWidget {
   const Sensor_Map({super.key});

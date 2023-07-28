@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:dio/dio.dart';
+import 'package:eqms_test/Widget/google_map/widget/bottomsheets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +10,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:ui' as ui;
-import '../Api/Retrofit/RestClient.dart';
-import 'GoogleMapMode.dart';
+import '../../Api/Retrofit/RestClient.dart';
+import 'models/GoogleMapMode.dart';
+import 'models/Place.dart';
 
 class Google_Map extends StatefulWidget {
   final GoogleMapMode mode;
@@ -138,9 +140,9 @@ class Google_MapState extends State<Google_Map> {
   void _updateClusterData(){
     final dio = Dio();
     client = RestClient(dio);
+    circles.clear();
     if (widget.mode == GoogleMapMode.EQinfo || widget.mode == GoogleMapMode.EQupdate) {
       setState(() {
-        circles.clear();
         client.getEarthQuake().then((value) {
           if(value.isNotEmpty){
             for(int i =0; i< value.length; i++){
@@ -152,6 +154,10 @@ class Google_MapState extends State<Google_Map> {
                   radius: value[i].magnitude * 10000,
                   strokeColor: Colors.blueAccent,
                   strokeWidth: 1,
+                  onTap: () {
+                    BottomSheets.showItemBottomSheet(context, widget.mode, value[i].id.toString());
+                  },
+                  consumeTapEvents: true,
                 )
               );
             }
@@ -164,7 +170,6 @@ class Google_MapState extends State<Google_Map> {
     else if (widget.mode == GoogleMapMode.shelter){
       client.getShelter().then((value){
         setState(() {
-          circles.clear();
           marker_items = [
             for (int i = 0; i< value.length; i++)
               Place(
@@ -179,7 +184,6 @@ class Google_MapState extends State<Google_Map> {
     }
     else if (widget.mode == GoogleMapMode.empty){
       setState(() {
-        circles.clear();
         marker_items.clear();
         _manager.setItems(marker_items);
       });
@@ -187,7 +191,6 @@ class Google_MapState extends State<Google_Map> {
     else if (widget.mode == GoogleMapMode.sensor){
       client.getSensorInformation().then((value){
         setState(() {
-          circles.clear();
           marker_items = [
             for (int i = 0; i< value.length; i++)
               Place(
@@ -208,6 +211,12 @@ class Google_MapState extends State<Google_Map> {
           markerId: MarkerId(cluster.getId()),
           position: cluster.location,
           onTap: () {
+            if (!cluster.isMultiple){
+              BottomSheets.showItemBottomSheet(
+                  context,
+                  widget.mode,
+                  cluster.items.single.id.toString());
+            }
             print('---- $cluster');
             cluster.items.forEach((p) => print(p));
           },
@@ -265,15 +274,5 @@ class Google_MapState extends State<Google_Map> {
     ByteData? bytes = await fi.image.toByteData(format: ui.ImageByteFormat.png);
     return BitmapDescriptor.fromBytes(bytes!.buffer.asUint8List());
   }
-}
 
-class Place with ClusterItem {
-  final String id;
-  final String address;
-  final LatLng latLng;
-
-  Place({required this.id, required this.address, required this.latLng});
-
-  @override
-  LatLng get location => latLng;
 }

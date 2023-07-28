@@ -1,5 +1,5 @@
-import 'package:eqms_test/Widget/GoogleMapMode.dart';
-import 'package:eqms_test/Widget/google_map.dart';
+import 'package:eqms_test/Widget/google_map/models/GoogleMapMode.dart';
+import 'package:eqms_test/Widget/google_map/google_map.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -41,7 +41,7 @@ class _EQ_InfoState extends State<EQ_Info> with AutomaticKeepAliveClientMixin {
       floatingActionButton: Padding(
         padding: EdgeInsets.only(left: 10, right: 20), // 임시 줄 맞추기
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ActionChip(
@@ -50,13 +50,15 @@ class _EQ_InfoState extends State<EQ_Info> with AutomaticKeepAliveClientMixin {
                 setState(() {
                   if (mode != GoogleMapMode.EQinfo) mode = GoogleMapMode.EQinfo;});
                 }),
+            const SizedBox(width: 10),
             ActionChip(
               label: Text('대피소 정보'),
               onPressed: () {
                 setState(() {
                   if (mode != GoogleMapMode.shelter) mode = GoogleMapMode.shelter;});
                 }),
-               ActionChip(
+            const SizedBox(width: 10),
+            ActionChip(
               label: Text('내진 설계'),
               onPressed: () {
                 setState(() {

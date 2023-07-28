@@ -81,6 +81,8 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin{
         children: widgetOptions,
       ),
       bottomNavigationBar: renderBottomNavigationBar(),
+      extendBody: false,
+      extendBodyBehindAppBar: true,
     );
   }
 }
