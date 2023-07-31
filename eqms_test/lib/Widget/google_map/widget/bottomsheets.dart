@@ -1,4 +1,4 @@
-import 'package:eqms_test/Widget/google_map/models/GoogleMapMode.dart';
+import 'package:eqms_test/Widget/google_map/models/EnumGoogleMap.dart';
 import 'package:flutter/material.dart';
 
 class BottomSheets {

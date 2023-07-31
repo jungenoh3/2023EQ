@@ -4,6 +4,7 @@ import 'package:eqms_test/widget/eq_info/eq_info.dart';
 import 'package:eqms_test/widget/eq_safety/eq_safety.dart';
 import 'package:eqms_test/widget/sensor_info/sensor_info.dart';
 import 'package:eqms_test/widget/sensor_map/sensor_map.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class RootScreen extends StatefulWidget {
   const RootScreen({super.key});
@@ -41,31 +42,42 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin{
 
   BottomNavigationBar renderBottomNavigationBar(){
     return BottomNavigationBar(
-      items: const <BottomNavigationBarItem>[
+      items: [
         BottomNavigationBarItem(
-          icon: Icon(Icons.local_activity),
-          label: '지진정보지도',
+          icon: SvgPicture.asset('assets/eq_info.svg'),
+          activeIcon: SvgPicture.asset('assets/eq_info.svg', color: Colors.black,),
+          label: '지진지도',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.local_activity),
-          label: '지진안전정보',
+          icon: SvgPicture.asset('assets/eq_safety.svg'),
+          activeIcon: SvgPicture.asset('assets/eq_safety.svg', color: Colors.black,),
+          label: '지진안전',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.local_activity),
+          icon: SvgPicture.asset('assets/sensor_map.svg'),
+          activeIcon: SvgPicture.asset('assets/sensor_map.svg', color: Colors.black,),
           label: '센서지도',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.local_activity),
+          icon: SvgPicture.asset('assets/sensor_info.svg'),
+          activeIcon: SvgPicture.asset('assets/sensor_info.svg', color: Colors.black,),
           label: '센서현황',
         ),BottomNavigationBarItem(
-          icon: Icon(Icons.local_activity),
+          icon: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6.0),
+            child: SvgPicture.asset('assets/setting.svg'),
+          ),
+          activeIcon: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6.0),
+            child: SvgPicture.asset('assets/setting.svg', color: Colors.black,),
+          ),
           label: '환경설정',
         ),
       ],
       type: BottomNavigationBarType.fixed,
       currentIndex: selectedIndex,
       unselectedItemColor: Colors.grey,
-      selectedItemColor: Colors.deepOrange,
+      selectedItemColor: Colors.black,
       onTap: onItemTapped,
     );
   }
@@ -80,7 +92,9 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin{
         onPageChanged: onItemTapped,
         children: widgetOptions,
       ),
-      bottomNavigationBar: renderBottomNavigationBar(),
+      bottomNavigationBar: SizedBox(
+          height: 70,
+          child: renderBottomNavigationBar()),
       extendBody: false,
       extendBodyBehindAppBar: true,
     );

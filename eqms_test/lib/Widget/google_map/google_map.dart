@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:ui';
-import 'package:dio/dio.dart';
 import 'package:eqms_test/Widget/google_map/widget/bottomsheets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -10,15 +9,18 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:ui' as ui;
-import '../../Api/Retrofit/RestClient.dart';
-import 'models/GoogleMapMode.dart';
-import 'models/Place.dart';
+import 'models/EnumGoogleMap.dart';
+import 'models/MapItems.dart';
 
 class Google_Map extends StatefulWidget {
   final GoogleMapMode mode;
+  final List<Circle> circleItems;
+  final List<ClusterData> markerItems;
 
   const Google_Map({
     required this.mode,
+    required this.circleItems,
+    required this.markerItems,
     Key? key}) : super(key: key);
 
   @override
@@ -27,23 +29,18 @@ class Google_Map extends StatefulWidget {
 
 class Google_MapState extends State<Google_Map> {
   late ClusterManager _manager;
-  late RestClient client;
   Completer<GoogleMapController> _controller = Completer();
   bool _isPermissionGranted = false;
   Set<Marker> markers = Set();
   Set<Circle> circles = Set();
 
   final CameraPosition _CameraPosition =
-  CameraPosition(target: LatLng(35.8881525, 128.6109335), zoom: 6.8);
-
-  List<Place> marker_items = [];
-  List<Circle> circle_items = [];
+  CameraPosition(target: LatLng(35.8881525, 128.6109335), zoom: 6.5);
 
   @override
   void initState() {
     super.initState();
     print('google_map initState');
-    _updateClusterData();
     checkPermission().then((value){
       setState(() {
         if(value == '위치 권한이 허가되었습니다.'){
@@ -52,11 +49,12 @@ class Google_MapState extends State<Google_Map> {
       });
     });
     _manager = _initClusterManager();
+    _updateClusterData();
   }
 
   ClusterManager _initClusterManager() {
-    return ClusterManager<Place>(
-        marker_items,
+    return ClusterManager<ClusterData>(
+        widget.markerItems,
         _updateMarkers,
         markerBuilder: _markerBuilder,
         levels: [1, 3, 6.8, 9, 11, 13, 15, 17, 19, 20],
@@ -68,6 +66,24 @@ class Google_MapState extends State<Google_Map> {
     setState(() {
       this.markers = markers;
     });
+  }
+
+  @override
+  void didUpdateWidget(covariant Google_Map oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _updateClusterData();
+  }
+
+  void _updateClusterData(){
+    circles.clear();
+    markers.clear();
+    _manager.setItems(widget.markerItems);
+    circles = Set.from(widget.circleItems);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -83,7 +99,7 @@ class Google_MapState extends State<Google_Map> {
         markers: markers,
         circles: circles,
         myLocationEnabled: true,
-        myLocationButtonEnabled: true,
+        myLocationButtonEnabled: false,
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
           _manager.setMapId(controller.mapId);
@@ -125,87 +141,7 @@ class Google_MapState extends State<Google_Map> {
     return '위치 권한이 허가되었습니다.';
   }
 
-  @override
-  void didUpdateWidget(covariant Google_Map oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    print('google_map didUpdateWidget');
-    if(widget.mode != oldWidget.mode){
-      _updateClusterData();
-    }
-    else if (widget.mode == GoogleMapMode.EQupdate){
-      _updateClusterData();
-    }
-  }
-
-  void _updateClusterData(){
-    final dio = Dio();
-    client = RestClient(dio);
-    circles.clear();
-    if (widget.mode == GoogleMapMode.EQinfo || widget.mode == GoogleMapMode.EQupdate) {
-      setState(() {
-        client.getEarthQuake().then((value) {
-          if(value.isNotEmpty){
-            for(int i =0; i< value.length; i++){
-              circles.add(
-                Circle(
-                  circleId: CircleId(value[i].id.toString()),
-                  center: LatLng(value[i].latitude, value[i].longitude),
-                  fillColor: Colors.blue.withOpacity(0.5),
-                  radius: value[i].magnitude * 10000,
-                  strokeColor: Colors.blueAccent,
-                  strokeWidth: 1,
-                  onTap: () {
-                    BottomSheets.showItemBottomSheet(context, widget.mode, value[i].id.toString());
-                  },
-                  consumeTapEvents: true,
-                )
-              );
-            }
-          }
-        });
-        marker_items.clear();
-        _manager.setItems(marker_items);
-      });
-    }
-    else if (widget.mode == GoogleMapMode.shelter){
-      client.getShelter().then((value){
-        setState(() {
-          marker_items = [
-            for (int i = 0; i< value.length; i++)
-              Place(
-                  id: value[i].id.toString(),
-                  address: value[i].dtl_adres,
-                  latLng: LatLng(value[i].ycord, value[i].xcord)
-              ),
-          ];
-          _manager.setItems(marker_items);
-        });
-      });
-    }
-    else if (widget.mode == GoogleMapMode.empty){
-      setState(() {
-        marker_items.clear();
-        _manager.setItems(marker_items);
-      });
-    }
-    else if (widget.mode == GoogleMapMode.sensor){
-      client.getSensorInformation().then((value){
-        setState(() {
-          marker_items = [
-            for (int i = 0; i< value.length; i++)
-              Place(
-                  id: value[i].deviceid,
-                  address: value[i].address,
-                  latLng: LatLng(value[i].latitude, value[i].longitude)
-              ),
-          ];
-          _manager.setItems(marker_items);
-        });
-      });
-    }
-  }
-
-  Future<Marker> Function(Cluster<Place>) get _markerBuilder =>
+  Future<Marker> Function(Cluster<ClusterData>) get _markerBuilder =>
           (cluster) async {
         return Marker(
           markerId: MarkerId(cluster.getId()),
