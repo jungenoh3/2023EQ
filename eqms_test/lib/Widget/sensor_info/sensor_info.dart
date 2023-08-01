@@ -10,15 +10,15 @@ class Sensor_Info extends StatefulWidget {
 }
 
 class _Sensor_InfoState extends State<Sensor_Info> {
-  late RestClient client;
+  final dio = Dio();
+  late RestClient client = RestClient(dio);
 
   @override
   void initState() {
     super.initState();
 
-    final dio = Dio();
-
-    client = RestClient(dio);
+    // final dio = Dio();
+    // client = RestClient(dio);
     // Future.microtask(() async {
     //   final resp = await client.getSensorInformation();
     //   print('microstack check');

@@ -1,9 +1,11 @@
+import 'package:eqms_test/Api/GoogleMapModel.dart';
 import 'package:eqms_test/widget/setting/setting.dart';
 import 'package:flutter/material.dart';
 import 'package:eqms_test/widget/eq_info/eq_info.dart';
 import 'package:eqms_test/widget/eq_safety/eq_safety.dart';
 import 'package:eqms_test/widget/sensor_info/sensor_info.dart';
 import 'package:eqms_test/widget/sensor_map/sensor_map.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class RootScreen extends StatefulWidget {
@@ -85,18 +87,20 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin{
   @override
   Widget build(BuildContext context) {
     print('RootScreen build');
-
-    return Scaffold(
-      body: PageView(
-        controller: _controller,
-        onPageChanged: onItemTapped,
-        children: widgetOptions,
+    return ChangeNotifierProvider(
+      create: (context) => GoogleMapModel(),
+      child: Scaffold(
+        body: PageView(
+          controller: _controller,
+          onPageChanged: onItemTapped,
+          children: widgetOptions,
+        ),
+        bottomNavigationBar: SizedBox(
+            height: 70,
+            child: renderBottomNavigationBar()),
+        extendBody: false,
+        extendBodyBehindAppBar: true,
       ),
-      bottomNavigationBar: SizedBox(
-          height: 70,
-          child: renderBottomNavigationBar()),
-      extendBody: false,
-      extendBodyBehindAppBar: true,
     );
   }
 }

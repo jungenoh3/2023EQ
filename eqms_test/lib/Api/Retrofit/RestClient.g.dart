@@ -137,7 +137,7 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<List<EarthQuake>> getEarthQuake() async {
+  Future<List<EarthQuake>> getEarthQuakeRecent() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -151,6 +151,35 @@ class _RestClient implements RestClient {
             .compose(
               _dio.options,
               '/earthquake/specific',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    var value = _result.data!
+        .map((dynamic i) => EarthQuake.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
+  Future<List<EarthQuake>> getEarthQuake() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<List<dynamic>>(_setStreamType<List<EarthQuake>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/earthquake/all',
               queryParameters: queryParameters,
               data: _data,
             )

@@ -15,6 +15,9 @@ abstract class RestClient {
   Future<List<Shelter>> getShelter();
 
   @GET('/earthquake/specific')
+  Future<List<EarthQuake>> getEarthQuakeRecent();
+
+  @GET('/earthquake/all')
   Future<List<EarthQuake>> getEarthQuake();
 }
 

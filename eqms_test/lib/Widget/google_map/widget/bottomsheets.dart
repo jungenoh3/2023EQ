@@ -1,32 +1,9 @@
-import 'package:eqms_test/Widget/google_map/models/EnumGoogleMap.dart';
+import 'package:eqms_test/Api/GoogleMapModel.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BottomSheets {
-
-  static void showMapBottomSheet(BuildContext context, GoogleMapMode mode, dynamic data){
-  }
-
-  static void showItemBottomSheet(BuildContext context, GoogleMapMode mode, String data){
-    String title;
-
-    switch (mode) {
-      case GoogleMapMode.EQinfo:
-        title = "해당 지진 정보";
-        break;
-      case GoogleMapMode.EQupdate:
-        title = "해당 지진 정보";
-        break;
-      case GoogleMapMode.shelter:
-        title = "해당 대피소 정보";
-        break;
-      case GoogleMapMode.sensor:
-        title = "해당 센서 정보";
-        break;
-      default:
-        title = "아직 없는 데이터";
-        break;
-    }
-
+  static void showItemBottomSheet(BuildContext context, String data){
     showBottomSheet(
         context: context,
         builder: (context) {
@@ -50,7 +27,7 @@ class BottomSheets {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title,
+                    Text(context.watch<GoogleMapModel>().bottomSheetTitle,
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,

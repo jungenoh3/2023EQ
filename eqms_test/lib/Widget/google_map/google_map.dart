@@ -150,7 +150,6 @@ class Google_MapState extends State<Google_Map> {
             if (!cluster.isMultiple){
               BottomSheets.showItemBottomSheet(
                   context,
-                  widget.mode,
                   cluster.items.single.id.toString());
             }
             print('---- $cluster');

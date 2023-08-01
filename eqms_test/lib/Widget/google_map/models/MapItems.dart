@@ -7,7 +7,7 @@ class ClusterData with ClusterItem {
   final String address;
   String? detail;
 
-  ClusterData({required this.id, required this.latLng, required this.address});
+  ClusterData({required this.id, required this.latLng, required this.address, required this.detail});
 
   @override
   LatLng get location => latLng;

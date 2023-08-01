@@ -54,6 +54,7 @@ dependencies:
   google_maps_flutter_platform_interface: ^2.4.0 # 오류 방지용
   google_maps_cluster_manager: ^3.0.0+1
   flutter_svg: ^2.0.7
+  provider: ^6.0.5
   # universal_html: ^2.2.3
   # expandable: ^5.0.1
   # sse_channel: ^0.0.3
