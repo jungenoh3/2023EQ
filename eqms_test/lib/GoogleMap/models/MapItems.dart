@@ -12,3 +12,12 @@ class ClusterData with ClusterItem {
   @override
   LatLng get location => latLng;
 }
+
+class CircleData{
+  final String id;
+  final LatLng latLng;
+  final double mangitude;
+  String? detail;
+
+  CircleData({required this.id, required this.latLng,required this.detail, required this.mangitude});
+}

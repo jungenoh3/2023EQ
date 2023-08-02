@@ -1,8 +1,8 @@
 import 'package:eqms_test/Api/GoogleMapModel.dart';
-import 'package:eqms_test/Widget/CustomScrollableSheet.dart';
-import 'package:eqms_test/Widget/google_map/google_map.dart';
+import 'package:eqms_test/GoogleMap/google_map.dart';
+import 'package:eqms_test/GoogleMap/models/EnumGoogleMap.dart';
+import 'package:eqms_test/GoogleMap/widget/CustomScrollableSheet.dart';
 import 'package:flutter/material.dart';
-import 'package:eqms_test/Widget/google_map/models/EnumGoogleMap.dart';
 import 'package:provider/provider.dart';
 
 class Sensor_Map extends StatefulWidget {
@@ -21,6 +21,15 @@ class _Sensor_MapState extends State<Sensor_Map> {
   }
 
   @override
+  void deactivate() {
+    final googleMapModel = context.read<GoogleMapModel>();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      googleMapModel.RemoveItems();
+    });
+    super.deactivate();
+  }
+
+  @override
   void dispose() {
     print("Sensor_map dispose");
     super.dispose();
@@ -35,12 +44,12 @@ class _Sensor_MapState extends State<Sensor_Map> {
             Google_Map(
                 mode: GoogleMapMode.sensor,
                 circleItems: context.watch<GoogleMapModel>().circleItems,
-                markerItems: context.watch<GoogleMapModel>().markerItems),
+                markerItems: context.watch<GoogleMapModel>().markerItems
+            ),
             CustomScrollableSheet(),
           ],
         ),
       ),
     );
   }
-
 }

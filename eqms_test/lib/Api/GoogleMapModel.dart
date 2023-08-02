@@ -1,23 +1,22 @@
 import 'package:dio/dio.dart';
 import 'package:eqms_test/Api/Retrofit/RestClient.dart';
-import 'package:eqms_test/Widget/ScrollableSheetData.dart';
-import 'package:eqms_test/Widget/google_map/models/MapItems.dart';
+import 'package:eqms_test/GoogleMap/models/MapItems.dart';
+import 'package:eqms_test/GoogleMap/models/ScrollableSheetData.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class GoogleMapModel with ChangeNotifier {
   final dio = Dio();
   late RestClient client = RestClient(dio);
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-
-  List<Circle> _circleItems = [];
+  List<CircleData> _circleItems = [];
   List<ClusterData> _markerItems = [];
   List<ScrollableSheetData> _sheetItems = [];
   String _sheetTitle = "";
   String _bottomSheetTitle = "";
 
-  List<Circle> get circleItems => _circleItems;
+  List<CircleData> get circleItems => _circleItems;
   List<ClusterData> get markerItems => _markerItems;
   List<ScrollableSheetData> get sheetItems => _sheetItems;
   String get sheetTitle => _sheetTitle;
@@ -56,18 +55,11 @@ class GoogleMapModel with ChangeNotifier {
       value = await client.getEarthQuakeRecent();
       if (value.isNotEmpty) {
         for (int i = 0; i < value.length; i++) {
-          _circleItems.add(Circle(
-            circleId: CircleId(value[i].id.toString()),
-            center: LatLng(value[i].latitude, value[i].longitude),
-            fillColor: Colors.blue.withOpacity(0.5),
-            radius: value[i].magnitude * 10000,
-            strokeColor: Colors.blueAccent,
-            strokeWidth: 1,
-            onTap: () {
-              // BottomSheets.showItemBottomSheet(navigatorKey.currentContext!, value[i].id.toString());
-            },
-            consumeTapEvents: true,
-          ));
+          _circleItems.add(CircleData(
+              id: value[i].id.toString(),
+              latLng: LatLng(value[i].latitude, value[i].longitude),
+              detail: value[i].update_time.toString(),
+              mangitude: value[i].magnitude));
         }
       }
       _sheetTitle = "최근 발생 지진";

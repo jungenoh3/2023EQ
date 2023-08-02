@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:ui';
-import 'package:eqms_test/Widget/google_map/widget/bottomsheets.dart';
+import 'package:eqms_test/Api/GoogleMapModel.dart';
+import 'package:eqms_test/GoogleMap/models/EnumGoogleMap.dart';
+import 'package:eqms_test/GoogleMap/models/MapItems.dart';
+import 'package:eqms_test/GoogleMap/widget/bottomsheets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -9,19 +12,20 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:ui' as ui;
-import 'models/EnumGoogleMap.dart';
-import 'models/MapItems.dart';
+
+import 'package:provider/provider.dart';
 
 class Google_Map extends StatefulWidget {
   final GoogleMapMode mode;
-  final List<Circle> circleItems;
+  final List<CircleData> circleItems;
   final List<ClusterData> markerItems;
 
-  const Google_Map({
-    required this.mode,
-    required this.circleItems,
-    required this.markerItems,
-    Key? key}) : super(key: key);
+  const Google_Map(
+      {required this.mode,
+      required this.circleItems,
+      required this.markerItems,
+      Key? key})
+      : super(key: key);
 
   @override
   State<Google_Map> createState() => Google_MapState();
@@ -35,15 +39,15 @@ class Google_MapState extends State<Google_Map> {
   Set<Circle> circles = Set();
 
   final CameraPosition _CameraPosition =
-  CameraPosition(target: LatLng(35.8881525, 128.6109335), zoom: 6.5);
+      CameraPosition(target: LatLng(35.8881525, 128.6109335), zoom: 6.5);
 
   @override
   void initState() {
     super.initState();
     print('google_map initState');
-    checkPermission().then((value){
+    checkPermission().then((value) {
       setState(() {
-        if(value == '위치 권한이 허가되었습니다.'){
+        if (value == '위치 권한이 허가되었습니다.') {
           _isPermissionGranted = true;
         }
       });
@@ -54,10 +58,10 @@ class Google_MapState extends State<Google_Map> {
 
   ClusterManager _initClusterManager() {
     return ClusterManager<ClusterData>(
-        widget.markerItems,
-        _updateMarkers,
-        markerBuilder: _markerBuilder,
-        levels: [1, 3, 6.8, 9, 11, 13, 15, 17, 19, 20],
+      widget.markerItems,
+      _updateMarkers,
+      markerBuilder: _markerBuilder,
+      levels: [1, 3, 6.8, 9, 11, 13, 15, 17, 19, 20],
     );
   }
 
@@ -68,17 +72,39 @@ class Google_MapState extends State<Google_Map> {
     });
   }
 
+  Set<Circle> _updateCircles(List<CircleData> value) {
+    Set<Circle> circles = {};
+
+    if (value.isNotEmpty) {
+      for (int i = 0; i < value.length; i++) {
+        circles.add(Circle(
+          circleId: CircleId(value[i].id),
+          center: value[i].latLng,
+          fillColor: Colors.blue.withOpacity(0.5),
+          radius: value[i].mangitude * 10000,
+          strokeColor: Colors.blueAccent,
+          strokeWidth: 1,
+          onTap: () {
+            BottomSheets.showItemBottomSheet(context, value[i].id.toString());
+          },
+          consumeTapEvents: true,
+        ));
+      }
+    }
+    return circles;
+  }
+
   @override
   void didUpdateWidget(covariant Google_Map oldWidget) {
     super.didUpdateWidget(oldWidget);
     _updateClusterData();
   }
 
-  void _updateClusterData(){
+  void _updateClusterData() {
     circles.clear();
     markers.clear();
     _manager.setItems(widget.markerItems);
-    circles = Set.from(widget.circleItems);
+    circles = _updateCircles(widget.circleItems);
   }
 
   @override
@@ -92,26 +118,67 @@ class Google_MapState extends State<Google_Map> {
     return _isPermissionGranted ? buildGoogleMap() : buildPermissionDenied();
   }
 
-  Widget buildGoogleMap(){
-    return GoogleMap(
-        mapType: MapType.normal,
-        initialCameraPosition: _CameraPosition,
-        markers: markers,
-        circles: circles,
-        myLocationEnabled: true,
-        myLocationButtonEnabled: false,
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-          _manager.setMapId(controller.mapId);
-        },
-        onCameraMove: _manager.onCameraMove,
-        onCameraIdle: _manager.updateMap,
-        gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
-          Factory<OneSequenceGestureRecognizer>(
+  Widget buildGoogleMap() {
+    return Scaffold(
+      body: GoogleMap(
+          mapType: MapType.normal,
+          initialCameraPosition: _CameraPosition,
+          markers: markers,
+          circles: circles,
+          myLocationEnabled: true,
+          myLocationButtonEnabled: false,
+          onMapCreated: (GoogleMapController controller) {
+            _controller.complete(controller);
+            _manager.setMapId(controller.mapId);
+          },
+          onCameraMove: _manager.onCameraMove,
+          onCameraIdle: _manager.updateMap,
+          gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+            Factory<OneSequenceGestureRecognizer>(
               () => EagerGestureRecognizer(),
+            ),
+          },
+        ),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            child: Icon(Icons.location_pin),
+            mini: true,
+            onPressed: () { currentLocation(); },
           ),
-        },
+          SizedBox(height: 5,),
+          FloatingActionButton(
+            child: Icon(Icons.refresh),
+            mini: true,
+            onPressed: () {
+              switch (context.read<GoogleMapModel>().sheetTitle){
+                case "내 주변 대피소":
+                  context.read<GoogleMapModel>().ShelterItems();
+                  break;
+                case "최근 발생 지진":
+                  context.read<GoogleMapModel>().EarthQuakeItems();
+                  break;
+                case "센서":
+                  context.read<GoogleMapModel>().SensorItems();
+                  break;
+                default:
+                  break;
+              }
+            },
+          ),
+          SizedBox(height: 35,), // 아마 이걸로 움직이는 거 생각할 수 있지 않을가??
+        ],
+      ),
     );
+  }
+
+  void currentLocation() async {
+    Geolocator.getCurrentPosition().then((value) async {
+      CameraPosition cameraPosition = CameraPosition(target: LatLng(value.latitude, value.longitude), zoom: 14);
+      final GoogleMapController controller = await _controller.future;
+      controller.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+    });
   }
 
   Widget buildPermissionDenied() {
@@ -123,40 +190,39 @@ class Google_MapState extends State<Google_Map> {
   Future<String> checkPermission() async {
     // GPS 켜져있는지
     final isLocationEnabled = await Geolocator.isLocationServiceEnabled();
-    if(!isLocationEnabled){
+    if (!isLocationEnabled) {
       return '위치 서비스를 활성화 해주세요.';
     }
     // GPS 권한이 있는지
     LocationPermission checkPermission = await Geolocator.checkPermission();
 
-    if(checkPermission == LocationPermission.denied){
+    if (checkPermission == LocationPermission.denied) {
       checkPermission = await Geolocator.requestPermission();
-      if(checkPermission == LocationPermission.denied) {
+      if (checkPermission == LocationPermission.denied) {
         return '위치 권한을 허가해주세요.';
       }
     }
-    if(checkPermission == LocationPermission.deniedForever){
+    if (checkPermission == LocationPermission.deniedForever) {
       return '위치 권한을 세팅에서 허가해주세요.';
     }
     return '위치 권한이 허가되었습니다.';
   }
 
   Future<Marker> Function(Cluster<ClusterData>) get _markerBuilder =>
-          (cluster) async {
+      (cluster) async {
         return Marker(
           markerId: MarkerId(cluster.getId()),
           position: cluster.location,
           onTap: () {
-            if (!cluster.isMultiple){
+            if (!cluster.isMultiple) {
               BottomSheets.showItemBottomSheet(
-                  context,
-                  cluster.items.single.id.toString());
+                  context, cluster.items.single.id.toString());
             }
             print('---- $cluster');
             cluster.items.forEach((p) => print(p));
           },
           icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,
-            text: cluster.isMultiple ? cluster.count.toString() : null),
+              text: cluster.isMultiple ? cluster.count.toString() : null),
           // 마지막 마커 png로 표시 - 추후에 이미지 변경
           // cluster.isMultiple ? await _getMarkerBitmap(125,
           //     text: cluster.count.toString())
@@ -174,7 +240,8 @@ class Google_MapState extends State<Google_Map> {
 
     canvas.drawCircle(Offset(size / 2, size / 2), size / 2.0, paint1); // 테두리 원
     canvas.drawCircle(Offset(size / 2, size / 2), size / 2.2, paint2); // 흰 테두리
-    canvas.drawCircle(Offset(size / 2, size / 2), size / 2.8, paint1); // 제일 안에 있는 원
+    canvas.drawCircle(
+        Offset(size / 2, size / 2), size / 2.8, paint1); // 제일 안에 있는 원
 
     if (text != null) {
       TextPainter painter = TextPainter(textDirection: TextDirection.ltr);
@@ -199,15 +266,15 @@ class Google_MapState extends State<Google_Map> {
   }
 
   Future<BitmapDescriptor> bitmapDescriptorFromImgAsset(
-      BuildContext context,
-      String assetName,
-      int size,
-      ) async {
+    BuildContext context,
+    String assetName,
+    int size,
+  ) async {
     ByteData data = await rootBundle.load(assetName);
-    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: size);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: size);
     ui.FrameInfo fi = await codec.getNextFrame();
     ByteData? bytes = await fi.image.toByteData(format: ui.ImageByteFormat.png);
     return BitmapDescriptor.fromBytes(bytes!.buffer.asUint8List());
   }
-
 }

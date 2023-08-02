@@ -71,6 +71,11 @@ class _CustomCategoryState extends State<CustomCategory> {
         break;
     }
   }
+
+  void onTap() {
+    print("Circle Tap");
+  }
+
 }
 
 class ChipData {
