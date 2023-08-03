@@ -3,7 +3,6 @@ import 'package:eqms_test/Api/Retrofit/RestClient.dart';
 import 'package:eqms_test/GoogleMap/models/MapItems.dart';
 import 'package:eqms_test/GoogleMap/models/ScrollableSheetData.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class GoogleMapModel with ChangeNotifier {
@@ -15,17 +14,23 @@ class GoogleMapModel with ChangeNotifier {
   List<ScrollableSheetData> _sheetItems = [];
   String _sheetTitle = "";
   String _bottomSheetTitle = "";
+  String _iconAsset = "";
+
 
   List<CircleData> get circleItems => _circleItems;
   List<ClusterData> get markerItems => _markerItems;
   List<ScrollableSheetData> get sheetItems => _sheetItems;
   String get sheetTitle => _sheetTitle;
   String get bottomSheetTitle => _bottomSheetTitle;
+  String get iconAsset => _iconAsset;
 
   void RemoveItems() {
     _circleItems.clear();
     _markerItems.clear();
     _sheetItems.clear();
+    _sheetTitle = "";
+    _bottomSheetTitle = "";
+    _iconAsset = "";
     notifyListeners();
   }
 
@@ -64,6 +69,7 @@ class GoogleMapModel with ChangeNotifier {
       }
       _sheetTitle = "최근 발생 지진";
       _bottomSheetTitle = "해당 지진 정보";
+      _iconAsset = "assets/earthquake.svg";
     } catch (error) {
       // TODO
     }
@@ -100,6 +106,7 @@ class GoogleMapModel with ChangeNotifier {
 
         _sheetTitle = "내 주변 대피소";
         _bottomSheetTitle = "해당 대피소 정보";
+        _iconAsset = "assets/shelter.svg";
       }
     } catch (error) {
       // TODO
@@ -137,6 +144,45 @@ class GoogleMapModel with ChangeNotifier {
 
         _sheetTitle = "센서";
         _bottomSheetTitle = "해당 센서 정보";
+        _iconAsset = "assets/sensor.svg";
+      }
+    } catch (error) {
+      // TODO
+    }
+    notifyListeners();
+  }
+
+  void EmergencyInstItems() async {
+    _circleItems.clear();
+    _markerItems.clear();
+    _sheetItems.clear();
+    try {
+      List<EmergencyInst> value = await client.getEmergencyInst();
+      if (value.isNotEmpty) {
+        for (int i = 0; i < value.length; i++) {
+          _markerItems.add(ClusterData(
+            id: value[i].id.toString(),
+            latLng: LatLng(value[i].latitude, value[i].longitude),
+            address: value[i].institution,
+            detail: null,
+          ));
+          _sheetItems.add(ScrollableSheetData(
+              id: value[i].id.toString(),
+              description: value[i].institution,
+              description2: null,
+              description3: null));
+        }
+        _sheetItems.insert(
+            0,
+            ScrollableSheetData(
+                id: "-",
+                description: "-",
+                description2: null,
+                description3: null));
+
+        _sheetTitle = "응급시설";
+        _bottomSheetTitle = "응급시설 정보";
+        _iconAsset = "assets/emergeInst.svg";
       }
     } catch (error) {
       // TODO

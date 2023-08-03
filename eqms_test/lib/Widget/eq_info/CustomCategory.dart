@@ -1,7 +1,8 @@
+import 'package:eqms_test/Api/DraggableSheetModel.dart';
 import 'package:eqms_test/Api/GoogleMapModel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-
 
 class CustomCategory extends StatefulWidget {
   const CustomCategory({super.key});
@@ -12,6 +13,7 @@ class CustomCategory extends StatefulWidget {
 
 class _CustomCategoryState extends State<CustomCategory> {
   int? _selectedIndex;
+  bool isSelected = false;
 
   List<Widget> choiceChips() {
     List<Widget> chips = [];
@@ -19,13 +21,24 @@ class _CustomCategoryState extends State<CustomCategory> {
       Widget item = Padding(
         padding: const EdgeInsets.only(left: 2.5, right: 2.5),
         child: ChoiceChip(
-          avatar: CircleAvatar(
-            child: Icon(_choiceChipsList[i].iconData),
+          label: Row(
+            children: [
+              SvgPicture.asset(
+                  _choiceChipsList[i].iconPath,
+                  width: 20,
+                  height: 20,
+                  color: _selectedIndex == i ? Colors.white : Colors.black,
+              ),
+              SizedBox(width: 7,),
+              Text(_choiceChipsList[i].label),
+            ],
           ),
-          label: Text(_choiceChipsList[i].label),
           backgroundColor: Colors.white,
           selected: _selectedIndex == i,
           selectedColor: Colors.deepOrange,
+          labelStyle: TextStyle(
+            color: _selectedIndex == i ? Colors.white : Colors.black,
+          ),
           onSelected: (bool selected) {
             setState(() {
               _selectedIndex = selected ? i : null;
@@ -41,7 +54,6 @@ class _CustomCategoryState extends State<CustomCategory> {
 
   @override
   Widget build(BuildContext context) {
-
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Padding(
@@ -54,41 +66,45 @@ class _CustomCategoryState extends State<CustomCategory> {
   }
 
   void _handleSelection(int? selectedIndex) {
-    switch(_selectedIndex){
+    final mapModel = context.read<GoogleMapModel>();
+    final draggModel = context.read<DraggableSheetModel>();
+
+    switch (_selectedIndex) {
       case null:
-      case 2:
       case 3:
-        context.read<GoogleMapModel>().RemoveItems();
+        mapModel.RemoveItems();
+        draggModel.resetDraggableSheetHeight();
         break;
       case 0:
-        context.read<GoogleMapModel>().EarthQuakeItems();
+        mapModel.EarthQuakeItems();
+        draggModel.adjustDraggableSheetHeight();
         break;
       case 1:
-        context.read<GoogleMapModel>().ShelterItems();
+        mapModel.ShelterItems();
+        draggModel.adjustDraggableSheetHeight();
         break;
+      case 2:
+        mapModel.EmergencyInstItems();
+        draggModel.adjustDraggableSheetHeight();
       default:
-        context.read<GoogleMapModel>().RemoveItems();
+        mapModel.RemoveItems();
+        draggModel.adjustDraggableSheetHeight();
         break;
     }
-  }
-
-  void onTap() {
-    print("Circle Tap");
   }
 
 }
 
 class ChipData {
   String label;
-  IconData iconData;
+  String iconPath;
 
-  ChipData(this.label, this.iconData);
+  ChipData(this.label, this.iconPath);
 }
 
 final List<ChipData> _choiceChipsList = [
-  ChipData("지진 정보", Icons.add),
-  ChipData("내 주변 대피소", Icons.add),
-  ChipData("응급시설", Icons.add),
-  ChipData("권역외상센터", Icons.add)
+  ChipData("지진 정보", "assets/earthquake.svg"),
+  ChipData("내 주변 대피소", "assets/shelter.svg"),
+  ChipData("응급시설", "assets/emergeInst.svg"),
+  ChipData("권역외상센터", "assets/traumaCenter.svg")
 ];
-

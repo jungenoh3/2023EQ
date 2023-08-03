@@ -55,6 +55,7 @@ dependencies:
   google_maps_cluster_manager: ^3.0.0+1
   flutter_svg: ^2.0.7
   provider: ^6.0.5
+  group_button: ^5.3.2
   # universal_html: ^2.2.3
   # expandable: ^5.0.1
   # sse_channel: ^0.0.3
@@ -86,9 +87,15 @@ flutter:
      - assets/maps-and-flags.png
      - assets/eq_info.svg
      - assets/eq_safety.svg
+     - assets/eq_safety_selected.svg
      - assets/sensor_info.svg
      - assets/sensor_map.svg
      - assets/setting.svg
+     - assets/earthquake.svg
+     - assets/emergeInst.svg
+     - assets/shelter.svg
+     - assets/traumaCenter.svg
+     - assets/sensor.svg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

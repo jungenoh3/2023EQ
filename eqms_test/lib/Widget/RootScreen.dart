@@ -1,3 +1,4 @@
+import 'package:eqms_test/Api/DraggableSheetModel.dart';
 import 'package:eqms_test/Api/GoogleMapModel.dart';
 import 'package:eqms_test/widget/setting/setting.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +53,7 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin{
         ),
         BottomNavigationBarItem(
           icon: SvgPicture.asset('assets/eq_safety.svg'),
-          activeIcon: SvgPicture.asset('assets/eq_safety.svg', color: Colors.black,),
+          activeIcon: SvgPicture.asset('assets/eq_safety_selected.svg',),
           label: '지진안전',
         ),
         BottomNavigationBarItem(
@@ -87,8 +88,11 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin{
   @override
   Widget build(BuildContext context) {
     print('RootScreen build');
-    return ChangeNotifierProvider(
-      create: (context) => GoogleMapModel(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<GoogleMapModel>(create: (context) => GoogleMapModel()),
+        ChangeNotifierProvider<DraggableSheetModel>(create: (context) => DraggableSheetModel())
+      ],
       child: Scaffold(
         body: PageView(
           controller: _controller,

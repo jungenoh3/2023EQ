@@ -60,6 +60,22 @@ Map<String, dynamic> _$EarthQuakeToJson(EarthQuake instance) =>
       'update_time': instance.update_time.toIso8601String(),
     };
 
+EmergencyInst _$EmergencyInstFromJson(Map<String, dynamic> json) =>
+    EmergencyInst(
+      id: json['id'] as int,
+      institution: json['institution'] as String,
+      latitude: (json['latitude'] as num).toDouble(),
+      longitude: (json['longitude'] as num).toDouble(),
+    );
+
+Map<String, dynamic> _$EmergencyInstToJson(EmergencyInst instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'institution': instance.institution,
+      'latitude': instance.latitude,
+      'longitude': instance.longitude,
+    };
+
 // **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
@@ -190,6 +206,35 @@ class _RestClient implements RestClient {
             ))));
     var value = _result.data!
         .map((dynamic i) => EarthQuake.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
+  Future<List<EmergencyInst>> getEmergencyInst() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<List<dynamic>>(_setStreamType<List<EmergencyInst>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/emergency/specific',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    var value = _result.data!
+        .map((dynamic i) => EmergencyInst.fromJson(i as Map<String, dynamic>))
         .toList();
     return value;
   }

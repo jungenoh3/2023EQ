@@ -1,12 +1,9 @@
 import 'package:eqms_test/Api/GoogleMapModel.dart';
-import 'package:eqms_test/GoogleMap/models/EnumGoogleMap.dart';
 import 'package:eqms_test/GoogleMap/models/MapItems.dart';
 import 'package:eqms_test/GoogleMap/widget/CustomScrollableSheet.dart';
 import 'package:eqms_test/Widget/eq_info/CustomCategory.dart';
 import 'package:eqms_test/GoogleMap/google_map.dart';
-import 'package:eqms_test/Widget/eq_info/CustomFloatingButton.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -46,13 +43,13 @@ class _EQ_InfoState extends State<EQ_Info> {
     return SafeArea(
       child: Stack(
         children: [
-          Google_Map(
+          Google_Map( // in google map build call CustomFloatingButton for FAB
             circleItems: context.watch<GoogleMapModel>().circleItems,
             markerItems: context.watch<GoogleMapModel>().markerItems,
-            mode: GoogleMapMode.shelter,
+            mode: 0,
           ),
           const CustomCategory(),
-          CustomScrollableSheet(),
+          CustomScrollableSheet(), // scrollablesheet
         ],
       ),
     );

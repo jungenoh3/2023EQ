@@ -1,6 +1,6 @@
+import 'package:eqms_test/Api/DraggableSheetModel.dart';
 import 'package:eqms_test/Api/GoogleMapModel.dart';
 import 'package:eqms_test/GoogleMap/google_map.dart';
-import 'package:eqms_test/GoogleMap/models/EnumGoogleMap.dart';
 import 'package:eqms_test/GoogleMap/widget/CustomScrollableSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +16,10 @@ class _Sensor_MapState extends State<Sensor_Map> {
   @override
   void initState() {
     super.initState();
-    context.read<GoogleMapModel>().SensorItems();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      context.read<GoogleMapModel>().SensorItems();
+      context.read<DraggableSheetModel>().getDraggableSheetHeight(0.11);
+    });
     print('Sensor_map initState');
   }
 
@@ -37,19 +40,17 @@ class _Sensor_MapState extends State<Sensor_Map> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
+    return SafeArea(
         child: Stack(
           children: [
             Google_Map(
-                mode: GoogleMapMode.sensor,
+                mode: 1,
                 circleItems: context.watch<GoogleMapModel>().circleItems,
                 markerItems: context.watch<GoogleMapModel>().markerItems
             ),
             CustomScrollableSheet(),
           ],
         ),
-      ),
-    );
+      );
   }
 }

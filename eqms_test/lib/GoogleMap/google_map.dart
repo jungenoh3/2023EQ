@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:ui';
+import 'package:eqms_test/Api/DraggableSheetModel.dart';
 import 'package:eqms_test/Api/GoogleMapModel.dart';
-import 'package:eqms_test/GoogleMap/models/EnumGoogleMap.dart';
 import 'package:eqms_test/GoogleMap/models/MapItems.dart';
+import 'package:eqms_test/GoogleMap/widget/CustomGroupButton.dart';
 import 'package:eqms_test/GoogleMap/widget/bottomsheets.dart';
+import 'package:eqms_test/Widget/eq_info/CustomFloatingButton.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -12,11 +14,10 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:ui' as ui;
-
 import 'package:provider/provider.dart';
 
 class Google_Map extends StatefulWidget {
-  final GoogleMapMode mode;
+  final int mode;
   final List<CircleData> circleItems;
   final List<ClusterData> markerItems;
 
@@ -37,6 +38,7 @@ class Google_MapState extends State<Google_Map> {
   bool _isPermissionGranted = false;
   Set<Marker> markers = Set();
   Set<Circle> circles = Set();
+  double widgetHeight = 0;
 
   final CameraPosition _CameraPosition =
       CameraPosition(target: LatLng(35.8881525, 128.6109335), zoom: 6.5);
@@ -74,7 +76,6 @@ class Google_MapState extends State<Google_Map> {
 
   Set<Circle> _updateCircles(List<CircleData> value) {
     Set<Circle> circles = {};
-
     if (value.isNotEmpty) {
       for (int i = 0; i < value.length; i++) {
         circles.add(Circle(
@@ -98,6 +99,7 @@ class Google_MapState extends State<Google_Map> {
   void didUpdateWidget(covariant Google_Map oldWidget) {
     super.didUpdateWidget(oldWidget);
     _updateClusterData();
+    _updateClusterData();
   }
 
   void _updateClusterData() {
@@ -119,8 +121,10 @@ class Google_MapState extends State<Google_Map> {
   }
 
   Widget buildGoogleMap() {
-    return Scaffold(
-      body: GoogleMap(
+    widgetHeight = MediaQuery.of(context).size.height;
+    return Stack(
+      children: [
+        GoogleMap(
           mapType: MapType.normal,
           initialCameraPosition: _CameraPosition,
           markers: markers,
@@ -133,52 +137,49 @@ class Google_MapState extends State<Google_Map> {
           },
           onCameraMove: _manager.onCameraMove,
           onCameraIdle: _manager.updateMap,
+          zoomControlsEnabled: false,
           gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
             Factory<OneSequenceGestureRecognizer>(
               () => EagerGestureRecognizer(),
             ),
           },
         ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            child: Icon(Icons.location_pin),
-            mini: true,
-            onPressed: () { currentLocation(); },
+        Visibility(
+          visible: widget.mode == 1,
+          child: Padding(
+            padding: EdgeInsets.all(12.0),
+            child: CustomGroupButton(moveCamera: moveLocation,),
           ),
-          SizedBox(height: 5,),
-          FloatingActionButton(
-            child: Icon(Icons.refresh),
-            mini: true,
-            onPressed: () {
-              switch (context.read<GoogleMapModel>().sheetTitle){
-                case "내 주변 대피소":
-                  context.read<GoogleMapModel>().ShelterItems();
-                  break;
-                case "최근 발생 지진":
-                  context.read<GoogleMapModel>().EarthQuakeItems();
-                  break;
-                case "센서":
-                  context.read<GoogleMapModel>().SensorItems();
-                  break;
-                default:
-                  break;
-              }
-            },
-          ),
-          SizedBox(height: 35,), // 아마 이걸로 움직이는 거 생각할 수 있지 않을가??
-        ],
-      ),
+        ),
+        Visibility(
+          visible:
+              0.5 > context.watch<DraggableSheetModel>().draggableSheetHeight,
+          child: Positioned(
+              right: 10,
+              bottom: context.watch<GoogleMapModel>().sheetItems.isEmpty
+                  ? 10
+                  : context.watch<DraggableSheetModel>().draggableSheetHeight *
+                      widgetHeight,
+              child: CustomFloatingButton(onMoveCamera: currentLocation)),
+        )
+      ],
     );
   }
 
-  void currentLocation() async {
+  Future<void> currentLocation() async {
     Geolocator.getCurrentPosition().then((value) async {
-      CameraPosition cameraPosition = CameraPosition(target: LatLng(value.latitude, value.longitude), zoom: 14);
+      CameraPosition cameraPosition = CameraPosition(
+          target: LatLng(value.latitude, value.longitude), zoom: 14);
       final GoogleMapController controller = await _controller.future;
       controller.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
     });
+  }
+
+  Future<void> moveLocation(double latitude, double longitude, double zoom) async {
+    CameraPosition cameraPosition =
+        CameraPosition(target: LatLng(latitude, longitude), zoom: zoom);
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
   }
 
   Widget buildPermissionDenied() {
@@ -218,8 +219,6 @@ class Google_MapState extends State<Google_Map> {
               BottomSheets.showItemBottomSheet(
                   context, cluster.items.single.id.toString());
             }
-            print('---- $cluster');
-            cluster.items.forEach((p) => print(p));
           },
           icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,
               text: cluster.isMultiple ? cluster.count.toString() : null),
