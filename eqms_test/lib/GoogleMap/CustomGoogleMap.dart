@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:eqms_test/Api/DraggableSheetModel.dart';
 import 'package:eqms_test/Api/GoogleMapModel.dart';
-import 'package:eqms_test/GoogleMap/models/MapItems.dart';
+import 'package:eqms_test/GoogleMap/Widget/BottomSheets.dart';
+import 'package:eqms_test/GoogleMap/Models/MapItems.dart';
 import 'package:eqms_test/GoogleMap/widget/CustomGroupButton.dart';
-import 'package:eqms_test/GoogleMap/widget/bottomsheets.dart';
-import 'package:eqms_test/Widget/eq_info/CustomFloatingButton.dart';
+import 'package:eqms_test/GoogleMap/Widget/CustomFloatingButton.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -16,12 +16,12 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:ui' as ui;
 import 'package:provider/provider.dart';
 
-class Google_Map extends StatefulWidget {
+class CustomGoogleMap extends StatefulWidget {
   final int mode;
   final List<CircleData> circleItems;
   final List<ClusterData> markerItems;
 
-  const Google_Map(
+  const CustomGoogleMap(
       {required this.mode,
       required this.circleItems,
       required this.markerItems,
@@ -29,10 +29,10 @@ class Google_Map extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<Google_Map> createState() => Google_MapState();
+  State<CustomGoogleMap> createState() => CustomGoogleMapState();
 }
 
-class Google_MapState extends State<Google_Map> {
+class CustomGoogleMapState extends State<CustomGoogleMap> {
   late ClusterManager _manager;
   Completer<GoogleMapController> _controller = Completer();
   bool _isPermissionGranted = false;
@@ -86,7 +86,10 @@ class Google_MapState extends State<Google_Map> {
           strokeColor: Colors.blueAccent,
           strokeWidth: 1,
           onTap: () {
-            BottomSheets.showItemBottomSheet(context, value[i].id.toString());
+            BottomSheets.showItemBottomSheet(
+                context,
+                "진도: ${value[i].mangitude}",
+                "위치: (${value[i].latLng.latitude}, ${value[i].latLng.longitude})");
           },
           consumeTapEvents: true,
         ));
@@ -96,7 +99,7 @@ class Google_MapState extends State<Google_Map> {
   }
 
   @override
-  void didUpdateWidget(covariant Google_Map oldWidget) {
+  void didUpdateWidget(covariant CustomGoogleMap oldWidget) {
     super.didUpdateWidget(oldWidget);
     _updateClusterData();
     _updateClusterData();
@@ -148,7 +151,9 @@ class Google_MapState extends State<Google_Map> {
           visible: widget.mode == 1,
           child: Padding(
             padding: EdgeInsets.all(12.0),
-            child: CustomGroupButton(moveCamera: moveLocation,),
+            child: CustomGroupButton(
+              moveCamera: moveLocation,
+            ),
           ),
         ),
         Visibility(
@@ -175,7 +180,8 @@ class Google_MapState extends State<Google_Map> {
     });
   }
 
-  Future<void> moveLocation(double latitude, double longitude, double zoom) async {
+  Future<void> moveLocation(
+      double latitude, double longitude, double zoom) async {
     CameraPosition cameraPosition =
         CameraPosition(target: LatLng(latitude, longitude), zoom: zoom);
     final GoogleMapController controller = await _controller.future;
@@ -217,7 +223,10 @@ class Google_MapState extends State<Google_Map> {
           onTap: () {
             if (!cluster.isMultiple) {
               BottomSheets.showItemBottomSheet(
-                  context, cluster.items.single.id.toString());
+                context,
+                cluster.items.single.name,
+                cluster.items.single.address,
+              );
             }
           },
           icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,

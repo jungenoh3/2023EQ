@@ -1,18 +1,18 @@
 import 'package:eqms_test/Api/DraggableSheetModel.dart';
 import 'package:eqms_test/Api/GoogleMapModel.dart';
-import 'package:eqms_test/GoogleMap/google_map.dart';
+import 'package:eqms_test/GoogleMap/CustomGoogleMap.dart';
 import 'package:eqms_test/GoogleMap/widget/CustomScrollableSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Sensor_Map extends StatefulWidget {
-  const Sensor_Map({super.key});
+class SensorMap extends StatefulWidget {
+  const SensorMap({super.key});
 
   @override
-  State<Sensor_Map> createState() => _Sensor_MapState();
+  State<SensorMap> createState() => _SensorMapState();
 }
 
-class _Sensor_MapState extends State<Sensor_Map> {
+class _SensorMapState extends State<SensorMap> {
   @override
   void initState() {
     super.initState();
@@ -43,7 +43,7 @@ class _Sensor_MapState extends State<Sensor_Map> {
     return SafeArea(
         child: Stack(
           children: [
-            Google_Map(
+            CustomGoogleMap(
                 mode: 1,
                 circleItems: context.watch<GoogleMapModel>().circleItems,
                 markerItems: context.watch<GoogleMapModel>().markerItems

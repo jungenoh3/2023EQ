@@ -17,14 +17,13 @@ public class EmergencyInst {
     @Id
     private Long id;
     private String institution;
-    private String instCategory;
-    private String medCategory;
-    private String medZone;
-    private Long postalCode;
+    private String inst_category;
+    private String med_category;
+    private String med_zone;
+    private Long postal_code;
     private String area;
-    private String cityDistrict;
+    private String city_district;
     private String address;
     private double latitude;
     private double longitude;
-
 }

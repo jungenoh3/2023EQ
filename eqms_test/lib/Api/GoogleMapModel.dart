@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:eqms_test/Api/Retrofit/RestClient.dart';
-import 'package:eqms_test/GoogleMap/models/MapItems.dart';
-import 'package:eqms_test/GoogleMap/models/ScrollableSheetData.dart';
+import 'package:eqms_test/GoogleMap/Models/MapItems.dart';
+import 'package:eqms_test/GoogleMap/Models/ScrollableSheetData.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -43,18 +43,18 @@ class GoogleMapModel with ChangeNotifier {
       if (value.isNotEmpty) {
         for (int i = 0; i < value.length; i++) {
           _sheetItems.add(ScrollableSheetData(
-              id: value[i].id.toString(),
-              description: value[i].magnitude.toString(),
-              description2: null,
-              description3: null));
+              leading: value[i].magnitude.toString(),
+              title: "주소",
+              subtitle: value[i].update_time.toString(),
+              trailing: null,));
         }
         _sheetItems.insert(
             0,
             ScrollableSheetData(
-                id: "-",
-                description: "-",
-                description2: null,
-                description3: null));
+                leading: null,
+                title: "-",
+                subtitle: "-",
+                trailing: null,));
       }
       value.clear();
       value = await client.getEarthQuakeRecent();
@@ -87,22 +87,23 @@ class GoogleMapModel with ChangeNotifier {
           _markerItems.add(ClusterData(
             id: value[i].id.toString(),
             latLng: LatLng(value[i].ycord, value[i].xcord),
+            name: value[i].vt_acmdfclty_nm, // shelter 이름 없음
             address: value[i].dtl_adres,
             detail: null,
           ));
           _sheetItems.add(ScrollableSheetData(
-              id: value[i].id.toString(),
-              description: value[i].dtl_adres,
-              description2: null,
-              description3: null));
+              leading: null,
+              title: value[i].vt_acmdfclty_nm,
+              subtitle: value[i].dtl_adres,
+              trailing: null,));
         }
         _sheetItems.insert(
             0,
             ScrollableSheetData(
-                id: "-",
-                description: "-",
-                description2: null,
-                description3: null));
+                leading: null,
+                title: "-",
+                subtitle: "-",
+                trailing: null,));
 
         _sheetTitle = "내 주변 대피소";
         _bottomSheetTitle = "해당 대피소 정보";
@@ -125,22 +126,23 @@ class GoogleMapModel with ChangeNotifier {
           _markerItems.add(ClusterData(
             id: value[i].id.toString(),
             latLng: LatLng(value[i].latitude, value[i].longitude),
-            address: value[i].address,
+            name: value[i].deviceid,
+            address: "${value[i].address} ${value[i].level} (${value[i].facility})",
             detail: null,
           ));
           _sheetItems.add(ScrollableSheetData(
-              id: value[i].deviceid.toString(),
-              description: value[i].address,
-              description2: null,
-              description3: null));
+              leading: null,
+              title: "단말번호  ${value[i].deviceid.toString()}",
+              subtitle: "${value[i].address} ${value[i].level} | ${value[i].etc} ",
+              trailing: value[i].facility,));
         }
         _sheetItems.insert(
             0,
             ScrollableSheetData(
-                id: "-",
-                description: "-",
-                description2: null,
-                description3: null));
+                leading: null,
+                title: "-",
+                subtitle: "-",
+                trailing: null,));
 
         _sheetTitle = "센서";
         _bottomSheetTitle = "해당 센서 정보";
@@ -163,22 +165,23 @@ class GoogleMapModel with ChangeNotifier {
           _markerItems.add(ClusterData(
             id: value[i].id.toString(),
             latLng: LatLng(value[i].latitude, value[i].longitude),
-            address: value[i].institution,
+            name: value[i].institution,
+            address: value[i].address,
             detail: null,
           ));
           _sheetItems.add(ScrollableSheetData(
-              id: value[i].id.toString(),
-              description: value[i].institution,
-              description2: null,
-              description3: null));
+              leading: null,
+              title: "[${value[i].med_category}]  ${value[i].institution}",
+              subtitle: value[i].address,
+              trailing: null,));
         }
         _sheetItems.insert(
             0,
             ScrollableSheetData(
-                id: "-",
-                description: "-",
-                description2: null,
-                description3: null));
+                leading: null,
+                title: "-",
+                subtitle: "-",
+                trailing: null,));
 
         _sheetTitle = "응급시설";
         _bottomSheetTitle = "응급시설 정보";

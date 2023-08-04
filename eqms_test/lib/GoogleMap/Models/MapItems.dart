@@ -4,10 +4,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class ClusterData with ClusterItem {
   final String id;
   final LatLng latLng;
+  String? name;
   final String address;
   String? detail;
 
-  ClusterData({required this.id, required this.latLng, required this.address, required this.detail});
+  ClusterData({required this.id, required this.latLng, required this.name, required this.address, required this.detail});
 
   @override
   LatLng get location => latLng;

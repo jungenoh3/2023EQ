@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class EQ_Safety extends StatelessWidget {
-  const EQ_Safety({super.key});
+class EQSafety extends StatelessWidget {
+  const EQSafety({super.key});
 
   @override
   Widget build(BuildContext context) {

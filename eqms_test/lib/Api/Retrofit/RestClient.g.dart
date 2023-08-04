@@ -15,6 +15,7 @@ SensorInfo _$SensorInfoFromJson(Map<String, dynamic> json) => SensorInfo(
       manu_comp: json['manu_comp'] as String,
       facility: json['facility'] as String?,
       level: json['level'] as String,
+      etc: json['etc'] as String?
     );
 
 Map<String, dynamic> _$SensorInfoToJson(SensorInfo instance) =>
@@ -27,10 +28,12 @@ Map<String, dynamic> _$SensorInfoToJson(SensorInfo instance) =>
       'manu_comp': instance.manu_comp,
       'facility': instance.facility,
       'level': instance.level,
+      'etc' : instance.etc
     };
 
 Shelter _$ShelterFromJson(Map<String, dynamic> json) => Shelter(
       id: json['id'] as int,
+      vt_acmdfclty_nm: json['vt_acmdfclty_nm'] as String,
       dtl_adres: json['dtl_adres'] as String,
       xcord: (json['xcord'] as num).toDouble(),
       ycord: (json['ycord'] as num).toDouble(),
@@ -38,6 +41,7 @@ Shelter _$ShelterFromJson(Map<String, dynamic> json) => Shelter(
 
 Map<String, dynamic> _$ShelterToJson(Shelter instance) => <String, dynamic>{
       'id': instance.id,
+      'vt_acmdfclty_nm': instance.vt_acmdfclty_nm,
       'dtl_adres': instance.dtl_adres,
       'xcord': instance.xcord,
       'ycord': instance.ycord,
@@ -64,6 +68,8 @@ EmergencyInst _$EmergencyInstFromJson(Map<String, dynamic> json) =>
     EmergencyInst(
       id: json['id'] as int,
       institution: json['institution'] as String,
+      address: json['address'] as String,
+      med_category: json['med_category'] as String,
       latitude: (json['latitude'] as num).toDouble(),
       longitude: (json['longitude'] as num).toDouble(),
     );
@@ -72,6 +78,8 @@ Map<String, dynamic> _$EmergencyInstToJson(EmergencyInst instance) =>
     <String, dynamic>{
       'id': instance.id,
       'institution': instance.institution,
+      'address': instance.address,
+      'med_category' : instance.med_category,
       'latitude': instance.latitude,
       'longitude': instance.longitude,
     };

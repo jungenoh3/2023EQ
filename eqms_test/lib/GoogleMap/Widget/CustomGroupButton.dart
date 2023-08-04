@@ -27,7 +27,6 @@ class CustomGroupButton extends StatelessWidget {
           buttonBuilder: (selected, value, context) {
             return TextButton(
               onPressed: () {
-                print(value.location);
                 moveCamera(value.latitude, value.longitude, value.zoomin);
               },
               style: TextButton.styleFrom(

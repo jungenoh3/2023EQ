@@ -34,9 +34,10 @@ class SensorInfo {
   String manu_comp;
   String? facility;
   String level;
+  String? etc;
 
   SensorInfo({required this.id, required this.deviceid, required this.latitude, required this.longitude,
-    required this.address, required this.manu_comp, this.facility, required this.level});
+    required this.address, required this.manu_comp, this.facility, required this.level, required this.etc});
 
   factory SensorInfo.fromJson(Map<String, dynamic> json) => _$SensorInfoFromJson(json);
   Map<String, dynamic> toJson() => _$SensorInfoToJson(this);
@@ -46,11 +47,12 @@ class SensorInfo {
 @JsonSerializable()
 class Shelter {
   int id;
+  String vt_acmdfclty_nm;
   String dtl_adres;
   double xcord;
   double ycord;
 
-  Shelter({required this.id, required this.dtl_adres, required this.xcord, required this.ycord});
+  Shelter({required this.id, required this.vt_acmdfclty_nm, required this.dtl_adres, required this.xcord, required this.ycord});
 
   factory Shelter.fromJson(Map<String, dynamic> json) => _$ShelterFromJson(json);
   Map<String, dynamic> toJson() => _$ShelterToJson(this);
@@ -74,10 +76,12 @@ class EarthQuake {
 class EmergencyInst {
   int id;
   String institution;
+  String address;
+  String med_category;
   double latitude;
   double longitude;
 
-  EmergencyInst({required this.id, required this.institution, required this.latitude, required this.longitude});
+  EmergencyInst({required this.id, required this.institution, required this.address, required this.med_category, required this.latitude, required this.longitude});
 
   factory EmergencyInst.fromJson(Map<String, dynamic> json) => _$EmergencyInstFromJson(json);
   Map<String, dynamic> toJson() => _$EmergencyInstToJson(this);

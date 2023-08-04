@@ -1,5 +1,5 @@
-import 'package:eqms_test/Widget/RootScreen.dart';
-import 'package:eqms_test/api/firebase_message.dart';
+import 'package:eqms_test/Widgets/RootScreen.dart';
+import 'package:eqms_test/Api/FirebaseMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';

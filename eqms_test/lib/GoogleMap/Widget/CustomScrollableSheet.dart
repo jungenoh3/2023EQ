@@ -5,7 +5,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class CustomScrollableSheet extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     final itemValue = context.watch<GoogleMapModel>();
@@ -14,14 +13,15 @@ class CustomScrollableSheet extends StatelessWidget {
       maintainState: false,
       child: NotificationListener<DraggableScrollableNotification>(
         onNotification: (notification) {
-          context.read<DraggableSheetModel>().getDraggableSheetHeight(notification.extent);
+          context
+              .read<DraggableSheetModel>()
+              .getDraggableSheetHeight(notification.extent);
           return false;
         },
         child: DraggableScrollableSheet(
             initialChildSize: 0.11,
             minChildSize: 0.05,
-            builder:
-                (BuildContext context, ScrollController scrollController) {
+            builder: (BuildContext context, ScrollController scrollController) {
               return Container(
                 decoration: const BoxDecoration(
                   color: Colors.white,
@@ -32,7 +32,8 @@ class CustomScrollableSheet extends StatelessWidget {
                 child: ListView.separated(
                   physics: ClampingScrollPhysics(),
                   controller: scrollController,
-                  separatorBuilder: (BuildContext context, int index) => const Divider(),
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const Divider(),
                   itemCount: itemValue.sheetItems.length,
                   itemBuilder: (BuildContext context, int index) {
                     final data = itemValue.sheetItems[index];
@@ -71,9 +72,36 @@ class CustomScrollableSheet extends StatelessWidget {
                     return Card(
                       elevation: 0,
                       child: ListTile(
-                        contentPadding: EdgeInsets.all(10),
-                        title: Text(data.id),
-                        trailing: Text(data.description),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                        leading: data.leading == null ? null
+                            : Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    data.leading!,
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                        title: Text(data.title),
+                        subtitle: Expanded(
+                            flex: 1,
+                            child: Text(
+                              data.subtitle,
+                              maxLines: 2,
+                              style: TextStyle(
+                                  fontSize: 13, color: Colors.grey[700]),
+                            )),
+                        trailing: data.trailing == null ? Text("")
+                            : Text(
+                                data.trailing!,
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                        dense: false,
+                        isThreeLine: false,
                       ),
                     );
                   },
@@ -83,5 +111,4 @@ class CustomScrollableSheet extends StatelessWidget {
       ),
     );
   }
-
 }

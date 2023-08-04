@@ -29,6 +29,6 @@ public class SensorInfo {
     private String manu_comp;
     private String facility;
     private String level;
-
+    private String etc;
 
 }

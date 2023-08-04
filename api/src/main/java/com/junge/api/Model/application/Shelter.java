@@ -28,4 +28,5 @@ public class Shelter {
     private Long fclty_ar;
     private double xcord;
     private double ycord;
+
 }

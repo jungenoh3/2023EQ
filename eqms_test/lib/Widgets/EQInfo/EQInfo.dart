@@ -1,20 +1,20 @@
 import 'package:eqms_test/Api/GoogleMapModel.dart';
-import 'package:eqms_test/GoogleMap/models/MapItems.dart';
-import 'package:eqms_test/GoogleMap/widget/CustomScrollableSheet.dart';
-import 'package:eqms_test/Widget/eq_info/CustomCategory.dart';
-import 'package:eqms_test/GoogleMap/google_map.dart';
+import 'package:eqms_test/GoogleMap/Models/MapItems.dart';
+import 'package:eqms_test/GoogleMap/Widget/CustomScrollableSheet.dart';
+import 'package:eqms_test/Widgets/EQInfo/CustomCategory.dart';
+import 'package:eqms_test/GoogleMap/CustomGoogleMap.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
-class EQ_Info extends StatefulWidget {
-  const EQ_Info({super.key});
+class EQInfo extends StatefulWidget {
+  const EQInfo({super.key});
 
   @override
-  State<EQ_Info> createState() => _EQ_InfoState();
+  State<EQInfo> createState() => _EQInfoState();
 }
 
-class _EQ_InfoState extends State<EQ_Info> {
+class _EQInfoState extends State<EQInfo> {
   List<Circle> circleItems = [];
   List<ClusterData> markerItems = [];
 
@@ -43,7 +43,7 @@ class _EQ_InfoState extends State<EQ_Info> {
     return SafeArea(
       child: Stack(
         children: [
-          Google_Map( // in google map build call CustomFloatingButton for FAB
+          CustomGoogleMap( // in google map build call CustomFloatingButton for FAB
             circleItems: context.watch<GoogleMapModel>().circleItems,
             markerItems: context.watch<GoogleMapModel>().markerItems,
             mode: 0,
