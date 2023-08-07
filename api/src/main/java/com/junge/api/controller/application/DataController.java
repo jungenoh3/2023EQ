@@ -6,8 +6,10 @@ import com.google.firebase.messaging.*;
 import com.junge.api.Model.application.SensorInfo;
 import com.junge.api.Repository.application.EmergencyInstRep;
 import com.junge.api.Repository.application.SensorInfoRep;
+import com.junge.api.Repository.application.SensorInfoSpecficiation;
 import com.junge.api.Repository.application.ShelterRep;
 import com.junge.api.Repository.server.EarthquakeDataRep;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,22 +36,34 @@ public class DataController {
 
     @GetMapping("/sensor-info/all")
     public ResponseEntity getAllSensor(){ return ResponseEntity.ok(this.sensorInfoRep.findAll()); }
-
     @GetMapping("/sensor-info/specific")
-    public ResponseEntity getSpecificSensor(){
-        return ResponseEntity.ok(this.sensorInfoRep.getNeed());
-        // return ResponseEntity.ok(this.sensorInfoRep.getReferenceById(2L));
+    public ResponseEntity getSearchSensor(){ return ResponseEntity.ok(this.sensorInfoRep.getNeed()); }
+    @GetMapping("/sensor-info/search")
+    public ResponseEntity getSpecificSensor(
+            @RequestParam(required = false) String deviceid,
+            @RequestParam(required = false) String facility,
+            @RequestParam(required = false) String region
+    ){
+        Specification<SensorInfo> spec = (root, query, criteriaBuilder) -> null;
+        if(deviceid != null)
+            spec = spec.and(SensorInfoSpecficiation.likeDeviceId(deviceid));
+        if(facility != null)
+            spec = spec.and(SensorInfoSpecficiation.equalFacility(facility));
+        if(region != null)
+            spec = spec.and(SensorInfoSpecficiation.equalRegion(region));
+
+        return ResponseEntity.ok(this.sensorInfoRep.findAll(spec));
     }
 
     @GetMapping("/shelter/all")
     public ResponseEntity getAllShelter(){
         return ResponseEntity.ok(this.shelterRep.findAll());
     }
-
     @GetMapping("/shelter/specific")
     public ResponseEntity getSpecificShelter(){
         return ResponseEntity.ok(this.shelterRep.getNeed());
     }
+
     @GetMapping("/earthquake/all")
     public ResponseEntity getEarthQuakeData() { return ResponseEntity.ok(this.earthQuakeDataRep.findAll());}
     @GetMapping("/earthquake/specific")

@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:eqms_test/Api/Retrofit/RestClient.dart';
 import 'package:eqms_test/Widgets/SensorInfo/SensorList.dart';
-import 'package:eqms_test/Widgets/SensorInfo/WreckedSensorList.dart';
+import 'package:eqms_test/Widgets/SensorInfo/SensorTable.dart';
 import 'package:flutter/material.dart';
 
 
@@ -31,7 +31,7 @@ class _SensorInfoState extends State<SensorInfo> with TickerProviderStateMixin {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
+        title: const Text(
           "세부센서현황",
           style: TextStyle(color: Colors.black),
         ),
@@ -41,7 +41,7 @@ class _SensorInfoState extends State<SensorInfo> with TickerProviderStateMixin {
           unselectedLabelColor: Colors.black,
           labelColor: Colors.deepOrange,
           labelStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
-          tabs: [
+          tabs: const [
             Tab(
               child: Center(
                 child: Text('센서 현황 리스트'),
@@ -60,7 +60,10 @@ class _SensorInfoState extends State<SensorInfo> with TickerProviderStateMixin {
         controller: _tabController,
         children: [
           SensorList(),
-          MyHomePage(),
+          Container(
+            color: Colors.black,
+          ),
+          // SensorTable(),
         ],
       ),
     );

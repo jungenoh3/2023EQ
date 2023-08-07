@@ -87,14 +87,12 @@ class CustomScrollableSheet extends StatelessWidget {
                                 ],
                               ),
                         title: Text(data.title),
-                        subtitle: Expanded(
-                            flex: 1,
-                            child: Text(
-                              data.subtitle,
-                              maxLines: 2,
-                              style: TextStyle(
-                                  fontSize: 13, color: Colors.grey[700]),
-                            )),
+                        subtitle: Text(
+                          data.subtitle,
+                          maxLines: 2,
+                          style: TextStyle(
+                              fontSize: 13, color: Colors.grey[700]),
+                        ),
                         trailing: data.trailing == null ? Text("")
                             : Text(
                                 data.trailing!,

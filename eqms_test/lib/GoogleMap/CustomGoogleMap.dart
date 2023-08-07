@@ -102,7 +102,6 @@ class CustomGoogleMapState extends State<CustomGoogleMap> {
   void didUpdateWidget(covariant CustomGoogleMap oldWidget) {
     super.didUpdateWidget(oldWidget);
     _updateClusterData();
-    _updateClusterData();
   }
 
   void _updateClusterData() {

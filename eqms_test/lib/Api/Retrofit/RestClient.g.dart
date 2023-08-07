@@ -15,7 +15,8 @@ SensorInfo _$SensorInfoFromJson(Map<String, dynamic> json) => SensorInfo(
       manu_comp: json['manu_comp'] as String,
       facility: json['facility'] as String?,
       level: json['level'] as String,
-      etc: json['etc'] as String?
+      etc: json['etc'] as String?,
+      region: json['region'] as String,
     );
 
 Map<String, dynamic> _$SensorInfoToJson(SensorInfo instance) =>
@@ -28,7 +29,8 @@ Map<String, dynamic> _$SensorInfoToJson(SensorInfo instance) =>
       'manu_comp': instance.manu_comp,
       'facility': instance.facility,
       'level': instance.level,
-      'etc' : instance.etc
+      'etc': instance.etc,
+      'region': instance.region,
     };
 
 Shelter _$ShelterFromJson(Map<String, dynamic> json) => Shelter(
@@ -79,7 +81,7 @@ Map<String, dynamic> _$EmergencyInstToJson(EmergencyInst instance) =>
       'id': instance.id,
       'institution': instance.institution,
       'address': instance.address,
-      'med_category' : instance.med_category,
+      'med_category': instance.med_category,
       'latitude': instance.latitude,
       'longitude': instance.longitude,
     };
@@ -117,6 +119,36 @@ class _RestClient implements RestClient {
             .compose(
               _dio.options,
               '/sensor-info/all',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    var value = _result.data!
+        .map((dynamic i) => SensorInfo.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
+  Future<List<SensorInfo>> getSensorSearch(Map<String, String> queries) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.addAll(queries);
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<List<dynamic>>(_setStreamType<List<SensorInfo>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/sensor-info/search',
               queryParameters: queryParameters,
               data: _data,
             )

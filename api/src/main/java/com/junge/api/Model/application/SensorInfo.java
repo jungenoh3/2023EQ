@@ -30,5 +30,7 @@ public class SensorInfo {
     private String facility;
     private String level;
     private String etc;
+    private String region;
+
 
 }

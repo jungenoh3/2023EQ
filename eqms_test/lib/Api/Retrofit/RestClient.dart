@@ -11,6 +11,9 @@ abstract class RestClient {
   @GET('/sensor-info/all')
   Future<List<SensorInfo>> getSensorInformation();
 
+  @GET('/sensor-info/search')
+  Future<List<SensorInfo>> getSensorSearch(@Queries() Map<String, String> queries);
+
   @GET('/shelter/specific')
   Future<List<Shelter>> getShelter();
 
@@ -35,9 +38,10 @@ class SensorInfo {
   String? facility;
   String level;
   String? etc;
+  String region;
 
   SensorInfo({required this.id, required this.deviceid, required this.latitude, required this.longitude,
-    required this.address, required this.manu_comp, this.facility, required this.level, required this.etc});
+    required this.address, required this.manu_comp, this.facility, required this.level, required this.etc, required this.region});
 
   factory SensorInfo.fromJson(Map<String, dynamic> json) => _$SensorInfoFromJson(json);
   Map<String, dynamic> toJson() => _$SensorInfoToJson(this);
