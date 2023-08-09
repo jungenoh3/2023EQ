@@ -35,15 +35,17 @@ class GoogleMapModel with ChangeNotifier {
   }
 
   void EarthQuakeItems() async {
+    print('EarthQuakeItems');
     _circleItems.clear();
     _markerItems.clear();
     _sheetItems.clear();
     try {
       List<EarthQuake> value = await client.getEarthQuake();
+      print('getEarthQuake: $value');
       if (value.isNotEmpty) {
         for (int i = 0; i < value.length; i++) {
           _sheetItems.add(ScrollableSheetData(
-              leading: value[i].magnitude.toString(),
+              leading: value[i].assoc_id.toString(),
               title: "주소",
               subtitle: value[i].update_time.toString(),
               trailing: null,));
@@ -57,21 +59,22 @@ class GoogleMapModel with ChangeNotifier {
                 trailing: null,));
       }
       value.clear();
-      value = await client.getEarthQuakeRecent();
+      value = await client.getEarthQuakeOngoing();
+      print('getEarthQuakeOngoing: $value');
       if (value.isNotEmpty) {
         for (int i = 0; i < value.length; i++) {
           _circleItems.add(CircleData(
               id: value[i].id.toString(),
-              latLng: LatLng(value[i].latitude, value[i].longitude),
+              latLng: LatLng(value[i].lat, value[i].lng),
               detail: value[i].update_time.toString(),
-              mangitude: value[i].magnitude));
+              mangitude: value[i].assoc_id));
         }
       }
       _sheetTitle = "최근 발생 지진";
       _bottomSheetTitle = "해당 지진 정보";
       _iconAsset = "assets/earthquake.svg";
     } catch (error) {
-      // TODO
+      print(error);
     }
     notifyListeners();
   }

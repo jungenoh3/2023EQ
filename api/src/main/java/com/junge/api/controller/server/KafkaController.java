@@ -43,7 +43,7 @@ public class KafkaController {
         this.firebaseMessaging = firebaseMessaging;
     }
 
-    private String EQMSLineAPI(Double data){
+    private String EQMSLineAPI(Long data){
         final LineMessagingClient client = LineMessagingClient
                 .builder("o7WhaO9vMoAzhP7h1WDuxjZNek79QoblCkNLndDcDuLoDlAyBEYJb4crTDVV8cdTFAH3bnzBdhmbgFN+KP1OajTnWrkaCGzmj1h6g8OoTLoF1lN2jz7o+QO4Yo8zc21oYOQzzN53tJRPXlbLHyVsVwdB04t89/1O/w1cDnyilFU=")
                 .build();
@@ -64,7 +64,7 @@ public class KafkaController {
 
     }
 
-    public String EQMSFCMTopic(Double data) throws FirebaseMessagingException {
+    public String EQMSFCMTopic(Long data) throws FirebaseMessagingException {
         FCMNotification fcmNotification = new FCMNotification();
 
         fcmNotification.setTitile("지진 알림");
@@ -92,23 +92,28 @@ public class KafkaController {
     }
 
     private void kafkaMessageProcess(String kafkaData) throws IOException, FirebaseMessagingException {
-        SensorData sensorData = mapper.readValue(kafkaData, SensorData.class);
+        Earthquake earthquake = mapper.readValue(kafkaData, Earthquake.class);
+
+//        SensorData sensorData = mapper.readValue(kafkaData, SensorData.class);
         Timestamp ts = new Timestamp(System.currentTimeMillis());
-        sensorData.setUpdate_time(ts);
+        earthquake.setUpdate_time(ts);
+        earthQuakeDataRep.save(earthquake);
+        String LineAnswer = EQMSLineAPI(earthquake.getAssoc_id());
+        String FCMAnswer = EQMSFCMTopic(earthquake.getAssoc_id());
+        System.out.println(LineAnswer + " " + FCMAnswer);
+
 
         // sensorDataRep.save(sensorData);
 
-        if (sensorData.getAcc_x() > 10){
-            Earthquake earthQuake = new Earthquake(sensorData.getLatitude(), sensorData.getLongitude(),
-                    ts, sensorData.getAcc_x()/10);
-            earthQuakeDataRep.save(earthQuake);
-            System.out.println(earthQuake);
-            sendData("Earthquake");
-
-//            String LineAnswer = EQMSLineAPI(sensorData.getAcc_x());
-//            String FCMAnswer = EQMSFCMTopic(sensorData.getAcc_x());
-//            System.out.println(LineAnswer + " " + FCMAnswer);
-        }
+//        if (sensorData.getAcc_x() > 10){
+//            Earthquake earthQuake = new Earthquake(sensorData.getLatitude(), sensorData.getLongitude(),
+//                    ts, sensorData.getAcc_x()/10);
+//
+//            System.out.println(earthQuake);
+//            sendData("Earthquake");
+//
+//
+//        }
 
     }
     public void sendData(String data) {

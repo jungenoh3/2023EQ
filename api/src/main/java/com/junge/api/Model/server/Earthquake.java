@@ -4,29 +4,31 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.Array;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Earthquake {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private double latitude;
-    private double longitude;
+    private double lat;
+    private double lng;
+    private Timestamp event_occurred_msec;
+    private Timestamp alert_created_msec;
     private Timestamp update_time;
-    private double magnitude;
+    private List<String> associated_sensors;
+    private String stage;
+    private Long assoc_id;
 
-    public Earthquake(double latitude, double longitude, Timestamp update_time, double magnitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.update_time = update_time;
-        this.magnitude = magnitude;
-    }
 }

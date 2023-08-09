@@ -1,6 +1,5 @@
 package com.junge.api.Repository.application;
 
-import com.junge.api.Model.application.SensorInfoSpecific;
 import com.junge.api.Model.application.Shelter;
 import com.junge.api.Model.application.ShelterSpecific;
 import org.springframework.data.jpa.repository.JpaRepository;

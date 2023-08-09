@@ -17,8 +17,8 @@ abstract class RestClient {
   @GET('/shelter/specific')
   Future<List<Shelter>> getShelter();
 
-  @GET('/earthquake/specific')
-  Future<List<EarthQuake>> getEarthQuakeRecent();
+  @GET('/earthquake/ongoing')
+  Future<List<EarthQuake>> getEarthQuakeOngoing();
 
   @GET('/earthquake/all')
   Future<List<EarthQuake>> getEarthQuake();
@@ -65,12 +65,12 @@ class Shelter {
 @JsonSerializable()
 class EarthQuake {
   int id;
-  double magnitude;
-  double latitude;
-  double longitude;
+  int assoc_id;
+  double lat;
+  double lng;
   DateTime update_time;
 
-  EarthQuake({required this.id, required this.magnitude, required this.latitude, required this.longitude, required this.update_time});
+  EarthQuake({required this.id, required this.assoc_id, required this.lat, required this.lng, required this.update_time});
 
   factory EarthQuake.fromJson(Map<String, dynamic> json) => _$EarthQuakeFromJson(json);
   Map<String, dynamic> toJson() => _$EarthQuakeToJson(this);

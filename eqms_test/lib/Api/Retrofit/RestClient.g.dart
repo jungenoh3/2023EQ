@@ -51,18 +51,18 @@ Map<String, dynamic> _$ShelterToJson(Shelter instance) => <String, dynamic>{
 
 EarthQuake _$EarthQuakeFromJson(Map<String, dynamic> json) => EarthQuake(
       id: json['id'] as int,
-      magnitude: (json['magnitude'] as num).toDouble(),
-      latitude: (json['latitude'] as num).toDouble(),
-      longitude: (json['longitude'] as num).toDouble(),
+      assoc_id: json['assoc_id'] as int,
+      lat: (json['lat'] as num).toDouble(),
+      lng: (json['lng'] as num).toDouble(),
       update_time: DateTime.parse(json['update_time'] as String),
     );
 
 Map<String, dynamic> _$EarthQuakeToJson(EarthQuake instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'magnitude': instance.magnitude,
-      'latitude': instance.latitude,
-      'longitude': instance.longitude,
+      'assoc_id': instance.assoc_id,
+      'lat': instance.lat,
+      'lng': instance.lng,
       'update_time': instance.update_time.toIso8601String(),
     };
 
@@ -193,7 +193,7 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<List<EarthQuake>> getEarthQuakeRecent() async {
+  Future<List<EarthQuake>> getEarthQuakeOngoing() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -206,7 +206,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/earthquake/specific',
+              '/earthquake/ongoing',
               queryParameters: queryParameters,
               data: _data,
             )

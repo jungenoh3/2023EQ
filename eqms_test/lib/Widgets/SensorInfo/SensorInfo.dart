@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:eqms_test/Api/Retrofit/RestClient.dart';
+import 'package:eqms_test/Widgets/SensorInfo/AbnorSensorList.dart';
 import 'package:eqms_test/Widgets/SensorInfo/SensorList.dart';
 import 'package:eqms_test/Widgets/SensorInfo/SensorTable.dart';
 import 'package:flutter/material.dart';
@@ -60,10 +61,7 @@ class _SensorInfoState extends State<SensorInfo> with TickerProviderStateMixin {
         controller: _tabController,
         children: [
           SensorList(),
-          Container(
-            color: Colors.black,
-          ),
-          // SensorTable(),
+          AbnorSensorList(),
         ],
       ),
     );

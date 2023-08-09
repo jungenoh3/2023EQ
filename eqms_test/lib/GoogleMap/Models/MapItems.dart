@@ -17,7 +17,7 @@ class ClusterData with ClusterItem {
 class CircleData{
   final String id;
   final LatLng latLng;
-  final double mangitude;
+  final int mangitude;
   String? detail;
 
   CircleData({required this.id, required this.latLng,required this.detail, required this.mangitude});

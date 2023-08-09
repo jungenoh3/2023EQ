@@ -1,26 +1,21 @@
 package com.junge.api.Model.application;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.Serial;
-
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class SensorInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
     private String deviceid;
     private double latitude;
@@ -31,6 +26,5 @@ public class SensorInfo {
     private String level;
     private String etc;
     private String region;
-
 
 }
