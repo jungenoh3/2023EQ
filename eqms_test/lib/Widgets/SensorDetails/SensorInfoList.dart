@@ -1,16 +1,16 @@
 import 'package:dio/dio.dart';
 import 'package:eqms_test/Api/Retrofit/RestClient.dart';
-import 'package:eqms_test/Widgets/SensorInfo/SensorTable.dart';
+import 'package:eqms_test/Widgets/SensorDetails/SensorInfoTable.dart';
 import 'package:flutter/material.dart';
 
-class SensorList extends StatefulWidget {
-  const SensorList({super.key});
+class SensorInfoList extends StatefulWidget {
+  const SensorInfoList({super.key});
 
   @override
-  State<SensorList> createState() => _SensorListState();
+  State<SensorInfoList> createState() => _SensorInfoListState();
 }
 
-class _SensorListState extends State<SensorList> {
+class _SensorInfoListState extends State<SensorInfoList> {
   final dio = Dio();
   late RestClient client = RestClient(dio);
   String facilityValue = "전체";
@@ -163,7 +163,7 @@ class _SensorListState extends State<SensorList> {
                       ],
                     ),
                     Divider(color: Colors.grey[800]),
-                    SensorTable(
+                    SensorInfoTable(
                       sensorValue: snapshot.data,
                     ),
                   ],

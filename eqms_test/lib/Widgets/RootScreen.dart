@@ -2,7 +2,7 @@ import 'package:eqms_test/Api/DraggableSheetModel.dart';
 import 'package:eqms_test/Api/GoogleMapModel.dart';
 import 'package:eqms_test/Widgets/EQInfo/EQInfo.dart';
 import 'package:eqms_test/Widgets/EQSafety/EQSafety.dart';
-import 'package:eqms_test/Widgets/SensorInfo/SensorInfo.dart';
+import 'package:eqms_test/Widgets/SensorDetails/SensorDetails.dart';
 import 'package:eqms_test/Widgets/SensorMap/SensorMap.dart';
 import 'package:eqms_test/Widgets/Setting/Setting.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +30,7 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin{
     EQInfo(),
     EQSafety(),
     SensorMap(),
-    SensorInfo(),
+    SensorDetails(),
     Setting()
   ];
 

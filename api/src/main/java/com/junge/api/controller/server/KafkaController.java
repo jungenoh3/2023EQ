@@ -123,15 +123,15 @@ public class KafkaController {
 //        }
     }
 
-//    @GetMapping(value = "/server-events", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-//    public Flux<String> SendDataToClient() throws IOException {
-//        return this.realTimeDataMany.asFlux();
-//    }
-//
-//    @KafkaListener(topics = "topic1", groupId = "test")
-//    void listener(ConsumerRecord<String, String> record) throws IOException, FirebaseMessagingException {
-//        kafkaMessageProcess(record.value());
-//    }
+    @GetMapping(value = "/server-events", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<String> SendDataToClient() throws IOException {
+        return this.realTimeDataMany.asFlux();
+    }
+
+    @KafkaListener(topics = "cr-assoc-results-integration-test", groupId = "cr-alert-mobile")
+    void listener(ConsumerRecord<String, String> record) throws IOException, FirebaseMessagingException {
+        kafkaMessageProcess(record.value());
+    }
 
 }
 

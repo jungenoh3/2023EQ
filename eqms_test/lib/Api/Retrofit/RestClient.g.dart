@@ -33,6 +33,32 @@ Map<String, dynamic> _$SensorInfoToJson(SensorInfo instance) =>
       'region': instance.region,
     };
 
+SensorAbnormal _$SensorAbnormalFromJson(Map<String, dynamic> json) =>
+    SensorAbnormal(
+      id: json['id'] as int,
+      deviceid: json['deviceid'] as String,
+      accelerator: json['accelerator'] as String?,
+      pressure: json['pressure'] as String?,
+      temperature: json['temperature'] as String?,
+      noise_class: json['noise_class'] as String?,
+      fault_message: json['fault_message'] as String?,
+      address: json['address'] as String,
+      region: json['region'] as String,
+    );
+
+Map<String, dynamic> _$SensorAbnormalToJson(SensorAbnormal instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'deviceid': instance.deviceid,
+      'accelerator': instance.accelerator,
+      'pressure': instance.pressure,
+      'temperature': instance.temperature,
+      'noise_class': instance.noise_class,
+      'fault_message': instance.fault_message,
+      'address': instance.address,
+      'region': instance.region,
+    };
+
 Shelter _$ShelterFromJson(Map<String, dynamic> json) => Shelter(
       id: json['id'] as int,
       vt_acmdfclty_nm: json['vt_acmdfclty_nm'] as String,
@@ -159,6 +185,37 @@ class _RestClient implements RestClient {
             ))));
     var value = _result.data!
         .map((dynamic i) => SensorInfo.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
+  Future<List<SensorAbnormal>> getSensorAbnormalSearch(
+      Map<String, String> queries) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.addAll(queries);
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<List<dynamic>>(_setStreamType<List<SensorAbnormal>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/sensor-abnormal/search',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    var value = _result.data!
+        .map((dynamic i) => SensorAbnormal.fromJson(i as Map<String, dynamic>))
         .toList();
     return value;
   }

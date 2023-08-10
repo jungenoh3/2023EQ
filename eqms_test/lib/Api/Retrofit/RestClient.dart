@@ -14,6 +14,9 @@ abstract class RestClient {
   @GET('/sensor-info/search')
   Future<List<SensorInfo>> getSensorSearch(@Queries() Map<String, String> queries);
 
+  @GET('/sensor-abnormal/search')
+  Future<List<SensorAbnormal>> getSensorAbnormalSearch(@Queries() Map<String, String> queries);
+
   @GET('/shelter/specific')
   Future<List<Shelter>> getShelter();
 
@@ -46,6 +49,26 @@ class SensorInfo {
   factory SensorInfo.fromJson(Map<String, dynamic> json) => _$SensorInfoFromJson(json);
   Map<String, dynamic> toJson() => _$SensorInfoToJson(this);
 }
+
+@JsonSerializable()
+class SensorAbnormal {
+  int id;
+  String deviceid;
+  String? accelerator;
+  String? pressure;
+  String? temperature;
+  String? noise_class;
+  String? fault_message;
+  String address;
+  String region;
+
+  SensorAbnormal({required this.id, required this.deviceid, required this.accelerator, required this.pressure,
+    required this.temperature, required this.noise_class, this.fault_message, required this.address, required this.region});
+
+  factory SensorAbnormal.fromJson(Map<String, dynamic> json) => _$SensorAbnormalFromJson(json);
+  Map<String, dynamic> toJson() => _$SensorAbnormalToJson(this);
+}
+
 
 
 @JsonSerializable()

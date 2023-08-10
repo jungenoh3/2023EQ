@@ -8,15 +8,15 @@ import 'package:syncfusion_flutter_core/theme.dart';
 List<Sensor> sensors = <Sensor>[];
 final int _rowsPerPage = 6;
 
-class SensorTable extends StatefulWidget {
+class SensorInfoTable extends StatefulWidget {
   List<SensorInfo> sensorValue;
-  SensorTable({required this.sensorValue, Key? key}) : super(key: key);
+  SensorInfoTable({required this.sensorValue, Key? key}) : super(key: key);
 
   @override
-  _SensorTableState createState() => _SensorTableState();
+  _SensorInfoTableState createState() => _SensorInfoTableState();
 }
 
-class _SensorTableState extends State<SensorTable> {
+class _SensorInfoTableState extends State<SensorInfoTable> {
   late SensorDataSource sensorDataSource;
 
   @override
@@ -27,18 +27,16 @@ class _SensorTableState extends State<SensorTable> {
   }
 
   @override
-  void didUpdateWidget(covariant SensorTable oldWidget) {
+  void didUpdateWidget(covariant SensorInfoTable oldWidget) {
     super.didUpdateWidget(oldWidget);
     sensors = getSensorData();
     // sensorDataSource = SensorDataSource(sensorData: sensors);
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     if (widget.sensorValue.isEmpty){
-      return Center(child: CircularProgressIndicator(),);
+      return Center(child: Text('데이터가 없습니다.'));
     }
 
     return LayoutBuilder(builder: (context, constraint) {
@@ -120,7 +118,6 @@ class _SensorTableState extends State<SensorTable> {
 
 class Sensor {
   Sensor(this.id, this.address, this.facility, this.level, this.state);
-
   final String id;
   final String address;
   final String? facility;
@@ -171,7 +168,6 @@ class SensorDataSource extends DataGridSource {
     } else {
       _paginatedSensors = [];
     }
-
     return true;
   }
 

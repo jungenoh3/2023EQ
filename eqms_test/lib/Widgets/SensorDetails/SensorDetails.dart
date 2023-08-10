@@ -1,19 +1,18 @@
 import 'package:dio/dio.dart';
 import 'package:eqms_test/Api/Retrofit/RestClient.dart';
-import 'package:eqms_test/Widgets/SensorInfo/AbnorSensorList.dart';
-import 'package:eqms_test/Widgets/SensorInfo/SensorList.dart';
-import 'package:eqms_test/Widgets/SensorInfo/SensorTable.dart';
+import 'package:eqms_test/Widgets/SensorDetails/SensorAbnormalList.dart';
+import 'package:eqms_test/Widgets/SensorDetails/SensorInfoList.dart';
 import 'package:flutter/material.dart';
 
 
-class SensorInfo extends StatefulWidget {
-  const SensorInfo({super.key});
+class SensorDetails extends StatefulWidget {
+  const SensorDetails({super.key});
 
   @override
-  State<SensorInfo> createState() => _SensorInfoState();
+  State<SensorDetails> createState() => _SensorDetailsState();
 }
 
-class _SensorInfoState extends State<SensorInfo> with TickerProviderStateMixin {
+class _SensorDetailsState extends State<SensorDetails> with TickerProviderStateMixin {
   final dio = Dio();
   late RestClient client = RestClient(dio);
   late TabController _tabController;
@@ -60,8 +59,8 @@ class _SensorInfoState extends State<SensorInfo> with TickerProviderStateMixin {
       body: TabBarView(
         controller: _tabController,
         children: [
-          SensorList(),
-          AbnorSensorList(),
+          SensorInfoList(),
+          SensorAbnormalList(),
         ],
       ),
     );

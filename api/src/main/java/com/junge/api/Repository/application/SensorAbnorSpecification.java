@@ -30,6 +30,13 @@ public class SensorAbnorSpecification {
         };
     }
 
+    public static Specification<SensorAbnormal> hasFaultMessageData(){
+        return (root, query, criteriaBuilder) -> {
+            root.fetch("sensorInfo", JoinType.LEFT);
+            return criteriaBuilder.isNotNull(root.get("fault_message"));
+        };
+    }
+
     public static Specification<SensorAbnormal> equalRegion(String region){
         return (root, query, criteriaBuilder) -> {
             Fetch<SensorAbnormal, SensorInfo> sensorInfoFetch = root.fetch("sensorInfo", JoinType.LEFT);

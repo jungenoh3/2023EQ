@@ -63,6 +63,7 @@ public class DataController {
             @RequestParam(required = false) String accerlator,
             @RequestParam(required = false) String pressure,
             @RequestParam(required = false) String temperature,
+            @RequestParam(required = false) String fault_message,
             @RequestParam(required = false) String region
     ){
         Specification<SensorAbnormal> spec = (root, query, criteriaBuilder) -> {
@@ -75,6 +76,8 @@ public class DataController {
             spec = spec.and(SensorAbnorSpecification.hasPressureData());
         if(temperature != null)
             spec = spec.and(SensorAbnorSpecification.hasTemperatureData());
+        if(fault_message != null)
+            spec = spec.and(SensorAbnorSpecification.hasFaultMessageData());
         if(region != null)
             spec = spec.and(SensorAbnorSpecification.equalRegion(region));
 
