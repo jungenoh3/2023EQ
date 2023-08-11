@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 
 part 'RestClient.g.dart';
 
-@RestApi(baseUrl: 'http://155.230.118.78:1234/EQMS')
+@RestApi(baseUrl: 'http://172.20.10.5:1234/EQMS')
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 

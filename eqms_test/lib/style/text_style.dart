@@ -1,0 +1,22 @@
+import 'package:flutter/material.dart';
+import 'color_guide.dart';
+
+const kAppBarTitleTextStyle = TextStyle(color: Colors.black);
+const kBoxContainerTitleTextStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
+const kInfoTitleTextStyle = TextStyle(fontSize: 22, fontWeight: FontWeight.w900);
+const kInfoDescriptionTextStyle = TextStyle(fontSize: 14, color: darkGray);
+const kSeismicTitleTextStyle = TextStyle(fontSize:22);
+const kSeismicDescriptionTextStyle = TextStyle(fontSize:16,  color: primaryBlack);
+const kLoadingTextStyle = TextStyle(color: Colors.white, fontSize: 16);
+const kSourceTextStyle = TextStyle(fontSize: 13, color: lightGray1);
+const kTapTextStyle = TextStyle(fontSize: 14, fontWeight: FontWeight.bold);
+const kHintTextStyle = TextStyle(fontSize: 14, color: mediumGray);
+const kWarningTextStyle = TextStyle(fontSize: 13, color: secondaryRed);
+const kMorePageTitleTextStyle = TextStyle(fontSize: 20, color: primaryBlack);
+const kMorePageRemainTitleTextStyle = TextStyle(fontSize: 20, color: primaryBlack);
+const kMorePageRemainTextStyle = TextStyle(fontSize: 12, color: mediumGray);
+const kButtonTextStyle = TextStyle(fontSize:18, color: Colors.white, fontWeight: FontWeight.bold);
+const kUnidentifiedButtonTextStyle = TextStyle(fontWeight: FontWeight.w300, color: Colors.white, fontSize: 18);
+const kAgreeTextStyle = TextStyle(fontSize:20, fontWeight: FontWeight.bold, color: primaryBlack);
+const kRegisterTextStyle = TextStyle(fontSize:18, color: primaryBlack);
+const kSettingDescriptionTextStyle = TextStyle(fontSize:18, color: primaryBlack);

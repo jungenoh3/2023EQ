@@ -123,7 +123,7 @@ class _RestClient implements RestClient {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://155.230.118.78:1234/EQMS';
+    baseUrl ??= 'http://172.20.10.5:1234/EQMS';
   }
 
   final Dio _dio;

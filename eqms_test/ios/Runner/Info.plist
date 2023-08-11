@@ -2,7 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleDevelopmentRegion</key>
+    <key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
 	<string>Eqms Test</string>
@@ -47,12 +47,30 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-	<key>LSApplicationQueriesSchemes</key>
+    <key>NSUserNotificationCenterUsageDescription</key>
+    <string>This app requires access to notifications.</string>
+    <key>FLTEnableImpeller</key>
+    <false />
+    <key>LSApplicationQueriesSchemes</key>
     <array>
       <string>https</string>
       <string>http</string>
+      <string>sms</string>
+      <string>tel</string>
     </array>
-    <string>위치 정보가 필요합니다.</string>
+    <key>NSAppTransportSecurity</key>
+    <dict>
+      <key>NSAllowsArbitraryLoads</key>
+      <true/>
+    </dict>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Required for selecting photos and videos</string>
+    <key>NSCameraUsageDescription</key>
+    <string>Required for taking photos and videos</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Required for taking videos with sound</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>Required for saving photos and videos</string>
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>위치 정보가 필요합니다.</string>
 </dict>
