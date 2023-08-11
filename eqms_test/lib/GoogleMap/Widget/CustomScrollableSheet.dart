@@ -1,9 +1,10 @@
 import 'package:eqms_test/Api/DraggableSheetModel.dart';
 import 'package:eqms_test/Api/GoogleMapModel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-
+import '../../style/text_style.dart';
 class CustomScrollableSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -61,7 +62,7 @@ class CustomScrollableSheet extends StatelessWidget {
                                 ),
                                 Text(
                                   itemValue.sheetTitle,
-                                  style: TextStyle(fontSize: 20),
+                                  style: kCustomScrollableSheetTitleTextStyle,
                                 ),
                               ],
                             ),

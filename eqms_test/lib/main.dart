@@ -1,12 +1,10 @@
-import 'package:eqms_test/Widgets/EQInfo/EQInfo.dart';
-import 'package:eqms_test/Widgets/RootScreen.dart';
 import 'package:eqms_test/Api/FirebaseMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 import 'firebase_options.dart';
-
+import './Widgets/InitialPage/splashscreen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -21,7 +19,7 @@ void main() async {
   }
 
   runApp(MaterialApp(
-    home: const RootScreen(),
+    home: SplashScreen(),
 
   ));
 }

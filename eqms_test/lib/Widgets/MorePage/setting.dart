@@ -38,14 +38,20 @@ class _SettingState extends State<Setting> {
 
   Future<void> _checkPermissionsAndSetAlarm(bool value) async {
     if (value) {
-      bool hasPermissions  = await _loadPermissionStatus();
+      bool hasPermissions = await _loadPermissionStatus();
       if (!hasPermissions) {
-          _showPermissionDialog();
-          return;
+        _showPermissionDialog();
+        return;
       }
     }
-    isAlarmEnabledFuture = _saveAlarmSetting(value);
+
+    bool? savedValue = await _saveAlarmSetting(value);
+
+    setState(() {
+      isAlarmEnabledFuture = Future.value(savedValue);
+    });
   }
+
 
 
   //TODO::Podfile 확인하기!

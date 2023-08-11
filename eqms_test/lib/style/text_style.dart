@@ -20,3 +20,4 @@ const kUnidentifiedButtonTextStyle = TextStyle(fontWeight: FontWeight.w300, colo
 const kAgreeTextStyle = TextStyle(fontSize:20, fontWeight: FontWeight.bold, color: primaryBlack);
 const kRegisterTextStyle = TextStyle(fontSize:18, color: primaryBlack);
 const kSettingDescriptionTextStyle = TextStyle(fontSize:18, color: primaryBlack);
+const kCustomScrollableSheetTitleTextStyle = TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: primaryDark);
