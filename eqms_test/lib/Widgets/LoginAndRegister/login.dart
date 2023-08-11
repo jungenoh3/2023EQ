@@ -1,3 +1,4 @@
+import 'package:eqms_test/Widgets/LoginAndRegister/register_agree.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../style/text_style.dart';
@@ -111,7 +112,10 @@ class Login extends StatelessWidget {
                     foregroundColor:
                         MaterialStatePropertyAll<Color>(primaryOrange)),
                 onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/registeragree');
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => const RegisterAgree())
+                  );
                 },
                 child: const Text('관리자 계정생성'))
           ],

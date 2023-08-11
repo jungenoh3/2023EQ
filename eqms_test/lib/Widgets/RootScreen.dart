@@ -19,6 +19,12 @@ class RootScreen extends StatefulWidget {
 class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
   late final PageController _controller;
   int selectedIndex = 0;
+  final GlobalKey<NavigatorState> eqInfoNavigatorKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> eqSafetyNavigatorKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> sensorMapNavigatorKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> sensorDetailsNavigatorKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> morePageNavigatorKey = GlobalKey<NavigatorState>();
+  late List<Widget> widgetOptions;
 
   final List<BottomNavigationBarItem> bottomItems = [
     BottomNavigationBarItem(
@@ -48,11 +54,48 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
     ),
   ];
 
+
+
   @override
   void initState() {
     super.initState();
     _controller = PageController();
+
+    widgetOptions = [
+      Navigator(
+          key: eqInfoNavigatorKey,
+          onGenerateRoute: (settings) {
+            return MaterialPageRoute(
+                builder: (context) => const EQInfo());
+          }),
+      Navigator(
+          key: eqSafetyNavigatorKey,
+          onGenerateRoute: (settings) {
+            return MaterialPageRoute(
+                builder: (context) => EQSafety(goToEQInfo: goToEQInfo));
+          }),
+
+      Navigator(
+          key: sensorMapNavigatorKey,
+          onGenerateRoute: (settings) {
+            return MaterialPageRoute(
+                builder: (context) => const SensorMap());
+          }),
+      Navigator(
+          key: sensorDetailsNavigatorKey,
+          onGenerateRoute: (settings) {
+            return MaterialPageRoute(
+                builder: (context) => const SensorDetails());
+          }),
+      Navigator(
+          key: morePageNavigatorKey,
+          onGenerateRoute: (settings) {
+            return MaterialPageRoute(
+                builder: (context) => const MorePage());
+          }),
+    ];
   }
+
 
   @override
   void dispose() {
@@ -61,10 +104,25 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
   }
 
   void onItemTapped(int index) {
+    if (!mounted) return;
+
     if (selectedIndex != index) {
       _controller.jumpToPage(index);
-      setState(() => selectedIndex = index);
     }
+  }
+
+  void onPageChanged(int index) {
+    if (!mounted) return;
+
+    setState(() => selectedIndex = index);
+  }
+  void goToEQInfo() {
+    if (!mounted) return;
+
+    _controller.jumpToPage(0);  // 0은 EQInfo 페이지의 인덱스입니다.
+    setState(() {
+      selectedIndex = 0; // 바텀바의 선택된 아이템을 EQInfo로 업데이트합니다.
+    });
   }
 
   BottomNavigationBar renderBottomNavigationBar() {
@@ -81,13 +139,7 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> widgetOptions = <Widget>[
-      const EQInfo(),
-      const EQSafety(),
-      const SensorMap(),
-      const SensorDetails(),
-      const MorePage(),
-    ];
+
 
     return MultiProvider(
       providers: [
@@ -97,9 +149,10 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
       child: Scaffold(
         body: PageView(
           controller: _controller,
-          onPageChanged: onItemTapped,
+          onPageChanged: onPageChanged,  // Use onPageChanged here
           children: widgetOptions,
         ),
+
         bottomNavigationBar: SafeArea(
           child: SizedBox(
               height: 58,

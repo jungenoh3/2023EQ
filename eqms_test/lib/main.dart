@@ -1,3 +1,4 @@
+import 'package:eqms_test/Widgets/EQInfo/EQInfo.dart';
 import 'package:eqms_test/Widgets/RootScreen.dart';
 import 'package:eqms_test/Api/FirebaseMessage.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ void main() async {
   }
 
   runApp(MaterialApp(
-    home: RootScreen(),
+    home: const RootScreen(),
+
   ));
 }

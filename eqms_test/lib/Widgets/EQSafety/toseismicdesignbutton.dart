@@ -4,6 +4,9 @@ import './seismic_design.dart';
 import '../../style/text_style.dart';
 
 class ToSeismicDesignButton extends StatelessWidget {
+  final Function goToEQInfo;
+  const ToSeismicDesignButton({Key? key, required this.goToEQInfo}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -11,7 +14,7 @@ class ToSeismicDesignButton extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const SeismicDesign(),
+            builder: (context) => SeismicDesign(goToEQInfo: goToEQInfo),
           ),
         );
       },

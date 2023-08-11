@@ -6,7 +6,8 @@ import '../../style/color_guide.dart';
 import '../../style/text_style.dart';
 
 class SeismicDesign extends StatefulWidget {
-  const SeismicDesign({super.key});
+  final Function goToEQInfo;
+  const SeismicDesign({Key? key, required this.goToEQInfo});
 
   @override
   State<SeismicDesign> createState() => _SeismicDesignState();
@@ -127,14 +128,13 @@ class _SeismicDesignState extends State<SeismicDesign> {
                 children: [
                   Expanded(
                       child: ToActInfoButtonNoAni()),
-                  Expanded(child: ToEQMapButton())
+                  Expanded(child: ToEQMapButton(goToEQInfo: widget.goToEQInfo))
                 ],
               ),
             ),
           )
         ],
       ),
-      bottomNavigationBar: BottomAppBar(height: 60, color: Colors.red),
     );
   }
 }

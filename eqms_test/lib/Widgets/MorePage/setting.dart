@@ -53,7 +53,7 @@ class _SettingState extends State<Setting> {
   Future<bool?> _saveAlarmSetting(bool value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('isAlarmenabled', value);
-    setState(() {
+    (() {
       isAlarmEnabledFuture = Future.value(value);
     });
     return value;

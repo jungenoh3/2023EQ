@@ -14,14 +14,20 @@ class SensorMap extends StatefulWidget {
 
 class _SensorMapState extends State<SensorMap> {
   @override
+  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      context.read<GoogleMapModel>().SensorItems();
-      context.read<DraggableSheetModel>().getDraggableSheetHeight(0.11);
+      try {
+        context.read<GoogleMapModel>().SensorItems();
+        context.read<DraggableSheetModel>().getDraggableSheetHeight(0.11);
+      } catch (e) {
+        print('Error occurred: $e');
+      }
     });
     print('Sensor_map initState');
   }
+
 
   @override
   void deactivate() {
