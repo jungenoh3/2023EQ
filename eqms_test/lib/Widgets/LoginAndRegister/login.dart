@@ -11,22 +11,24 @@ class Login extends StatelessWidget {
   const Login({Key? key, required this.nextRoute}) : super(key: key);
   // TODO: 로그인 아이디 비번 관련 validation(아예 입력하지 않은 경우)
   void _loginAction(BuildContext context) async {
+    // Get the NavigatorState before the async operation
+    final NavigatorState navigatorState = Navigator.of(context);
+
     // TODO: 로그인 관련 유저정보 검증 및 확인 실시
-    // Simulating a successful login for demonstration purposes.
-    bool isLoggedIn = true;
+    bool isLoggedIn = true; // For demonstration purposes
 
     if (isLoggedIn) {
-      // If the login is successful, save the login state to local storage.
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setBool('isLoggedIn', true);
 
-      // Navigate to the specified next route.
-      Navigator.pushReplacementNamed(context, nextRoute);
+      // Use navigatorState to navigate, ensuring you're not using context after the async gap
+      navigatorState.pushReplacementNamed(nextRoute);
     } else {
-      // Handle the case when login fails (optional).
-      // You can show an error message or perform other actions here.
-    } // TODO: 상황에 맞는 실패 메시지 안내
+      // Handle login failure
+      // ...
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -126,12 +128,16 @@ class Login extends StatelessWidget {
 
   // Check the login state during app startup.
   void _checkLoginState(BuildContext context) async {
+    // Get the NavigatorState before the async operation
+    final NavigatorState navigatorState = Navigator.of(context);
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
 
     if (isLoggedIn) {
-      // If the user is logged in, navigate to the specified next route directly.
-      Navigator.pushReplacementNamed(context, nextRoute);
+      // Use the cached NavigatorState to navigate after the async gap
+      navigatorState.pushReplacementNamed(nextRoute);
     }
   }
+
 }

@@ -39,10 +39,10 @@ class BottomSheets {
                   child: RichText(
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
-                    strutStyle: StrutStyle(fontSize: 15.0),
+                    strutStyle: const StrutStyle(fontSize: 15.0),
                     text: TextSpan(
                         text: name,
-                        style: TextStyle(color: Colors.black, fontSize: 16, fontWeight:FontWeight.bold)
+                        style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight:FontWeight.bold)
                     ),
                   ),
                 ),
@@ -51,10 +51,10 @@ class BottomSheets {
                   child: RichText(
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
-                    strutStyle: StrutStyle(fontSize: 12.0),
+                    strutStyle: const StrutStyle(fontSize: 12.0),
                     text: TextSpan(
                       text: location,
-                      style: TextStyle(color: Colors.black, fontSize: 13)
+                      style: const TextStyle(color: Colors.black, fontSize: 13)
                     ),
                   ),
                 ),

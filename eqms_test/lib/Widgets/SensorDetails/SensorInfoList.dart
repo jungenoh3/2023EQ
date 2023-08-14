@@ -1,10 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:eqms_test/Api/Retrofit/RestClient.dart';
-import 'package:eqms_test/Widgets/SensorDetails/SensorInfoTable.dart';
+import 'package:eqms_test/Widgets/CommonWidgets/loading_widget.dart';
+import 'package:eqms_test/Widgets/SensorDetails/sensor_info_table.dart';
 import 'package:flutter/material.dart';
 
 class SensorInfoList extends StatefulWidget {
-  const SensorInfoList({super.key});
+  const SensorInfoList({Key? key}) : super(key: key);
 
   @override
   State<SensorInfoList> createState() => _SensorInfoListState();
@@ -33,7 +34,7 @@ class _SensorInfoListState extends State<SensorInfoList> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return FutureBuilder<List<SensorInfo>>(
       future: client.getSensorSearch(queryParameter),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (snapshot.hasData) {
@@ -53,7 +54,7 @@ class _SensorInfoListState extends State<SensorInfoList> {
                     Flexible(
                       child: TextField(
                         controller: myController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             contentPadding: EdgeInsets.all(10),
                             border: OutlineInputBorder(),
                             focusedBorder: OutlineInputBorder(
@@ -65,7 +66,7 @@ class _SensorInfoListState extends State<SensorInfoList> {
                     const SizedBox(
                       width: 10,
                     ),
-                    Container(
+                    SizedBox(
                         height: 48,
                         child: OutlinedButton(
                           onPressed: () {
@@ -77,10 +78,10 @@ class _SensorInfoListState extends State<SensorInfoList> {
                                 }
                               });
                           },
-                          child: Text("조회"),
                           style: OutlinedButton.styleFrom(
                               backgroundColor: Colors.deepOrange,
                               foregroundColor: Colors.white),
+                          child: const Text("조회"),
                         ))
                   ],
                 ),
@@ -135,12 +136,12 @@ class _SensorInfoListState extends State<SensorInfoList> {
                         const SizedBox(
                           width: 10,
                         ),
-                        Container(
+                        SizedBox(
                           width: 75,
                           child: DropdownButton(
                             isExpanded: true,
                               value: facilityValue,
-                              style: TextStyle(color: Colors.black, fontSize: 14),
+                              style: const TextStyle(color: Colors.black, fontSize: 14),
                               items: facilityData
                                   .map<DropdownMenuItem<String>>((String value) {
                                 return DropdownMenuItem<String>(
@@ -172,9 +173,7 @@ class _SensorInfoListState extends State<SensorInfoList> {
             ],
           );
         }
-        return Center(
-          child: CircularProgressIndicator(),
-        );
+        return const LoadingIndicator();
       },
     );
   }

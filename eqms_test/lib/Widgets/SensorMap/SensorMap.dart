@@ -1,7 +1,7 @@
 import 'package:eqms_test/Api/DraggableSheetModel.dart';
 import 'package:eqms_test/Api/GoogleMapModel.dart';
-import 'package:eqms_test/GoogleMap/CustomGoogleMap.dart';
-import 'package:eqms_test/GoogleMap/widget/CustomScrollableSheet.dart';
+import 'package:eqms_test/GoogleMap/custom_googlemap.dart';
+import 'package:eqms_test/GoogleMap/widget/custom_scrollablesheet.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

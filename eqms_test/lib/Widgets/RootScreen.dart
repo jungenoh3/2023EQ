@@ -1,8 +1,8 @@
 import 'package:eqms_test/Api/DraggableSheetModel.dart';
 import 'package:eqms_test/Api/GoogleMapModel.dart';
 import 'package:eqms_test/Widgets/EQInfo/EQInfo.dart';
-import 'package:eqms_test/Widgets/EQSafety/EQSafety.dart';
-import 'package:eqms_test/Widgets/SensorDetails/SensorDetails.dart';
+import 'package:eqms_test/Widgets/EQSafety/eq_safety.dart';
+import 'package:eqms_test/Widgets/SensorDetails/SensorInfo.dart';
 import 'package:eqms_test/Widgets/SensorMap/SensorMap.dart';
 import 'package:eqms_test/Widgets/MorePage/more_page.dart';
 import 'package:flutter/material.dart';
@@ -85,7 +85,7 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
           key: sensorDetailsNavigatorKey,
           onGenerateRoute: (settings) {
             return MaterialPageRoute(
-                builder: (context) => const SensorDetails());
+                builder: (context) => const SensorInfo());
           }),
       Navigator(
           key: morePageNavigatorKey,

@@ -3,26 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CustomFloatingButton extends StatelessWidget {
-  VoidCallback onMoveCamera;
-
-  CustomFloatingButton({required this.onMoveCamera, super.key});
+  final VoidCallback onMoveCamera;
+  const CustomFloatingButton({required this.onMoveCamera, super.key});
 
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.end, children: [
       FloatingActionButton(
-        child: Icon(Icons.location_pin),
         mini: true,
         onPressed: () {
           onMoveCamera();
         },
+        child: const Icon(Icons.location_pin),
       ),
-      SizedBox(
+      const SizedBox(
         height: 5,
       ),
       FloatingActionButton(
-        child: Icon(Icons.refresh),
         mini: true,
+        child: const Icon(Icons.refresh),
         onPressed: () {
           switch (context.read<GoogleMapModel>().sheetTitle) {
             case "내 주변 대피소":

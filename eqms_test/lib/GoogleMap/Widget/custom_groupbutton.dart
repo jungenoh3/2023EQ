@@ -13,7 +13,7 @@ class CustomGroupButton extends StatelessWidget {
       textColor: Colors.black,
       backgroundColor: Colors.white,
       initiallyExpanded: false,
-      title: Text("지역 선택"),
+      title: const Text("지역 선택"),
       children: [
         GroupButton<MapLocation>(
           isRadio: true,
@@ -31,7 +31,7 @@ class CustomGroupButton extends StatelessWidget {
               },
               style: TextButton.styleFrom(
                 minimumSize: Size.zero,
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 shadowColor: Colors.grey,
               ),

@@ -1,8 +1,8 @@
 import 'package:eqms_test/Api/GoogleMapModel.dart';
 import 'package:eqms_test/GoogleMap/Models/MapItems.dart';
-import 'package:eqms_test/GoogleMap/Widget/CustomScrollableSheet.dart';
+import 'package:eqms_test/GoogleMap/Widget/custom_scrollablesheet.dart';
 import 'package:eqms_test/Widgets/EQInfo/CustomCategory.dart';
-import 'package:eqms_test/GoogleMap/CustomGoogleMap.dart';
+import 'package:eqms_test/GoogleMap/custom_googlemap.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +21,6 @@ class _EQInfoState extends State<EQInfo> {
   @override
   void initState() {
     super.initState();
-    print('EQ_Info initState');
   }
 
   @override

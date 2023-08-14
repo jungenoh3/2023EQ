@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:eqms_test/Api/Retrofit/RestClient.dart';
 import 'package:eqms_test/Widgets/SensorDetails/SensorAbnormalTable.dart';
 import 'package:flutter/material.dart';
+import '../CommonWidgets/loading_widget.dart';
 
 class SensorAbnormalList extends StatefulWidget {
   const SensorAbnormalList({super.key});
@@ -139,7 +140,7 @@ class _SensorAbnormalListState extends State<SensorAbnormalList> {
               ],
             );
           }
-          return Center(child: CircularProgressIndicator(),);
+          return LoadingIndicator();
         });
   }
 

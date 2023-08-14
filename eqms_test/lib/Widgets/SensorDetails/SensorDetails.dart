@@ -6,8 +6,9 @@ import 'package:flutter/material.dart';
 
 
 class SensorDetails extends StatefulWidget {
-  const SensorDetails({super.key});
-
+  final int initialTabIndex;
+  const SensorDetails({Key? key, this.initialTabIndex = 0})
+      : super(key: key);
   @override
   State<SensorDetails> createState() => _SensorDetailsState();
 }
@@ -20,6 +21,7 @@ class _SensorDetailsState extends State<SensorDetails> with TickerProviderStateM
   @override
   void initState() {
     _tabController = TabController(
+      initialIndex: widget.initialTabIndex,
       length: 2,
       vsync: this,
     );
@@ -40,7 +42,7 @@ class _SensorDetailsState extends State<SensorDetails> with TickerProviderStateM
           indicatorColor: Colors.deepOrange,
           unselectedLabelColor: Colors.black,
           labelColor: Colors.deepOrange,
-          labelStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+          labelStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
           tabs: const [
             Tab(
               child: Center(
@@ -58,7 +60,7 @@ class _SensorDetailsState extends State<SensorDetails> with TickerProviderStateM
       ),
       body: TabBarView(
         controller: _tabController,
-        children: [
+        children: const [
           SensorInfoList(),
           SensorAbnormalList(),
         ],

@@ -6,17 +6,17 @@ import 'package:syncfusion_flutter_core/theme.dart';
 // https://help.syncfusion.com/flutter/datagrid/paging
 
 List<Sensor> sensors = <Sensor>[];
-final int _rowsPerPage = 6;
+const int _rowsPerPage = 6;
 
 class SensorInfoTable extends StatefulWidget {
-  List<SensorInfo> sensorValue;
-  SensorInfoTable({required this.sensorValue, Key? key}) : super(key: key);
+  final List<SensorInfo> sensorValue;
+  const SensorInfoTable({required this.sensorValue, Key? key}) : super(key: key);
 
   @override
-  _SensorInfoTableState createState() => _SensorInfoTableState();
+  SensorInfoTableState createState() => SensorInfoTableState();
 }
 
-class _SensorInfoTableState extends State<SensorInfoTable> {
+class SensorInfoTableState extends State<SensorInfoTable> {
   late SensorDataSource sensorDataSource;
 
   @override
@@ -36,14 +36,14 @@ class _SensorInfoTableState extends State<SensorInfoTable> {
   @override
   Widget build(BuildContext context) {
     if (widget.sensorValue.isEmpty){
-      return Center(child: Text('데이터가 없습니다.'));
+      return const Center(child: Text('데이터가 없습니다.'));
     }
 
     return LayoutBuilder(builder: (context, constraint) {
       return Column(
         mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
+              SizedBox(
                 height: 350,
                 child: SfDataGrid(
                   source: sensorDataSource,
@@ -51,45 +51,45 @@ class _SensorInfoTableState extends State<SensorInfoTable> {
                   columns: <GridColumn>[
                     GridColumn(
                         columnName: 'id',
-                        autoFitPadding: EdgeInsets.all(5.0),
+                        autoFitPadding: const EdgeInsets.all(5.0),
                         label: Container(
-                            padding: EdgeInsets.all(5.0),
+                            padding: const EdgeInsets.all(5.0),
                             alignment: Alignment.center,
-                            child: Text(
+                            child: const Text(
                               '단말번호',
                             ))),
                     GridColumn(
                         columnName: 'address',
-                        autoFitPadding: EdgeInsets.all(5.0),
+                        autoFitPadding: const EdgeInsets.all(5.0),
                         label: Container(
-                            padding: EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(8.0),
                             alignment: Alignment.center,
-                            child: Text('주소 (상세)', overflow: TextOverflow.clip,))),
+                            child: const Text('주소 (상세)', overflow: TextOverflow.clip,))),
                     GridColumn(
                         columnName: 'facility',
                         label: Container(
-                            padding: EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(8.0),
                             alignment: Alignment.center,
-                            child: Text(
+                            child: const Text(
                               '시설구분',
                               overflow: TextOverflow.ellipsis,
                             ))),
                     GridColumn(
                         columnName: 'level',
                         label: Container(
-                            padding: EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(8.0),
                             alignment: Alignment.center,
-                            child: Text('층 정보'))),
+                            child: const Text('층 정보'))),
                     GridColumn(
                         columnName: 'state',
                         label: Container(
-                            padding: EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(8.0),
                             alignment: Alignment.center,
-                            child: Text('상태'))),
+                            child: const Text('상태'))),
                   ],
                 ),
               ),
-              Container(
+              SizedBox(
                 height: 60,
                 child: SfDataPagerTheme(
                   data: SfDataPagerThemeData(
@@ -144,8 +144,8 @@ class SensorDataSource extends DataGridSource {
         cells: row.getCells().map<Widget>((e) {
       return Container(
         alignment: Alignment.center,
-        padding: EdgeInsets.all(8.0),
-        child: Text(e.value.toString(), style: TextStyle(fontSize: 11),),
+        padding: const EdgeInsets.all(8.0),
+        child: Text(e.value.toString(), style: const TextStyle(fontSize: 11)),
       );
     }).toList());
   }

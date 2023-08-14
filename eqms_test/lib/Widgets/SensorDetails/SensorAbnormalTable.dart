@@ -6,45 +6,48 @@ import 'package:syncfusion_flutter_core/theme.dart';
 // https://help.syncfusion.com/flutter/datagrid/paging
 
 List<Sensor> sensors = <Sensor>[];
-final int _rowsPerPage = 8;
+const int _rowsPerPage = 8;
 
 class SensorAbnormalTable extends StatefulWidget {
-  List<SensorAbnormal> sensorValue;
-  SensorAbnormalTable({required this.sensorValue, Key? key}) : super(key: key);
+  final List<SensorAbnormal> sensorValue;
+  const SensorAbnormalTable({required this.sensorValue, Key? key}) : super(key: key);
 
   @override
-  _SensorAbnormalTableState createState() => _SensorAbnormalTableState();
+  SensorAbnormalTableState createState() => SensorAbnormalTableState();
 }
 
-class _SensorAbnormalTableState extends State<SensorAbnormalTable> {
+class SensorAbnormalTableState extends State<SensorAbnormalTable> {
   late SensorDataSource sensorDataSource;
 
   @override
   void initState() {
     super.initState();
-    sensors = getSensorData();
-    sensorDataSource = SensorDataSource(sensorData: sensors);
+    updateSensorData();
   }
 
   @override
   void didUpdateWidget(covariant SensorAbnormalTable oldWidget) {
     super.didUpdateWidget(oldWidget);
+    updateSensorData();
+  }
+
+  void updateSensorData() {
     sensors = getSensorData();
-    // sensorDataSource = SensorDataSource(sensorData: sensors);
+    sensorDataSource = SensorDataSource(sensorData: sensors);
   }
 
   @override
   Widget build(BuildContext context) {
     if (widget.sensorValue.isEmpty){
-      return Center(child: Text('데이터가 없습니다.'));
+      return const Center(child: Text('데이터가 없습니다.'));
     }
+
 
     return LayoutBuilder(builder: (context, constraint) {
       return Column(
         mainAxisSize: MainAxisSize.min,
             children: [
-              widget.sensorValue.isEmpty ? Center(child: Text("데이터가 없습니다."),) :
-              Container(
+              if (widget.sensorValue.isEmpty) const Center(child: Text("데이터가 없습니다."),) else SizedBox(
                 height: 450,
                 child: SfDataGrid(
                   source: sensorDataSource,
@@ -52,51 +55,51 @@ class _SensorAbnormalTableState extends State<SensorAbnormalTable> {
                   columns: <GridColumn>[
                     GridColumn(
                         columnName: 'id',
-                        autoFitPadding: EdgeInsets.all(5.0),
+                        autoFitPadding: const EdgeInsets.all(5.0),
                         label: Container(
-                            padding: EdgeInsets.all(5.0),
+                            padding: const EdgeInsets.all(5.0),
                             alignment: Alignment.center,
-                            child: Text(
+                            child: const Text(
                               '단말번호',
                             ))),
                     GridColumn(
                         columnName: 'address',
-                        autoFitPadding: EdgeInsets.all(5.0),
+                        autoFitPadding: const EdgeInsets.all(5.0),
                         label: Container(
-                            padding: EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(8.0),
                             alignment: Alignment.center,
-                            child: Text('주소 (상세)', overflow: TextOverflow.clip,))),
+                            child: const Text('주소 (상세)', overflow: TextOverflow.clip,))),
                     GridColumn(
                         columnName: 'accelerator',
                         label: Container(
-                            padding: EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(8.0),
                             alignment: Alignment.center,
-                            child: Text(
+                            child: const Text(
                               '가속도',
                               overflow: TextOverflow.ellipsis,
                             ))),
                     GridColumn(
                         columnName: 'pressure',
                         label: Container(
-                            padding: EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(8.0),
                             alignment: Alignment.center,
-                            child: Text('온도'))),
+                            child: const Text('온도'))),
                     GridColumn(
                         columnName: 'temperature',
                         label: Container(
-                            padding: EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(8.0),
                             alignment: Alignment.center,
-                            child: Text('기압계'))),
+                            child: const Text('기압계'))),
                     GridColumn(
                         columnName: 'fault_message',
                         label: Container(
-                            padding: EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(8.0),
                             alignment: Alignment.center,
-                            child: Text('Fault Message'))),
+                            child: const Text('Fault Message'))),
                   ],
                 ),
               ),
-              Container(
+              SizedBox(
                 height: 60,
                 child: SfDataPagerTheme(
                   data: SfDataPagerThemeData(
@@ -124,14 +127,14 @@ class _SensorAbnormalTableState extends State<SensorAbnormalTable> {
 }
 
 class Sensor {
-  Sensor(this.id, this.address, this.accelerator, this.pressure, this.temperature, this.fault_message);
+  Sensor(this.id, this.address, this.accelerator, this.pressure, this.temperature, this.faultMessage);
 
   final String id;
   final String address;
   final String? accelerator;
   final String? pressure;
   final String? temperature;
-  final String? fault_message;
+  final String? faultMessage;
 }
 
 class SensorDataSource extends DataGridSource {
@@ -153,8 +156,8 @@ class SensorDataSource extends DataGridSource {
         cells: row.getCells().map<Widget>((e) {
       return Container(
         alignment: Alignment.center,
-        padding: EdgeInsets.all(8.0),
-        child: Text(e.value.toString(), style: TextStyle(fontSize: 11),),
+        padding: const EdgeInsets.all(8.0),
+        child: Text(e.value.toString(), style: const TextStyle(fontSize: 11),),
       );
     }).toList());
   }
@@ -189,7 +192,7 @@ class SensorDataSource extends DataGridSource {
           columnName: 'accelerator', value: e.accelerator),
       DataGridCell<String>(columnName: 'pressure', value: e.pressure),
       DataGridCell<String>(columnName: 'temperature', value: e.temperature),
-      DataGridCell<String>(columnName: 'fault_message', value: e.fault_message),
+      DataGridCell<String>(columnName: 'faultMessage', value: e.faultMessage),
     ]))
         .toList();
   }

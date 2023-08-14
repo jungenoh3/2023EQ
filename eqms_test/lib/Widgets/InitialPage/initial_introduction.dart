@@ -1,4 +1,3 @@
-import 'package:eqms_test/Widgets/EQInfo/EQInfo.dart';
 import 'package:eqms_test/Widgets/RootScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,10 +10,10 @@ class InitialIntroduction extends StatefulWidget {
   const InitialIntroduction({Key? key}) : super(key: key);
 
   @override
-  _InitialIntroductionState createState() => _InitialIntroductionState();
+  InitialIntroductionState createState() => InitialIntroductionState();
 }
 
-class _InitialIntroductionState extends State<InitialIntroduction> {
+class InitialIntroductionState extends State<InitialIntroduction> {
   // Function to request notification permissions
   Future<void> savePermissionStatus(bool status) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -113,12 +112,12 @@ class _InitialIntroductionState extends State<InitialIntroduction> {
                       context,
                       PageTransition(
                         type: PageTransitionType.fade,
-                        duration: Duration(milliseconds: 1000),
-                        child: RootScreen(),
+                        duration: const Duration(milliseconds: 1000),
+                        child: const RootScreen(),
                       ),
                     );
                   },
-                  child: Text(
+                  child: const Text(
                     '시작하기',
                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
                   ),

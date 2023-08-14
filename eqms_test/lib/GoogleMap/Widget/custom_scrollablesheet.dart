@@ -5,7 +5,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import '../../style/text_style.dart';
+
 class CustomScrollableSheet extends StatelessWidget {
+  const CustomScrollableSheet({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final itemValue = context.watch<GoogleMapModel>();
@@ -31,7 +33,7 @@ class CustomScrollableSheet extends StatelessWidget {
                       topRight: Radius.circular(20)),
                 ),
                 child: ListView.separated(
-                  physics: ClampingScrollPhysics(),
+                  physics: const ClampingScrollPhysics(),
                   controller: scrollController,
                   separatorBuilder: (BuildContext context, int index) =>
                       const Divider(),
@@ -52,12 +54,12 @@ class CustomScrollableSheet extends StatelessWidget {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 SvgPicture.asset(itemValue.iconAsset),
-                                SizedBox(
+                                const SizedBox(
                                   width: 8,
                                 ),
                                 Text(
@@ -73,15 +75,16 @@ class CustomScrollableSheet extends StatelessWidget {
                     return Card(
                       elevation: 0,
                       child: ListTile(
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-                        leading: data.leading == null ? null
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 0, horizontal: 15),
+                        leading: data.leading == null
+                            ? null
                             : Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
                                     data.leading!,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -91,13 +94,14 @@ class CustomScrollableSheet extends StatelessWidget {
                         subtitle: Text(
                           data.subtitle,
                           maxLines: 2,
-                          style: TextStyle(
-                              fontSize: 13, color: Colors.grey[700]),
+                          style:
+                              TextStyle(fontSize: 13, color: Colors.grey[700]),
                         ),
-                        trailing: data.trailing == null ? Text("")
+                        trailing: data.trailing == null
+                            ? const Text("")
                             : Text(
                                 data.trailing!,
-                                style: TextStyle(color: Colors.grey),
+                                style: const TextStyle(color: Colors.grey),
                               ),
                         dense: false,
                         isThreeLine: false,

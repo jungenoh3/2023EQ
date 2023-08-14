@@ -31,43 +31,43 @@ class MorePageRemain extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ServiceUsePromise(),
+                                  builder: (context) => const ServiceUsePromise(),
                                 ),
                               );
                             },
-                            child: Text('이용약관')),
-                        SizedBox(width: 20),
+                            child: const Text('이용약관')),
+                        const SizedBox(width: 20),
                         GestureDetector(
                             onTap: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => PrivacyPolicy(),
+                                  builder: (context) => const PrivacyPolicy(),
                                 ),
                               );
                             },
-                            child: Text('개인정보 처리방침'))
+                            child: const Text('개인정보 처리방침'))
                       ],
                     ),
-                    SizedBox(height: 20),
-                    Text(
+                    const SizedBox(height: 20),
+                    const Text(
                       'Contact',
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 5),
-                    Text('- 경북대학교 초연결융합기술연구소', style: kMorePageRemainTextStyle),
-                    SizedBox(height: 5),
-                    Text('- 웹사이트 주소', style: kMorePageRemainTextStyle),
-                    Text('   https://connected.knu.ac.kr/',
+                    const SizedBox(height: 5),
+                    const Text('- 경북대학교 초연결융합기술연구소', style: kMorePageRemainTextStyle),
+                    const SizedBox(height: 5),
+                    const Text('- 웹사이트 주소', style: kMorePageRemainTextStyle),
+                    const Text('   https://connected.knu.ac.kr/',
                         style: kMorePageRemainTextStyle),
-                    SizedBox(height: 5),
-                    Text('- 이메일', style: kMorePageRemainTextStyle),
-                    Text('   ywkwon@knu.ac.kr',
+                    const SizedBox(height: 5),
+                    const Text('- 이메일', style: kMorePageRemainTextStyle),
+                    const Text('   ywkwon@knu.ac.kr',
                         style: kMorePageRemainTextStyle),
                   ],
                 )),
-            Expanded(flex: 2, child: MorePageCall())
+            const Expanded(flex: 2, child: MorePageCall())
           ],
         ),
       ),

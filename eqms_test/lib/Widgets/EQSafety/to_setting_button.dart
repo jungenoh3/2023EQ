@@ -7,10 +7,10 @@ class ToSettingButton extends StatefulWidget {
   const ToSettingButton({Key? key}) : super(key: key);
 
   @override
-  _ToSettingButtonState createState() => _ToSettingButtonState();
+  ToSettingButtonState createState() => ToSettingButtonState();
 }
 
-class _ToSettingButtonState extends State<ToSettingButton> with SingleTickerProviderStateMixin {
+class ToSettingButtonState extends State<ToSettingButton> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _opacityAnimation;
 

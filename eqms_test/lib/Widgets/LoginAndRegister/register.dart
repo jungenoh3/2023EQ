@@ -9,10 +9,10 @@ class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
 
   @override
-  _RegisterState createState() => _RegisterState();
+  RegisterState createState() => RegisterState();
 }
 
-class _RegisterState extends State<Register> {
+class RegisterState extends State<Register> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _idController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -280,7 +280,7 @@ class _RegisterState extends State<Register> {
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => Login(nextRoute: '')));
+                                        builder: (context) => const Login(nextRoute: '')));
                               } catch (error) {
                                 // 서버에서 오류가 발생한 경우
                                 setState(() {
@@ -289,7 +289,7 @@ class _RegisterState extends State<Register> {
                                   _isErrorMessageVisible = true; // 페이드인 시작
                                 });
                                 // 일정 시간 후 메시지 숨기기
-                                Future.delayed(Duration(milliseconds: 1500),
+                                Future.delayed(const Duration(milliseconds: 1500),
                                     () {
                                   setState(() {
                                     _isErrorMessageVisible = false; // 페이드아웃 시작

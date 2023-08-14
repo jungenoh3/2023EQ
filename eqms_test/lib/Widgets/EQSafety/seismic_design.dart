@@ -7,7 +7,7 @@ import '../../style/text_style.dart';
 
 class SeismicDesign extends StatefulWidget {
   final Function goToEQInfo;
-  const SeismicDesign({Key? key, required this.goToEQInfo});
+  const SeismicDesign({Key? key, required this.goToEQInfo}): super(key: key);
 
   @override
   State<SeismicDesign> createState() => _SeismicDesignState();
@@ -33,18 +33,18 @@ class _SeismicDesignState extends State<SeismicDesign> {
           Expanded(
             flex:3,
             child: Container(
-              margin: EdgeInsets.only(bottom: 10),
-              padding: EdgeInsets.all(20),
+              margin: const EdgeInsets.only(bottom: 10),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 children: [
-                  Align(alignment: Alignment.centerLeft, child: Text('주소 검색', style: kSeismicTitleTextStyle,)),
-                  SizedBox(height: 5),
+                  const Align(alignment: Alignment.centerLeft, child: Text('주소 검색', style: kSeismicTitleTextStyle,)),
+                  const SizedBox(height: 5),
                   Container(
-                    padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+                    padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 5),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all()),
-                    child: Row(
+                    child: const Row(
                         children: [
                       Expanded(
                         flex:8,
@@ -61,8 +61,8 @@ class _SeismicDesignState extends State<SeismicDesign> {
                           child: Icon(Icons.search))
                     ]),
                   ),
-                  SizedBox(height: 3),
-                  Align(
+                  const SizedBox(height: 3),
+                  const Align(
                     alignment: Alignment.topRight,
                     child: Text('주소가 정확히 입력되지 않았습니다.',style: kWarningTextStyle),
                   )
@@ -70,12 +70,12 @@ class _SeismicDesignState extends State<SeismicDesign> {
               ),
             ),
           ),
-          SegmentH(size: 3),
+          const SegmentH(size: 3),
           Expanded(
             flex:4,
             child: Container(
-              margin: EdgeInsets.only(top: 20),
-              child: Column(
+              margin: const EdgeInsets.only(top: 20),
+              child: const Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -106,11 +106,9 @@ class _SeismicDesignState extends State<SeismicDesign> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  Container(
-                    child: Text(
-                      '내진 설계',
-                      style: kSeismicDescriptionTextStyle,
-                    ),
+                  Text(
+                    '내진 설계',
+                    style: kSeismicDescriptionTextStyle,
                   )
                 ],
               ),
@@ -119,14 +117,14 @@ class _SeismicDesignState extends State<SeismicDesign> {
           Expanded(
             flex:3,
             child: Container(
-              margin: EdgeInsets.only(bottom: 10),
+              margin: const EdgeInsets.only(bottom: 10),
               width: double.infinity,
               color: lightGray1_5,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Expanded(
+                  const Expanded(
                       child: ToActInfoButtonNoAni()),
                   Expanded(child: ToEQMapButton(goToEQInfo: widget.goToEQInfo))
                 ],

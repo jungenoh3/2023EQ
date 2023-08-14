@@ -9,10 +9,10 @@ class RegisterAgree extends StatefulWidget {
   const RegisterAgree({Key? key}) : super(key: key);
 
   @override
-  _RegisterAgreeState createState() => _RegisterAgreeState();
+  RegisterAgreeState createState() => RegisterAgreeState();
 }
 
-class _RegisterAgreeState extends State<RegisterAgree>
+class RegisterAgreeState extends State<RegisterAgree>
     with TickerProviderStateMixin {
   bool _allAgree = false;
   bool _serviceAgree = false;

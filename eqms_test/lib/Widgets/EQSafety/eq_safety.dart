@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../EQInfo/EQInfo.dart';
 import './to_setting_button.dart';
 import './toactinfobutton.dart';
 import './toseismicdesignbutton.dart';
@@ -12,10 +11,10 @@ class EQSafety extends StatefulWidget {
   const EQSafety({Key? key, required this.goToEQInfo}) : super(key: key);
 
   @override
-  _EQSafetyState createState() => _EQSafetyState();
+  EQSafetyState createState() => EQSafetyState();
 }
 
-class _EQSafetyState extends State<EQSafety> with TickerProviderStateMixin {
+class EQSafetyState extends State<EQSafety> with TickerProviderStateMixin {
   AnimationController? _lastController;
   late Animation<double> _animation1;
   late Animation<double> _animation2;
@@ -64,7 +63,7 @@ class _EQSafetyState extends State<EQSafety> with TickerProviderStateMixin {
               Expanded(child: ToSeismicDesignButton(goToEQInfo: widget.goToEQInfo)),
             ],
           )),
-          ToSettingButton(),
+          const ToSettingButton(),
           Expanded(
               child: GestureDetector(
             onTap: () {
@@ -137,7 +136,7 @@ class _EQSafetyState extends State<EQSafety> with TickerProviderStateMixin {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(' 지진, 대피소, 응급시설 등',
+                        Text('최근 발생 지진, 대피소, 응급시설 등',
                             style: kInfoDescriptionTextStyle),
                         Text('다양한 지진 관련 정보 지도 제공',
                             style: kInfoDescriptionTextStyle),

@@ -1,4 +1,3 @@
-import 'package:eqms_test/Widgets/EQInfo/EQInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../style/text_style.dart';
@@ -7,7 +6,7 @@ class ToEQMapButton extends StatelessWidget {
   final Function goToEQInfo;
   final String? text1;
   final String? text2;
-  ToEQMapButton({this.text1, this.text2, required this.goToEQInfo});
+  const ToEQMapButton({Key? key, this.text1, this.text2, required this.goToEQInfo}):super(key:key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +25,7 @@ class ToEQMapButton extends StatelessWidget {
               color: Colors.grey.withOpacity(0.1),
               spreadRadius: 5,
               blurRadius: 100,
-              offset: Offset(0, 3), // changes position of shadow
+              offset: const Offset(0, 3), // changes position of shadow
             ),
           ],
           color: Colors.white,
@@ -71,7 +70,7 @@ class ToEQMapButton extends StatelessWidget {
               width: 20,
               child: SvgPicture.asset('assets/mappoint.svg'),
             ),
-            Positioned(
+            const Positioned(
               left: 10,
               top: 10,
               child: Text('지진지도', style: kInfoTitleTextStyle),

@@ -20,7 +20,7 @@ class SegmentH extends StatelessWidget {
 
 class SegmentV extends StatelessWidget {
   final double size;
-  SegmentV(
+  const SegmentV(
       {Key? key,
         required this.size})
       : super(key: key);
@@ -29,7 +29,7 @@ class SegmentV extends StatelessWidget {
     return Container(
       height :size,
       width: 2,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           color: lightGray1_5
       ),
     );

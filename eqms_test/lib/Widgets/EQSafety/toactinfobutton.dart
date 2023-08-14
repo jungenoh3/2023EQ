@@ -7,13 +7,13 @@ class ToActInfoButton extends StatefulWidget {
   final bool animate; // Whether to animate or not
   final String? text1;
   final String? text2;
-  ToActInfoButton({required this.animate, this.text1, this.text2});
+  const ToActInfoButton({Key? key, required this.animate, this.text1, this.text2}): super(key:key);
 
   @override
-  _ToActInfoButtonState createState() => _ToActInfoButtonState();
+  ToActInfoButtonState createState() => ToActInfoButtonState();
 }
 
-class _ToActInfoButtonState extends State<ToActInfoButton>
+class ToActInfoButtonState extends State<ToActInfoButton>
     with SingleTickerProviderStateMixin {
   late AnimationController _leftToRightController;
   late Animation<double> _rightPositionAnimation;
@@ -23,7 +23,7 @@ class _ToActInfoButtonState extends State<ToActInfoButton>
     super.initState();
     _leftToRightController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
     );
 
     _rightPositionAnimation = Tween<double>(
@@ -60,7 +60,7 @@ class _ToActInfoButtonState extends State<ToActInfoButton>
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => EQActInfo(),
+            builder: (context) => const EQActInfo(),
           ),
         );
       },
@@ -75,7 +75,7 @@ class _ToActInfoButtonState extends State<ToActInfoButton>
               color: Colors.grey.withOpacity(0.1),
               spreadRadius: 5,
               blurRadius: 100,
-              offset: Offset(0, 3), // changes position of shadow
+              offset: const Offset(0, 3), // changes position of shadow
             ),
           ],
           color: Colors.white,
@@ -97,7 +97,7 @@ class _ToActInfoButtonState extends State<ToActInfoButton>
                 );
               },
             ),
-            Positioned(
+            const Positioned(
               left: 10,
               top: 10,
               child: Text('지진행동요령', style: kInfoTitleTextStyle),

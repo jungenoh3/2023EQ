@@ -13,10 +13,10 @@ class Setting extends StatefulWidget {
   const Setting({Key? key}) : super(key: key);
 
   @override
-  _SettingState createState() => _SettingState();
+  SettingState createState() => SettingState();
 }
 
-class _SettingState extends State<Setting> {
+class SettingState extends State<Setting> {
   late Future<bool?> isAlarmEnabledFuture;
 
   @override

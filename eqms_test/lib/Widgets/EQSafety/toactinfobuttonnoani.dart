@@ -9,10 +9,10 @@ class ToActInfoButtonNoAni extends StatefulWidget {
   const ToActInfoButtonNoAni({Key? key, this.text1, this.text2}) : super(key:key);
 
   @override
-  _ToActInfoButtonNoAniState createState() => _ToActInfoButtonNoAniState();
+  ToActInfoButtonNoAniState createState() => ToActInfoButtonNoAniState();
 }
 
-class _ToActInfoButtonNoAniState extends State<ToActInfoButtonNoAni> {
+class ToActInfoButtonNoAniState extends State<ToActInfoButtonNoAni> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -20,7 +20,7 @@ class _ToActInfoButtonNoAniState extends State<ToActInfoButtonNoAni> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => EQActInfo(),
+            builder: (context) => const EQActInfo(),
           ),
         );
       },
@@ -35,7 +35,7 @@ class _ToActInfoButtonNoAniState extends State<ToActInfoButtonNoAni> {
               color: Colors.grey.withOpacity(0.1),
               spreadRadius: 5,
               blurRadius: 100,
-              offset: Offset(0, 3), // changes position of shadow
+              offset: const Offset(0, 3), // changes position of shadow
             ),
           ],
           color: Colors.white,
@@ -52,7 +52,7 @@ class _ToActInfoButtonNoAniState extends State<ToActInfoButtonNoAni> {
                 fit: BoxFit.contain,
               ),
             ),
-            Positioned(
+            const Positioned(
               left: 10,
               top: 10,
               child: Text('지진행동요령', style: kInfoTitleTextStyle),

@@ -111,6 +111,7 @@ class FirebaseMessageApi {
     ){
       print('메세지 권한이 허가되었습니다.');
       check_initNotifiaction();
+      //TODO: isAlarmEnabled 받아와서 설정에 따라 알림 보낼지 말지
     } else {
       print('메세지 권한을 허가해주세요.');
     }

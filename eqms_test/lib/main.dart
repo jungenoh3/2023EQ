@@ -18,7 +18,7 @@ void main() async {
     mapsImplementation.initializeWithRenderer(AndroidMapRenderer.latest);
   }
 
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: SplashScreen(),
 
   ));

@@ -22,14 +22,11 @@ Future<String?> getUserName() async {
 class MorePage extends StatefulWidget {
   const MorePage({super.key});
   @override
-  _MorePageState createState() => _MorePageState();
+  MorePageState createState() => MorePageState();
 }
 
-class _MorePageState extends State<MorePage> {
+class MorePageState extends State<MorePage> {
   bool? isLoggedIn;
-  final Uri _url = Uri.parse('https://line.me/R/ti/p/%40336fgjcu');
-
-
   @override
   void initState() {
     super.initState();

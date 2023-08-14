@@ -75,23 +75,23 @@ class ServiceIntroduction extends StatelessWidget {
             flex: 2,
             child: Container(
               padding: const EdgeInsets.all(20),
-              child: Column(
+              child: const Column(
                 children: [
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Expanded(
+                      Expanded(
                         child: Image(
                           image: AssetImage('images/초연결융합기술연구소로고세로.png'),
                           fit: BoxFit.cover, // 이 부분이 이미지 크기를 조정합니다.
                         ),
                       ),
-                      const SizedBox(width: 20),
+                      SizedBox(width: 20),
                       SegmentV(size: 100),
-                      const SizedBox(width: 20),
-                      const Expanded(
+                      SizedBox(width: 20),
+                      Expanded(
                         child: Image(
                           image: AssetImage('images/초연결융합기술연구소로고세로.png'),
                           fit: BoxFit.cover, // 이 부분이 이미지 크기를 조정합니다.

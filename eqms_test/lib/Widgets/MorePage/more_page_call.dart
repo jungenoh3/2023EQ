@@ -4,7 +4,9 @@ import '../../style/color_guide.dart';
 import '../../style/text_style.dart';
 
 class MorePageCall extends StatelessWidget {
+  const MorePageCall({Key? key}):super(key: key);
   final String _phone = '0539506447'; // Replace with your desired phone number.
+
 
   Future<void> _makePhoneCall(String phoneNumber) async {
     final Uri launchUri = Uri(scheme: 'tel', path: phoneNumber);
@@ -25,13 +27,13 @@ class MorePageCall extends StatelessWidget {
             _makePhoneCall(_phone);
           },
           child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 8),
+            margin: const EdgeInsets.symmetric(horizontal: 8),
             padding: const EdgeInsets.all(3),
             decoration: BoxDecoration(
               border: Border.all(color: lightGray1),
               borderRadius: BorderRadius.circular(4),
             ),
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.call),
@@ -41,8 +43,8 @@ class MorePageCall extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 5),
-        Text('평일 09:00 ~ 18:00', style: kMorePageRemainTextStyle),
+        const SizedBox(height: 5),
+        const Text('평일 09:00 ~ 18:00', style: kMorePageRemainTextStyle),
       ],
     );
   }

@@ -9,9 +9,9 @@ class GoogleMapModel with ChangeNotifier {
   final dio = Dio();
   late RestClient client = RestClient(dio);
 
-  List<CircleData> _circleItems = [];
-  List<ClusterData> _markerItems = [];
-  List<ScrollableSheetData> _sheetItems = [];
+  final List<CircleData> _circleItems = [];
+  final List<ClusterData> _markerItems = [];
+  final List<ScrollableSheetData> _sheetItems = [];
   String _sheetTitle = "";
   String _bottomSheetTitle = "";
   String _iconAsset = "";

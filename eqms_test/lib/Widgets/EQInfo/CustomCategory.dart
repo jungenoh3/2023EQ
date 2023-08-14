@@ -3,7 +3,7 @@ import 'package:eqms_test/Api/GoogleMapModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-
+import '../../style/color_guide.dart';
 class CustomCategory extends StatefulWidget {
   const CustomCategory({super.key});
 
@@ -23,13 +23,14 @@ class _CustomCategoryState extends State<CustomCategory> {
         child: ChoiceChip(
           label: Row(
             children: [
-              SvgPicture.asset(
-                  _choiceChipsList[i].iconPath,
-                  width: 20,
-                  height: 20,
-                  color: _selectedIndex == i ? Colors.white : Colors.black,
+              ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                    _selectedIndex == i ? Colors.white : primaryDark,
+                    BlendMode.srcIn
+                ),
+                child: SvgPicture.asset(_choiceChipsList[i].iconPath, width: 20, height: 20),
               ),
-              SizedBox(width: 7,),
+              const SizedBox(width: 7,),
               Text(_choiceChipsList[i].label),
             ],
           ),

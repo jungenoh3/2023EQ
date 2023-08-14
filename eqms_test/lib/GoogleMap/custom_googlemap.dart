@@ -4,7 +4,7 @@ import 'package:eqms_test/Api/DraggableSheetModel.dart';
 import 'package:eqms_test/Api/GoogleMapModel.dart';
 import 'package:eqms_test/GoogleMap/Widget/BottomSheets.dart';
 import 'package:eqms_test/GoogleMap/Models/MapItems.dart';
-import 'package:eqms_test/GoogleMap/widget/CustomGroupButton.dart';
+import 'package:eqms_test/GoogleMap/widget/custom_groupbutton.dart';
 import 'package:eqms_test/GoogleMap/Widget/CustomFloatingButton.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -34,14 +34,14 @@ class CustomGoogleMap extends StatefulWidget {
 
 class CustomGoogleMapState extends State<CustomGoogleMap> {
   late ClusterManager _manager;
-  Completer<GoogleMapController> _controller = Completer();
+  final Completer<GoogleMapController> _controller = Completer();
   bool _isPermissionGranted = false;
-  Set<Marker> markers = Set();
-  Set<Circle> circles = Set();
+  Set<Marker> markers = {};
+  Set<Circle> circles = {};
   double widgetHeight = 0;
 
-  final CameraPosition _CameraPosition =
-      CameraPosition(target: LatLng(35.8881525, 128.6109335), zoom: 6.5);
+  final CameraPosition _cameraPosition =
+      const CameraPosition(target: LatLng(35.8881525, 128.6109335), zoom: 6.5);
 
   @override
   void initState() {
@@ -128,7 +128,7 @@ class CustomGoogleMapState extends State<CustomGoogleMap> {
       children: [
         GoogleMap(
           mapType: MapType.normal,
-          initialCameraPosition: _CameraPosition,
+          initialCameraPosition: _cameraPosition,
           markers: markers,
           circles: circles,
           myLocationEnabled: true,
@@ -149,7 +149,7 @@ class CustomGoogleMapState extends State<CustomGoogleMap> {
         Visibility(
           visible: widget.mode == 1,
           child: Padding(
-            padding: EdgeInsets.all(12.0),
+            padding: const EdgeInsets.all(12.0),
             child: CustomGroupButton(
               moveCamera: moveLocation,
             ),
@@ -188,7 +188,7 @@ class CustomGoogleMapState extends State<CustomGoogleMap> {
   }
 
   Widget buildPermissionDenied() {
-    return Center(
+    return const Center(
       child: Text('위치 서비스를 활성화 해주세요.'),
     );
   }
