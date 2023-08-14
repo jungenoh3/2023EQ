@@ -9,9 +9,11 @@ import java.util.List;
 
 @Repository
 public interface FCMTokenRep extends JpaRepository<FCMToken, String > {
+
+    // @Cacheable(value = "FCMToken", key = "'FCMToken: ' + (#token != null ? #token : '')")
     FCMToken getReferenceBytoken(String token);
 
-    @Query(value = "SELECT token FROM fcmtoken WHERE now() - update_time > interval '2 minute';", nativeQuery = true)
+    @Query(value = "SELECT token FROM fcmtoken WHERE now() - update_time > interval '20 day';", nativeQuery = true)
     List<String> findAllDeprecated();
 
     // void deleteAllByTokenInBatch(String token);

@@ -68,7 +68,7 @@ public class FCMTokenController {
 
     @GetMapping("/deprecated")
     public void CheckDeprecated() throws FirebaseMessagingException {
-        List<String> fcmTokenList = fcmTokenRep.findAllDeprecated();
+        List<String> fcmTokenList = fcmTokenRep.findAllDeprecated(); // 30분동안 업데이트 되지 않은 것 구독 해제 및 삭제
         if (fcmTokenList != null ){
             TopicManagementResponse response = firebaseMessaging.unsubscribeFromTopic(
                     fcmTokenList, "EQMS"

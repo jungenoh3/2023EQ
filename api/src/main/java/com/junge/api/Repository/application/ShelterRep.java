@@ -12,5 +12,5 @@ import java.util.List;
 public interface ShelterRep extends JpaRepository<Shelter, Long> {
 
     @Query(value = "SELECT id, vt_acmdfclty_nm, dtl_adres, xcord, ycord FROM shelter;", nativeQuery = true)
-    List<ShelterSpecific> getNeed();
+    List<ShelterSpecific> findSpecific();
 }

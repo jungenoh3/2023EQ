@@ -15,5 +15,6 @@ public interface EarthquakeDataRep extends JpaRepository<Earthquake, Long> {
     List<EarthquakeSpecific> findAllOngoing();
 
     @Query(value = "SELECT id, lat, lng, update_time, assoc_id from earthquake", nativeQuery = true)
-    List<EarthquakeSpecific> findAllNeed();
+    List<EarthquakeSpecific> findSpecific();
+
 }

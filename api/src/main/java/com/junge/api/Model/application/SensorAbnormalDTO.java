@@ -3,9 +3,13 @@ package com.junge.api.Model.application;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
+// 방출용: 필요한 sensorDat만 뽑아서 보냄
+
 @Getter
 @Setter
-public class SensorAbnormalDTO {
+public class SensorAbnormalDTO implements Serializable {
     private long id;
     private String deviceid;
     private String accelerator;

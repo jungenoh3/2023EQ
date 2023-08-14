@@ -1,6 +1,8 @@
 package com.junge.api.Model.application;
 
-public interface EmergencyInstSpecific {
+import java.io.Serializable;
+
+public interface EmergencyInstSpecific extends Serializable {
     Long getId();
     String getInstitution();
     String getMed_category();

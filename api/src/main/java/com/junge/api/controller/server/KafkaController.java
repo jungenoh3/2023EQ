@@ -6,20 +6,20 @@ import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
 import com.junge.api.Model.server.Earthquake;
+import com.junge.api.Model.server.EarthquakeRaw;
 import com.junge.api.Model.server.FCMNotification;
-import com.junge.api.Model.server.SensorData;
 import com.junge.api.Repository.server.EarthquakeDataRep;
 import com.junge.api.Repository.server.SensorDataRep;
+import com.junge.api.Service.KafkaService;
 import com.linecorp.bot.client.LineMessagingClient;
 import com.linecorp.bot.model.PushMessage;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.model.response.BotApiResponse;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Sinks;
 
@@ -30,6 +30,7 @@ import java.util.concurrent.ExecutionException;
 @RestController
 @RequestMapping()
 public class KafkaController {
+    private KafkaService kafkaService;
     private final SensorDataRep sensorDataRep;
     private final EarthquakeDataRep earthQuakeDataRep;
     private final FirebaseMessaging firebaseMessaging;
@@ -37,7 +38,8 @@ public class KafkaController {
     private Sinks.Many<String> realTimeDataMany = Sinks.many().multicast().onBackpressureBuffer();
 
 
-    public KafkaController(SensorDataRep sensorDataRep, EarthquakeDataRep earthQuakeDataRep, FirebaseMessaging firebaseMessaging) {
+    public KafkaController(KafkaService kafkaService, SensorDataRep sensorDataRep, EarthquakeDataRep earthQuakeDataRep, FirebaseMessaging firebaseMessaging) {
+        this.kafkaService = kafkaService;
         this.sensorDataRep = sensorDataRep;
         this.earthQuakeDataRep = earthQuakeDataRep;
         this.firebaseMessaging = firebaseMessaging;
@@ -94,26 +96,12 @@ public class KafkaController {
     private void kafkaMessageProcess(String kafkaData) throws IOException, FirebaseMessagingException {
         Earthquake earthquake = mapper.readValue(kafkaData, Earthquake.class);
 
-//        SensorData sensorData = mapper.readValue(kafkaData, SensorData.class);
         Timestamp ts = new Timestamp(System.currentTimeMillis());
         earthquake.setUpdate_time(ts);
         earthQuakeDataRep.save(earthquake);
         String LineAnswer = EQMSLineAPI(earthquake.getAssoc_id());
         String FCMAnswer = EQMSFCMTopic(earthquake.getAssoc_id());
         System.out.println(LineAnswer + " " + FCMAnswer);
-
-
-        // sensorDataRep.save(sensorData);
-
-//        if (sensorData.getAcc_x() > 10){
-//            Earthquake earthQuake = new Earthquake(sensorData.getLatitude(), sensorData.getLongitude(),
-//                    ts, sensorData.getAcc_x()/10);
-//
-//            System.out.println(earthQuake);
-//            sendData("Earthquake");
-//
-//
-//        }
 
     }
     public void sendData(String data) {
@@ -123,14 +111,40 @@ public class KafkaController {
 //        }
     }
 
+    @PostMapping("/publish")
+    public ResponseEntity<String> publish(@RequestBody Earthquake earthquake){
+        kafkaService.sendMessage(earthquake);
+        return ResponseEntity.ok("Message sent to kafka topic");
+    }
+
     @GetMapping(value = "/server-events", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<String> SendDataToClient() throws IOException {
         return this.realTimeDataMany.asFlux();
     }
 
-    @KafkaListener(topics = "cr-assoc-results-integration-test", groupId = "cr-alert-mobile")
-    void listener(ConsumerRecord<String, String> record) throws IOException, FirebaseMessagingException {
-        kafkaMessageProcess(record.value());
+//    @KafkaListener(topics = "topic1", groupId = "test")
+//    void StringDeserializeListener(ConsumerRecord<String, String> record) throws IOException, FirebaseMessagingException {
+//        kafkaMessageProcess(record.value());
+//    }
+
+    @KafkaListener(topics = "topic1", groupId = "test")
+    void JsonDeserializeListener(Earthquake data) throws IOException, FirebaseMessagingException {
+        System.out.println(data.toString());
+
+//        Earthquake earthquake = new Earthquake();
+//        earthquake.setLat(data.getLat());
+//        earthquake.setLng(data.getLng());
+//        earthquake.setAlert_created_msec(data.getAlert_created_msec());
+
+
+        Timestamp ts = new Timestamp(System.currentTimeMillis());
+        data.setUpdate_time(ts);
+
+        earthQuakeDataRep.save(data);
+        String LineAnswer = EQMSLineAPI(data.getAssoc_id());
+        String FCMAnswer = EQMSFCMTopic(data.getAssoc_id());
+        System.out.println(LineAnswer + " " + FCMAnswer);
+
     }
 
 }
