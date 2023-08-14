@@ -133,6 +133,7 @@ class CustomGoogleMapState extends State<CustomGoogleMap> {
           circles: circles,
           myLocationEnabled: true,
           myLocationButtonEnabled: false,
+          cameraTargetBounds: CameraTargetBounds(LatLngBounds(southwest: LatLng(32.972997240652575, 125.25859248865342), northeast: LatLng(39.097067, 131.545519))),
           onMapCreated: (GoogleMapController controller) {
             _controller.complete(controller);
             _manager.setMapId(controller.mapId);

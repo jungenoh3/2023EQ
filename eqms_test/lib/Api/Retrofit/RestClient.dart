@@ -4,27 +4,43 @@ import 'package:dio/dio.dart';
 
 part 'RestClient.g.dart';
 
-@RestApi(baseUrl: 'http://172.20.10.5:1234/EQMS')
+@RestApi(baseUrl: 'http://155.230.118.78:1234/EQMS')
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
   @GET('/sensor-info/all')
   Future<List<SensorInfo>> getSensorInformation();
 
+  @GET('/sensor-info/region')
+  Future<List<String>> getSensorInfoRegion();
+
+  @GET('/sensor-info/facility')
+  Future<List<String>> getSensorInfoFacility();
+
   @GET('/sensor-info/search')
   Future<List<SensorInfo>> getSensorSearch(@Queries() Map<String, String> queries);
+
+
+  @GET('/sensor-abnormal/region')
+  Future<List<String>> getSensorAbnormalRegion();
+
+  @GET('/sensor-abnormal/facility')
+  Future<List<String>> getSensorAbnormalFacility();
 
   @GET('/sensor-abnormal/search')
   Future<List<SensorAbnormal>> getSensorAbnormalSearch(@Queries() Map<String, String> queries);
 
+
   @GET('/shelter/specific')
   Future<List<Shelter>> getShelter();
+
 
   @GET('/earthquake/ongoing')
   Future<List<EarthQuake>> getEarthQuakeOngoing();
 
   @GET('/earthquake/all')
   Future<List<EarthQuake>> getEarthQuake();
+
 
   @GET('/emergency/specific')
   Future<List<EmergencyInst>> getEmergencyInst();

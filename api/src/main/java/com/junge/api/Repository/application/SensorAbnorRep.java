@@ -14,4 +14,10 @@ public interface SensorAbnorRep extends JpaRepository<SensorAbnormal, Long>, Jpa
     @Query("select sa from SensorAbnormal sa join fetch sa.sensorInfo")
     List<SensorAbnormal> getAbnormalWithInfo();
 
+    @Query("select distinct sa.sensorInfo.region from SensorAbnormal sa join sa.sensorInfo where sa.sensorInfo.region is not null")
+    List<String> findAllRegion();
+
+    @Query("select distinct sa.sensorInfo.facility from SensorAbnormal sa join sa.sensorInfo where sa.sensorInfo.facility is not null")
+    List<String> findAllFacility();
+
 }

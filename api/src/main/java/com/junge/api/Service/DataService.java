@@ -33,6 +33,8 @@ public class DataService {
 
     @Cacheable(value = "sensorInfo")
     public List<SensorInfo> getSensorInfoList() { return this.sensorInfoRep.findAll(); }
+    public List<String> getSensorInfoRegion() { return this.sensorInfoRep.findAllRegion(); }
+    public List<String> getSensorInfoFacility() { return this.sensorInfoRep.findAllFacility(); }
     @Cacheable(value = "sensorInfoSearch", key = "'SISearch' + (#deviceid != null ? #deviceid : '') + (#facility != null ? #facility : '') + (#region != null ? #region : '')")
     public List<SensorInfo> searchSensorInfo(String deviceid, String facility, String region) {
         Specification<SensorInfo> spec = (root, query, criteriaBuilder) -> null;
@@ -47,6 +49,8 @@ public class DataService {
 
     @Cacheable(value = "sensorAbnormal")
     public List<SensorAbnormal> getSensorAbnormalList() { return this.sensorAbnorRep.getAbnormalWithInfo(); }
+    public List<String> getSensorAbnormalRegion() { return this.sensorAbnorRep.findAllRegion(); }
+    public List<String> getSensorAbnormalFacility() { return this.sensorAbnorRep.findAllFacility(); }
     @Cacheable(value = "sensorAbnormalSearch", key = "'SASearch' + (#accerlator != null ? #accerlator : '') + (#pressure != null ? #pressure : '') + (#temperature != null ? #temperature : '') + (#fault_message != null ? #fault_message : '') + (#region != null ? #region : '')")
     public List<SensorAbnormalDTO> searchSensorAbnormal(String accerlator, String pressure, String temperature, String fault_message, String region){
         Specification<SensorAbnormal> spec = (root, query, criteriaBuilder) -> {
@@ -125,5 +129,4 @@ public class DataService {
         }
         return emerygencyInstProjections;
     }
-
 }
