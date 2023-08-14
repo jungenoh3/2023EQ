@@ -33,6 +33,10 @@ class _SensorDetailsState extends State<SensorDetails> with TickerProviderStateM
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
         title: const Text(
           "세부센서현황",
           style: TextStyle(color: Colors.black),
