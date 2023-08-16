@@ -55,7 +55,8 @@ class SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const String imageLogoName = 'images/초연결융합기술연구소로고세로.png';
+    const String imageLogoName = 'images/LOGO.png';
+    const String labLogoName = 'images/초연결융합기술연구소로고세로.png';
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
 
@@ -69,18 +70,26 @@ class SplashScreenState extends State<SplashScreen> {
             body: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                SizedBox(height: screenHeight * 0.384375),
+                SizedBox(height: screenHeight * 0.27375),
                 Image.asset(
                   imageLogoName,
-                  width: screenWidth * 0.616666,
-                  height: screenHeight * 0.0859375,
+                  width: double.infinity,
+                  height: screenHeight * 0.30,
                 ),
                 const Expanded(child: SizedBox()),
-                Align(
-                  child: Text(
-                    "© Copyright 2023, 초연결융합기술연구소",
-                    style: TextStyle(
-                      fontSize: screenWidth * (14 / 360),
+                Image.asset(
+                  labLogoName,
+                  width: screenWidth * 0.516666,
+                  height: screenHeight * 0.0759375,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Align(
+                    child: Text(
+                      "© Copyright 2023, 초연결융합기술연구소",
+                      style: TextStyle(
+                        fontSize: screenWidth * (14 / 360),
+                      ),
                     ),
                   ),
                 ),
