@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+import 'package:eqms_test/Api/Retrofit/RestClient.dart';
 import 'package:eqms_test/Widgets/SensorDetails/SensorDetails.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -19,11 +21,13 @@ class SensorInfo extends StatefulWidget {
 class SensorInfoState extends State<SensorInfo> {
   late Future<Map<String, dynamic>> _futureData;
   List<double>? dataValues; // 상태 변수 추가
+  final dio = Dio();
+  late RestClient client = RestClient(dio);
 
   @override
   void initState() {
     super.initState();
-    _futureData = fetchData();
+    // _futureData = fetchData();
   }
   //TODO: 서버연결 후 활성화
   // Future<Map<String, dynamic>> fetchData() async {
@@ -84,8 +88,8 @@ class SensorInfoState extends State<SensorInfo> {
         backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
-        child: FutureBuilder<Map<String, dynamic>>(
-          future: _futureData,
+        child: FutureBuilder<SensorCount>(
+          future: client.getSensorCount(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: LoadingIndicator());
@@ -98,7 +102,7 @@ class SensorInfoState extends State<SensorInfo> {
                     padding: const EdgeInsets.all(20),
                     child: AspectRatio(
                         aspectRatio: 1.4,
-                        child: SensorPieChart(dataValues: dataValues)),
+                        child: SensorPieChart(dataValues: [snapshot.data!.normal_sensor.toDouble(), snapshot.data!.abnormal_sensor.toDouble(), 0, 0])),
                   ),
                   const SegmentH(size: 4),
                   Container(
@@ -109,12 +113,12 @@ class SensorInfoState extends State<SensorInfo> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            const SensorDescription(
-                                title: '전체센서', numOfSensors: 7318),
+                            SensorDescription(
+                                title: '전체센서', numOfSensors: snapshot.data!.normal_sensor + snapshot.data!.abnormal_sensor),
                             const SegmentV(size: 80),
                             SensorDescription(
                                 title: '정상작동',
-                                numOfSensors: dataValues?[0].toInt() ?? 0),
+                                numOfSensors: snapshot.data?.normal_sensor ?? 0),
                           ],
                         ),
                         Row(
@@ -123,15 +127,15 @@ class SensorInfoState extends State<SensorInfo> {
                           children: [
                             SensorDescription(
                                 title: '이상동작',
-                                numOfSensors: dataValues?[1].toInt() ?? 0),
+                                numOfSensors: snapshot.data?.abnormal_sensor ?? 0),
                             const SegmentV(size: 80),
                             SensorDescription(
                                 title: '연동확인',
-                                numOfSensors: dataValues?[2].toInt() ?? 0),
+                                numOfSensors: 0),
                             const SegmentV(size: 80),
                             SensorDescription(
                                 title: '예비물자',
-                                numOfSensors: dataValues?[3].toInt() ?? 0),
+                                numOfSensors: 0),
                           ],
                         ),
                       ],

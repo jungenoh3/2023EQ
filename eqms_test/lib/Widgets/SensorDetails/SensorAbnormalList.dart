@@ -29,12 +29,13 @@ class _SensorAbnormalListState extends State<SensorAbnormalList> {
   @override
   void initState() {
     super.initState();
+    fetchDropButtonData();
+  }
 
+  void fetchDropButtonData(){
     client.getSensorAbnormalRegion().then((value) {
-      setState(() {
-        regionData = value;
-        regionData.insert(0, "전체");
-      });
+      regionData = value;
+      regionData.insert(0, "전체");
     });
   }
 

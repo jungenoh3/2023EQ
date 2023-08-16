@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,9 +32,12 @@ public class DataService {
         this.sensorAbnorRep = sensorAbnorRep;
     }
 
+    public Map<String, Long> getSensorCount() { return this.sensorInfoRep.getSensorCount(); }
     @Cacheable(value = "sensorInfo")
     public List<SensorInfo> getSensorInfoList() { return this.sensorInfoRep.findAll(); }
+    @Cacheable(value = "sensorInfoRegion")
     public List<String> getSensorInfoRegion() { return this.sensorInfoRep.findAllRegion(); }
+    @Cacheable(value = "sensorInfoFacility")
     public List<String> getSensorInfoFacility() { return this.sensorInfoRep.findAllFacility(); }
     @Cacheable(value = "sensorInfoSearch", key = "'SISearch' + (#deviceid != null ? #deviceid : '') + (#facility != null ? #facility : '') + (#region != null ? #region : '')")
     public List<SensorInfo> searchSensorInfo(String deviceid, String facility, String region) {
@@ -49,7 +53,9 @@ public class DataService {
 
     @Cacheable(value = "sensorAbnormal")
     public List<SensorAbnormal> getSensorAbnormalList() { return this.sensorAbnorRep.getAbnormalWithInfo(); }
+    @Cacheable(value = "sensorAbnormalRegion")
     public List<String> getSensorAbnormalRegion() { return this.sensorAbnorRep.findAllRegion(); }
+    @Cacheable(value = "sensorAbnormalFacility")
     public List<String> getSensorAbnormalFacility() { return this.sensorAbnorRep.findAllFacility(); }
     @Cacheable(value = "sensorAbnormalSearch", key = "'SASearch' + (#accerlator != null ? #accerlator : '') + (#pressure != null ? #pressure : '') + (#temperature != null ? #temperature : '') + (#fault_message != null ? #fault_message : '') + (#region != null ? #region : '')")
     public List<SensorAbnormalDTO> searchSensorAbnormal(String accerlator, String pressure, String temperature, String fault_message, String region){
@@ -129,4 +135,5 @@ public class DataService {
         }
         return emerygencyInstProjections;
     }
+
 }

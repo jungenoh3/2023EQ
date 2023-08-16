@@ -5,17 +5,19 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
-import com.junge.api.Model.server.Earthquake;
-import com.junge.api.Model.server.EarthquakeRaw;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.JSONObject;
 import com.junge.api.Model.server.FCMNotification;
 import com.junge.api.Repository.server.EarthquakeDataRep;
 import com.junge.api.Repository.server.SensorDataRep;
 import com.junge.api.Service.KafkaService;
 import com.linecorp.bot.client.LineMessagingClient;
+import com.linecorp.bot.model.Broadcast;
 import com.linecorp.bot.model.PushMessage;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.model.response.BotApiResponse;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.json.simple.parser.ParseException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -45,12 +47,12 @@ public class KafkaController {
         this.firebaseMessaging = firebaseMessaging;
     }
 
-    private String EQMSLineAPI(Long data){
+    private String EQMSLineAPI(Object lat, Object lng){
         final LineMessagingClient client = LineMessagingClient
                 .builder("o7WhaO9vMoAzhP7h1WDuxjZNek79QoblCkNLndDcDuLoDlAyBEYJb4crTDVV8cdTFAH3bnzBdhmbgFN+KP1OajTnWrkaCGzmj1h6g8OoTLoF1lN2jz7o+QO4Yo8zc21oYOQzzN53tJRPXlbLHyVsVwdB04t89/1O/w1cDnyilFU=")
                 .build();
 
-        final TextMessage textMessage = new TextMessage("진도 " + data +"의 지진이 일어났습니다.\n신속히 대피해주세요.");
+        final TextMessage textMessage = new TextMessage("지진이 일어났습니다.\n위치: " + lat + "," + lng + "\n신속히 대피해주세요.");
         final PushMessage pushMessage = new PushMessage(
                 "Uf83a19041d324526d51909f41c242778",
                 textMessage);
@@ -62,6 +64,20 @@ public class KafkaController {
             e.printStackTrace();
             return "Line 전송 실패";
         }
+        return botApiResponse.toString();
+
+    }
+
+    private String EQMSLineAPIBroadCast(Object lat, Object lng) throws ExecutionException, InterruptedException {
+        final LineMessagingClient client = LineMessagingClient
+                .builder("o7WhaO9vMoAzhP7h1WDuxjZNek79QoblCkNLndDcDuLoDlAyBEYJb4crTDVV8cdTFAH3bnzBdhmbgFN+KP1OajTnWrkaCGzmj1h6g8OoTLoF1lN2jz7o+QO4Yo8zc21oYOQzzN53tJRPXlbLHyVsVwdB04t89/1O/w1cDnyilFU=")
+                .build();
+
+        final TextMessage textMessage = new TextMessage("지진이 일어났습니다.\n위치: " + lat + "," + lng + "\n신속히 대피해주세요.");
+        final Broadcast broadcast = new Broadcast(textMessage);
+        final BotApiResponse botApiResponse;
+        botApiResponse = client.broadcast(broadcast).get(); // pushMessage(pushMessage).get();
+
         return botApiResponse.toString();
 
     }
@@ -93,17 +109,6 @@ public class KafkaController {
         }
     }
 
-    private void kafkaMessageProcess(String kafkaData) throws IOException, FirebaseMessagingException {
-        Earthquake earthquake = mapper.readValue(kafkaData, Earthquake.class);
-
-        Timestamp ts = new Timestamp(System.currentTimeMillis());
-        earthquake.setUpdate_time(ts);
-        earthQuakeDataRep.save(earthquake);
-        String LineAnswer = EQMSLineAPI(earthquake.getAssoc_id());
-        String FCMAnswer = EQMSFCMTopic(earthquake.getAssoc_id());
-        System.out.println(LineAnswer + " " + FCMAnswer);
-
-    }
     public void sendData(String data) {
         Sinks.EmitResult result = this.realTimeDataMany.tryEmitNext(data);
 //        if (result.isFailure()){
@@ -112,7 +117,7 @@ public class KafkaController {
     }
 
     @PostMapping("/publish")
-    public ResponseEntity<String> publish(@RequestBody Earthquake earthquake){
+    public ResponseEntity<String> publish(@RequestBody JSONObject earthquake){
         kafkaService.sendMessage(earthquake);
         return ResponseEntity.ok("Message sent to kafka topic");
     }
@@ -122,30 +127,15 @@ public class KafkaController {
         return this.realTimeDataMany.asFlux();
     }
 
-//    @KafkaListener(topics = "topic1", groupId = "test")
-//    void StringDeserializeListener(ConsumerRecord<String, String> record) throws IOException, FirebaseMessagingException {
-//        kafkaMessageProcess(record.value());
-//    }
+    @KafkaListener(topics = "cr-assoc-results-integration-test", groupId = "cr-alert-mobile")
+    void StringDeserializeListener(ConsumerRecord<String, String> record) throws ParseException {
+        JSONParser parser = new JSONParser();
+        JSONObject jsonObject = (JSONObject) parser.parse(record.value());
 
-    @KafkaListener(topics = "topic1", groupId = "test")
-    void JsonDeserializeListener(Earthquake data) throws IOException, FirebaseMessagingException {
-        System.out.println(data.toString());
-
-//        Earthquake earthquake = new Earthquake();
-//        earthquake.setLat(data.getLat());
-//        earthquake.setLng(data.getLng());
-//        earthquake.setAlert_created_msec(data.getAlert_created_msec());
-
-
-        Timestamp ts = new Timestamp(System.currentTimeMillis());
-        data.setUpdate_time(ts);
-
-        earthQuakeDataRep.save(data);
-        String LineAnswer = EQMSLineAPI(data.getAssoc_id());
-        String FCMAnswer = EQMSFCMTopic(data.getAssoc_id());
-        System.out.println(LineAnswer + " " + FCMAnswer);
-
+        String LineAnswer = EQMSLineAPI(jsonObject.get("lat"), jsonObject.get("lng"));
+        System.out.println("Record: " + record);
     }
+
 
 }
 

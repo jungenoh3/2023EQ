@@ -1,11 +1,12 @@
 package com.junge.api.Model.server;
 
-import jakarta.persistence.Cacheable;
 import jakarta.persistence.MappedSuperclass;
 import lombok.*;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 // 사용 X
 
@@ -23,6 +24,7 @@ public class EarthquakeRaw {
     private List<String> associated_sensors;
     private String stage;
     private Long assoc_id;
+    // private List<Map<String, Map<String, Objects>>> associated_sensors_details;
 
     public EarthquakeRaw(EarthquakeRaw earthquakeRaw) {
         this.lat = earthquakeRaw.lat;

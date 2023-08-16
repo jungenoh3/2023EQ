@@ -14,6 +14,9 @@ public class DataController {
         this.dataService = dataService;
     }
 
+    @GetMapping("/sensor/count")
+    public ResponseEntity getSensorCount() { return ResponseEntity.ok(this.dataService.getSensorCount()); }
+
     @GetMapping("/sensor-info/all")
     public ResponseEntity getAllSensor(){ return ResponseEntity.ok(this.dataService.getSensorInfoList()); }
     @GetMapping("/sensor-info/region")

@@ -25,19 +25,17 @@ class _SensorInfoListState extends State<SensorInfoList> {
   @override
   void initState() {
     super.initState();
+    fetchDropButtonData();
+  }
 
-    // 속도 매우 느림
+  void fetchDropButtonData(){
     client.getSensorInfoFacility().then((value) {
-      setState(() {
-        facilityData = value;
-        facilityData.insert(0, "전체");
-      });
+      facilityData = value;
+      facilityData.insert(0, "전체");
     });
     client.getSensorInfoRegion().then((value) {
-      setState(() {
-        regionData = value;
-        regionData.insert(0, "전체");
-      });
+      regionData = value;
+      regionData.insert(0, "전체");
     });
   }
 

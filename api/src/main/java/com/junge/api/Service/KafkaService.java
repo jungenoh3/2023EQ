@@ -1,6 +1,7 @@
 package com.junge.api.Service;
 
 import com.junge.api.Model.server.EarthquakeRaw;
+import org.json.simple.JSONObject;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.messaging.Message;
@@ -13,14 +14,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class KafkaService extends ErrorHandlingDeserializer<Earthquake> {
     @Autowired
-    private KafkaTemplate<String, Earthquake> kafkaTemplate;
+    private KafkaTemplate<String, EarthquakeRaw> kafkaTemplate;
 
-    public void sendMessage(Earthquake earthquake){
+    public void sendMessage(JSONObject earthquake){
         System.out.println(String.format("Message sent -> %s", earthquake.toString()));
 
-        Message<Earthquake> message = MessageBuilder
+        Message<JSONObject> message = MessageBuilder
                 .withPayload(earthquake)
-                .setHeader(KafkaHeaders.TOPIC, "topic1")
+                .setHeader(KafkaHeaders.TOPIC, "cr-assoc-results-integration-test")
                 .build();
 
         kafkaTemplate.send(message);

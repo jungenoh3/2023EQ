@@ -152,7 +152,6 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
           onPageChanged: onPageChanged,  // Use onPageChanged here
           children: widgetOptions,
         ),
-
         bottomNavigationBar: SafeArea(
           child: SizedBox(
               height: 58,
