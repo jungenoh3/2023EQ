@@ -16,6 +16,11 @@ public class DataController {
 
     @GetMapping("/sensor-info/all")
     public ResponseEntity getAllSensor(){ return ResponseEntity.ok(this.dataService.getSensorInfoList()); }
+    @GetMapping("/sensor-info/region")
+    public ResponseEntity getAllSensorRegion() { return ResponseEntity.ok(this.dataService.getSensorInfoRegion()); }
+
+    @GetMapping("/sensor-info/facility")
+    public ResponseEntity getAllSensorFacility() { return ResponseEntity.ok(this.dataService.getSensorInfoFacility()); }
 
     @GetMapping("/sensor-info/search")
     public ResponseEntity getSpecificSensor(
@@ -28,6 +33,10 @@ public class DataController {
 
     @GetMapping("/sensor-abnormal/all") // N+1
     public ResponseEntity getSensorAbnormal() { return ResponseEntity.ok(this.dataService.getSensorAbnormalList()); }
+    @GetMapping("/sensor-abnormal/region")
+    public ResponseEntity getAllSensorAbnormalRegion() { return ResponseEntity.ok(this.dataService.getSensorAbnormalRegion()); }
+    @GetMapping("/sensor-abnormal/facility")
+    public ResponseEntity getAllSensorAbnormalFacility() { return ResponseEntity.ok(this.dataService.getSensorAbnormalFacility()); }
     @GetMapping("/sensor-abnormal/search") // Cannot Serialize
     public ResponseEntity getSpecificSensorAbnormal(
             @RequestParam(required = false) String accerlator,

@@ -16,11 +16,26 @@ class _SensorAbnormalListState extends State<SensorAbnormalList> {
   late RestClient client = RestClient(dio);
   String abnormalValue = "전체";
   String regionValue = "전체";
+  List<String> regionData = [];
+  List<String> abnormalData = [
+    "전체",
+    "가속도",
+    "기압계",
+    "온도계",
+    "Fault Message"
+  ];
   final queryParameter = Map<String, String>();
 
   @override
   void initState() {
     super.initState();
+
+    client.getSensorAbnormalRegion().then((value) {
+      setState(() {
+        regionData = value;
+        regionData.insert(0, "전체");
+      });
+    });
   }
 
   @override
@@ -29,14 +44,6 @@ class _SensorAbnormalListState extends State<SensorAbnormalList> {
         future: client.getSensorAbnormalSearch(queryParameter),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.hasData){
-            List<String> abnormalData = [
-              "전체",
-              "가속도",
-              "기압계",
-              "온도계",
-              "Fault Message"
-            ];
-            List<String> regionData = getRegionButtonItems(snapshot.data);
 
             print(queryParameter);
 

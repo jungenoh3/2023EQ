@@ -16,6 +16,8 @@ class _SensorInfoListState extends State<SensorInfoList> {
   late RestClient client = RestClient(dio);
   String facilityValue = "전체";
   String regionValue = "전체";
+  List<String> facilityData = [];
+  List<String> regionData = [];
   final queryParameter = Map<String, String>();
   final myController = TextEditingController();
 
@@ -23,6 +25,20 @@ class _SensorInfoListState extends State<SensorInfoList> {
   @override
   void initState() {
     super.initState();
+
+    // 속도 매우 느림
+    client.getSensorInfoFacility().then((value) {
+      setState(() {
+        facilityData = value;
+        facilityData.insert(0, "전체");
+      });
+    });
+    client.getSensorInfoRegion().then((value) {
+      setState(() {
+        regionData = value;
+        regionData.insert(0, "전체");
+      });
+    });
   }
 
   @override
@@ -38,9 +54,6 @@ class _SensorInfoListState extends State<SensorInfoList> {
       future: client.getSensorSearch(queryParameter),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (snapshot.hasData) {
-          List<String> facilityData = getFacilityButtonItems(snapshot.data);
-          List<String> regionData = getRegionButtonItems(snapshot.data);
-
           print('길이: ${snapshot.data.length}');
           print('쿼리파라미터 ${queryParameter}');
 

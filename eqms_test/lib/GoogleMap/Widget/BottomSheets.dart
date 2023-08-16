@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 class BottomSheets {
   static void showItemBottomSheet(BuildContext context, String? name, String location) {
-    showBottomSheet(
+    showModalBottomSheet(
       context: context,
       builder: (context) {
         return GestureDetector(
@@ -20,7 +20,7 @@ class BottomSheets {
                 ),
                 color: Colors.white,
                 ),
-            height: 120,
+            height: 130,
             width: MediaQuery.of(context).size.width,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -64,10 +64,10 @@ class BottomSheets {
         );
       },
       backgroundColor: Colors.transparent,
-      // barrierColor: Colors.transparent,
+      barrierColor: Colors.black.withOpacity(0.2),
       // isScrollControlled: true,
       // useRootNavigator: true,
-      // useSafeArea: true,
+      useSafeArea: true,
     );
   }
 }
