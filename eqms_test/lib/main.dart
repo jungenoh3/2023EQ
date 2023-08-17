@@ -20,6 +20,6 @@ void main() async {
 
   runApp(const MaterialApp(
     home: SplashScreen(),
-
+    debugShowCheckedModeBanner: false,
   ));
 }

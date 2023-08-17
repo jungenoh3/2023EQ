@@ -65,6 +65,7 @@ class SplashScreenState extends State<SplashScreen> {
       child: MediaQuery(
         data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           navigatorKey: _navigatorKey,
           home: Scaffold(
             body: Column(
