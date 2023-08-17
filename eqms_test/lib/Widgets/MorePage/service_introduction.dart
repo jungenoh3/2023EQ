@@ -10,10 +10,12 @@ class ServiceIntroduction extends StatelessWidget {
   Widget build(BuildContext context) {
     // 예시 이미지 리스트
     final List<String> images = [
-      'images/image1.jpg',
-      'images/image1.jpg',
-      'images/image1.jpg',
-      // add other image paths
+      'images/Intro1.png',
+      'images/Intro2.png',
+      'images/Intro3.png',
+      'images/Intro4.png',
+      'images/Intro5.png',
+      'images/Intro6.png',
     ];
 
     return Scaffold(
@@ -30,7 +32,7 @@ class ServiceIntroduction extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            flex: 5,
+            flex: 8,
             child: Stack(
               alignment: Alignment.bottomCenter,
               children: [
@@ -93,8 +95,9 @@ class ServiceIntroduction extends StatelessWidget {
                       SizedBox(width: 20),
                       Expanded(
                         child: Image(
-                          image: AssetImage('images/초연결융합기술연구소로고세로.png'),
-                          fit: BoxFit.cover, // 이 부분이 이미지 크기를 조정합니다.
+                          height: 100,
+                          image: AssetImage('images/LOGO.png'),
+                          fit: BoxFit.fitHeight, // 이 부분이 이미지 크기를 조정합니다.
                         ),
                       ),
                     ],

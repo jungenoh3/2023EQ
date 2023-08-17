@@ -52,16 +52,13 @@ class SettingState extends State<Setting> {
     });
   }
 
-
-
-  //TODO::Podfile 확인하기!
-
   Future<bool?> _saveAlarmSetting(bool value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('isAlarmenabled', value);
     (() {
       isAlarmEnabledFuture = Future.value(value);
     });
+    print('alarmEnabled${value}');
     return value;
   }
 
@@ -200,7 +197,6 @@ class SettingState extends State<Setting> {
                           );
                         },
                       ),
-
                     ],
                   ),
                 ),

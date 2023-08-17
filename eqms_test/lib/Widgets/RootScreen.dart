@@ -5,6 +5,7 @@ import 'package:eqms_test/Widgets/EQSafety/eq_safety.dart';
 import 'package:eqms_test/Widgets/SensorDetails/SensorInfo.dart';
 import 'package:eqms_test/Widgets/SensorMap/SensorMap.dart';
 import 'package:eqms_test/Widgets/MorePage/more_page.dart';
+import 'package:eqms_test/style/color_guide.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -131,8 +132,9 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
       items: bottomItems,
       type: BottomNavigationBarType.fixed,
       currentIndex: selectedIndex,
-      unselectedItemColor: Colors.grey,
-      selectedItemColor: Colors.black,
+      unselectedItemColor: mediumGray,
+      selectedItemColor: primaryDark,
+      selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
       onTap: onItemTapped,
     );
   }
