@@ -87,12 +87,14 @@ class FirebaseMessageApi {
     try {
       final http.Response response = await http
           .post(url, body: fCMToken)
-          .timeout(const Duration(seconds: 3),
-          onTimeout: () { throw TimeoutException('3초가 지났습니다.');
+          .timeout(const Duration(seconds: 10),
+          onTimeout: () { throw TimeoutException('10초가 지났습니다.');
           });
-      if (response.body == "subscribe"){
-        _firebaseMessaging.subscribeToTopic("EQMS");
+      if (response.body == "subscribed"){
+        // _firebaseMessaging.subscribeToTopic("EQMS-1");
         print("subscribed");
+      } else if (response.body == "already subscribed"){
+        print("already subscribed");
       }
       initPushNotifications();
     } on TimeoutException {

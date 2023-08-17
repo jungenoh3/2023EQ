@@ -28,6 +28,17 @@ public class Earthquake implements Serializable {
     private String stage;
     private Long assoc_id;
 
+    public Earthquake(Timestamp update_time, double lat, double lng, Timestamp event_occurred_msec, Timestamp alert_created_msec, List<String> associated_sensors, String stage, Long assoc_id) {
+        this.update_time = update_time;
+        this.lat = lat;
+        this.lng = lng;
+        this.event_occurred_msec = event_occurred_msec;
+        this.alert_created_msec = alert_created_msec;
+        this.associated_sensors = associated_sensors;
+        this.stage = stage;
+        this.assoc_id = assoc_id;
+    }
+
 //    public Earthquake(EarthquakeRaw earthquakeRaw) {
 //        super(earthquakeRaw);
 //    }

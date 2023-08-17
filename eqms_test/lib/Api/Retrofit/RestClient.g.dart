@@ -6,6 +6,17 @@ part of 'RestClient.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+SensorCount _$SensorCountFromJson(Map<String, dynamic> json) => SensorCount(
+      abnormal_sensor: json['abnormal_sensor'] as int,
+      normal_sensor: json['normal_sensor'] as int,
+    );
+
+Map<String, dynamic> _$SensorCountToJson(SensorCount instance) =>
+    <String, dynamic>{
+      'abnormal_sensor': instance.abnormal_sensor,
+      'normal_sensor': instance.normal_sensor,
+    };
+
 SensorInfo _$SensorInfoFromJson(Map<String, dynamic> json) => SensorInfo(
       id: json['id'] as int,
       deviceid: json['deviceid'] as String,
@@ -129,6 +140,33 @@ class _RestClient implements RestClient {
   final Dio _dio;
 
   String? baseUrl;
+
+  @override
+  Future<SensorCount> getSensorCount() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<SensorCount>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/sensor/count',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = SensorCount.fromJson(_result.data!);
+    return value;
+  }
 
   @override
   Future<List<SensorInfo>> getSensorInformation() async {

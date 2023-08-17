@@ -8,6 +8,9 @@ part 'RestClient.g.dart';
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
+  @GET('/sensor/count')
+  Future<SensorCount> getSensorCount();
+
   @GET('/sensor-info/all')
   Future<List<SensorInfo>> getSensorInformation();
 
@@ -44,6 +47,16 @@ abstract class RestClient {
 
   @GET('/emergency/specific')
   Future<List<EmergencyInst>> getEmergencyInst();
+}
+
+@JsonSerializable()
+class SensorCount {
+  int abnormal_sensor;
+  int normal_sensor;
+
+  SensorCount({required this.abnormal_sensor, required this.normal_sensor});
+  factory SensorCount.fromJson(Map<String, dynamic> json) => _$SensorCountFromJson(json);
+  Map<String, dynamic> toJson() => _$SensorCountToJson(this);
 }
 
 @JsonSerializable()

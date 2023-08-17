@@ -7,6 +7,7 @@ import com.junge.api.Repository.application.FCMTokenRep;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -21,7 +22,7 @@ public class FCMTokenController {
         this.firebaseMessaging = firebaseMessaging;
     }
 
-    @PostMapping("/check-message") // 메세지 잘 받는지 확인용
+    @PostMapping("/check-message") // 토픽 메세지 잘 받는지 확인용
     public String EQMSFCMTopic() throws FirebaseMessagingException {
     FCMNotification fcmNotification = new FCMNotification();
 
@@ -36,7 +37,7 @@ public class FCMTokenController {
 
     Message message = Message
             .builder()
-            .setTopic("EQMS")
+            .setTopic("EQMS-1")
             .setNotification(notification)
             .build();
 
@@ -57,12 +58,21 @@ public class FCMTokenController {
             Timestamp ts = new Timestamp(System.currentTimeMillis());
             FCMToken fcmToken = new FCMToken(token, ts, ts);
             fcmTokenRep.save(fcmToken); // insert
-            return "subscribe"; // 구독 메세지 보내기
+
+            List<String> tokenList = new ArrayList<String>(); // 구독
+            tokenList.add(token);
+            try{
+                TopicManagementResponse topicManagementResponse = firebaseMessaging.subscribeToTopic(tokenList, "EQMS-1");
+                System.out.println(String.format("성공한 수: %d \n실패한 수: %d", topicManagementResponse.getSuccessCount(), topicManagementResponse.getFailureCount()));
+            } catch (FirebaseMessagingException e) {
+                System.out.println(e);
+            }
+            return "subscribed"; // 구독 메세지 보내기
         } else {
             Timestamp ts = new Timestamp(System.currentTimeMillis());
             response.setUpdate_time(ts);
             fcmTokenRep.save(response); // update
-            return null; // 이미 구독되어있으니 아무것도 안보냄
+            return "already subscribed"; // 이미 구독되어있으니 아무것도 안보냄
         }
     }
 
@@ -71,7 +81,7 @@ public class FCMTokenController {
         List<String> fcmTokenList = fcmTokenRep.findAllDeprecated(); // 30분동안 업데이트 되지 않은 것 구독 해제 및 삭제
         if (fcmTokenList != null ){
             TopicManagementResponse response = firebaseMessaging.unsubscribeFromTopic(
-                    fcmTokenList, "EQMS"
+                    fcmTokenList, "EQMS-1"
             );
             if (response.getFailureCount() > 0 ){
                 System.out.print(response.getErrors());

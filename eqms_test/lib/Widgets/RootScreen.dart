@@ -139,8 +139,6 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-
-
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<GoogleMapModel>(create: (context) => GoogleMapModel()),
