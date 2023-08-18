@@ -19,18 +19,6 @@ class _ServiceIntroductionState extends State<ServiceIntroduction> {
   ];
   int selectedIndex = 0;
   @override
-  void initState() {
-    super.initState();
-    _preloadImages();
-  }
-
-  _preloadImages() {
-    for (var imagePath in images) {
-      precacheImage(AssetImage(imagePath), context);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final primaryOrange = Color(0xFFFFA726);
 
@@ -57,7 +45,7 @@ class _ServiceIntroductionState extends State<ServiceIntroduction> {
                 height: double.infinity,
                 aspectRatio: 16 / 9,
                 viewportFraction: 1.2,
-                autoPlay: true,
+                autoPlay: false,
                 onPageChanged: (index, reason) {
                   setState(() {
                     selectedIndex = index;
@@ -83,7 +71,7 @@ class _ServiceIntroductionState extends State<ServiceIntroduction> {
           Expanded(
             child: Container(
               padding: const EdgeInsets.all(20),
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
