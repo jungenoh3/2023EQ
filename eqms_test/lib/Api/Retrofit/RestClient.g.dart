@@ -6,6 +6,22 @@ part of 'RestClient.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+User _$UserFromJson(Map<String, dynamic> json) => User(
+      name: json['name'] as String,
+      identification: json['identification'] as String,
+      password: json['password'] as String,
+      phoneNumber: json['phoneNumber'] as String,
+      email: json['email'] as String,
+    );
+
+Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
+      'name': instance.name,
+      'identification': instance.identification,
+      'password': instance.password,
+      'phoneNumber': instance.phoneNumber,
+      'email': instance.email,
+    };
+
 SensorCount _$SensorCountFromJson(Map<String, dynamic> json) => SensorCount(
       abnormal_sensor: json['abnormal_sensor'] as int,
       normal_sensor: json['normal_sensor'] as int,
@@ -140,6 +156,60 @@ class _RestClient implements RestClient {
   final Dio _dio;
 
   String? baseUrl;
+
+  @override
+  Future<String> postUserInfo(Map<String, String> registerData) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.addAll(registerData);
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<String>(_setStreamType<String>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/user/register',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+    final value = _result.data!;
+    return value;
+  }
+
+  @override
+  Future<String> getRegisterInfo(Map<String, String> loginData) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.addAll(loginData);
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<String>(_setStreamType<String>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/user/login',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+    final value = _result.data!;
+    return value;
+  }
 
   @override
   Future<SensorCount> getSensorCount() async {

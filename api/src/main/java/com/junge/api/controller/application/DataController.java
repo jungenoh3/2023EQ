@@ -42,13 +42,10 @@ public class DataController {
     public ResponseEntity getAllSensorAbnormalFacility() { return ResponseEntity.ok(this.dataService.getSensorAbnormalFacility()); }
     @GetMapping("/sensor-abnormal/search") // Cannot Serialize
     public ResponseEntity getSpecificSensorAbnormal(
-            @RequestParam(required = false) String accerlator,
-            @RequestParam(required = false) String pressure,
-            @RequestParam(required = false) String temperature,
-            @RequestParam(required = false) String fault_message,
+            @RequestParam(required = false) String sensorData,
             @RequestParam(required = false) String region
     ){
-        return ResponseEntity.ok(this.dataService.searchSensorAbnormal(accerlator,pressure,temperature,fault_message,region));
+        return ResponseEntity.ok(this.dataService.searchSensorAbnormal(sensorData,region));
     }
     @GetMapping("/shelter/all")
     public ResponseEntity getAllShelter(){
