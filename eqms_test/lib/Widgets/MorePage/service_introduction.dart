@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import '../../style/color_guide.dart';
 
 class ServiceIntroduction extends StatefulWidget {
   const ServiceIntroduction({Key? key}) : super(key: key);
 
   @override
-  _ServiceIntroductionState createState() => _ServiceIntroductionState();
+  ServiceIntroductionState createState() => ServiceIntroductionState();
 }
 
-class _ServiceIntroductionState extends State<ServiceIntroduction> {
+class ServiceIntroductionState extends State<ServiceIntroduction> {
   final List<String> images = [
     'images/Intro1.png',
     'images/Intro2.png',
     'images/Intro3.png',
     'images/Intro4.png',
     'images/Intro5.png',
-    'images/Intro6.png',
   ];
   int selectedIndex = 0;
+  final CarouselController carouselController = CarouselController();
+
   @override
   Widget build(BuildContext context) {
-    final primaryOrange = Color(0xFFFFA726);
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -31,7 +32,8 @@ class _ServiceIntroductionState extends State<ServiceIntroduction> {
           icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('서비스 소개', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        title: const Text('서비스 소개',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.white,
       ),
       body: Column(
@@ -39,13 +41,16 @@ class _ServiceIntroductionState extends State<ServiceIntroduction> {
           Expanded(
             flex: 2,
             child: CarouselSlider(
-              items: images.map((item) => Image.asset(item, fit: BoxFit.fitWidth)).toList(),
+              carouselController: carouselController,
+              items: images
+                  .map((item) => Image.asset(item, fit: BoxFit.fitWidth))
+                  .toList(),
               options: CarouselOptions(
                 enlargeCenterPage: true,
                 height: double.infinity,
                 aspectRatio: 16 / 9,
                 viewportFraction: 1.2,
-                autoPlay: false,
+                autoPlay: true,
                 onPageChanged: (index, reason) {
                   setState(() {
                     selectedIndex = index;
@@ -54,19 +59,18 @@ class _ServiceIntroductionState extends State<ServiceIntroduction> {
               ),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(images.length, (index) {
-              return Container(
-                width: 8,
-                height: 8,
-                margin: const EdgeInsets.symmetric(horizontal: 2),
-                decoration: BoxDecoration(
-                  color: index == selectedIndex ? primaryOrange : Colors.grey,
-                  shape: BoxShape.circle,
-                ),
-              );
-            }),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: AnimatedSmoothIndicator(
+              activeIndex: selectedIndex,
+              count: images.length,
+              effect: const WormEffect(
+                activeDotColor: primaryOrange,
+                dotColor: mediumGray,
+                dotHeight: 10,
+                dotWidth: 10,
+              ),
+            ),
           ),
           Expanded(
             child: Container(

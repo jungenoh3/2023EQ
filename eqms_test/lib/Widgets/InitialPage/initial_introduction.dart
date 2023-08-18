@@ -1,8 +1,10 @@
 import 'package:eqms_test/Widgets/RootScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import '../../style/color_guide.dart';
 
 
@@ -31,12 +33,11 @@ class InitialIntroductionState extends State<InitialIntroduction> {
   Future<void> requestNotificationPermission() async {
     await Permission.notification.request();
   }
-  late PageController _pageController;
+  int selectedIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
     requestNotificationPermission();
   }
 
@@ -48,52 +49,50 @@ class InitialIntroductionState extends State<InitialIntroduction> {
       'images/Intro3.png',
       'images/Intro4.png',
       'images/Intro5.png',
-      'images/Intro6.png', // add other image paths
+      'images/Intro6.png',
     ];
 
+
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: [
+            const Expanded(
+              flex:1,
+                child:
+            SizedBox()
+            ),
+
             Expanded(
-              flex: 7,
-              child: Stack(
-                alignment: Alignment.bottomCenter,
+              flex: 5,
+              child: Column(
                 children: [
-                  PageView.builder(
-                    controller: _pageController,
-                    itemBuilder: (context, index) {
-                      final image = images[index % images.length];
-                      return Image.asset(image, fit: BoxFit.cover);
-                    },
-                    itemCount: images.length,
-                    onPageChanged: (index) {
-                      selectedIndex.value = index % images.length;
-                    },
+                  Expanded(
+                    child: CarouselSlider(
+                      items: images.map((item) => Image.asset(item, fit: BoxFit.cover)).toList(),
+                      options: CarouselOptions(
+                        enlargeCenterPage: true,
+                        height: double.infinity,
+                        aspectRatio: 16 / 9,
+                        viewportFraction: 1.0,
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            selectedIndex = index;
+                          });
+                        },
+                      ),
+                    ),
                   ),
-                  ValueListenableBuilder<int>(
-                    valueListenable: selectedIndex,
-                    builder: (context, value, child) {
-                      return Container(
-                        margin: const EdgeInsets.only(bottom: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: List.generate(images.length, (index) {
-                            return Container(
-                              width: 8,
-                              height: 8,
-                              margin: const EdgeInsets.symmetric(horizontal: 2),
-                              decoration: BoxDecoration(
-                                color: index == value
-                                    ? primaryOrange
-                                    : mediumGray,
-                                shape: BoxShape.circle,
-                              ),
-                            );
-                          }),
-                        ),
-                      );
-                    },
+                  AnimatedSmoothIndicator(
+                    activeIndex: selectedIndex,
+                    count: images.length,
+                    effect: const WormEffect(
+                      activeDotColor: primaryOrange,
+                      dotColor: mediumGray,
+                      dotHeight: 8,
+                      dotWidth: 8,
+                    ),
                   ),
                 ],
               ),
@@ -134,5 +133,3 @@ class InitialIntroductionState extends State<InitialIntroduction> {
     );
   }
 }
-
-final selectedIndex = ValueNotifier<int>(0);
