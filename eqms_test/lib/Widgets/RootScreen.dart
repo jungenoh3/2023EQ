@@ -7,8 +7,10 @@ import 'package:eqms_test/Widgets/SensorMap/SensorMap.dart';
 import 'package:eqms_test/Widgets/MorePage/more_page.dart';
 import 'package:eqms_test/style/color_guide.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class RootScreen extends StatefulWidget {
   const RootScreen({Key? key}) : super(key: key);
@@ -26,6 +28,7 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
   final GlobalKey<NavigatorState> sensorDetailsNavigatorKey = GlobalKey<NavigatorState>();
   final GlobalKey<NavigatorState> morePageNavigatorKey = GlobalKey<NavigatorState>();
   late List<Widget> widgetOptions;
+  DateTime? currentBackPressTime;
 
   final List<BottomNavigationBarItem> bottomItems = [
     BottomNavigationBarItem(
@@ -147,10 +150,13 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
         ChangeNotifierProvider<DraggableSheetModel>(create: (context) => DraggableSheetModel()),
       ],
       child: Scaffold(
-        body: PageView(
-          controller: _controller,
-          onPageChanged: onPageChanged,  // Use onPageChanged here
-          children: widgetOptions,
+        body: WillPopScope(
+          onWillPop: onWillPop,
+          child: PageView(
+            controller: _controller,
+            onPageChanged: onPageChanged,  // Use onPageChanged here
+            children: widgetOptions,
+          ),
         ),
         bottomNavigationBar: SafeArea(
           child: SizedBox(
@@ -161,5 +167,25 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
         extendBodyBehindAppBar: true,
       ),
     );
+  }
+
+  Future<bool> onWillPop() async {
+    DateTime currentTime = DateTime.now();
+
+    //Statement 1 Or statement2
+    if (currentBackPressTime == null ||
+        currentTime.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
+      currentBackPressTime = currentTime;
+      Fluttertoast.showToast(
+          msg: "'뒤로' 버튼을 한번 더 누르시면 종료됩니다.",
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: const Color(0xff6E6E6E),
+          fontSize: 20,
+          toastLength: Toast.LENGTH_SHORT);
+      return false;
+    }
+    return true;
+
+    SystemNavigator.pop();
   }
 }

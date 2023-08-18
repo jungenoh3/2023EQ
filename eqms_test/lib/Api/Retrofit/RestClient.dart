@@ -8,6 +8,13 @@ part 'RestClient.g.dart';
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
+  @POST('/user/register')
+  Future<String> postUserInfo(@Queries() Map<String, String> registerData);
+
+  @GET('/user/login')
+  Future<String> getRegisterInfo(@Queries() Map<String, String> loginData);
+
+
   @GET('/sensor/count')
   Future<SensorCount> getSensorCount();
 
@@ -47,6 +54,19 @@ abstract class RestClient {
 
   @GET('/emergency/specific')
   Future<List<EmergencyInst>> getEmergencyInst();
+}
+
+@JsonSerializable()
+class User {
+  String name;
+  String identification;
+  String password;
+  String phoneNumber;
+  String email;
+
+  User({required this.name, required this.identification, required this.password, required this.phoneNumber, required this.email});
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  Map<String, dynamic> toJson() => _$UserToJson(this);
 }
 
 @JsonSerializable()
@@ -97,8 +117,6 @@ class SensorAbnormal {
   factory SensorAbnormal.fromJson(Map<String, dynamic> json) => _$SensorAbnormalFromJson(json);
   Map<String, dynamic> toJson() => _$SensorAbnormalToJson(this);
 }
-
-
 
 @JsonSerializable()
 class Shelter {

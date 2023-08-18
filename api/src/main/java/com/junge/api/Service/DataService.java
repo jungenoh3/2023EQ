@@ -57,20 +57,27 @@ public class DataService {
     public List<String> getSensorAbnormalRegion() { return this.sensorAbnorRep.findAllRegion(); }
     @Cacheable(value = "sensorAbnormalFacility")
     public List<String> getSensorAbnormalFacility() { return this.sensorAbnorRep.findAllFacility(); }
-    @Cacheable(value = "sensorAbnormalSearch", key = "'SASearch' + (#accerlator != null ? #accerlator : '') + (#pressure != null ? #pressure : '') + (#temperature != null ? #temperature : '') + (#fault_message != null ? #fault_message : '') + (#region != null ? #region : '')")
-    public List<SensorAbnormalDTO> searchSensorAbnormal(String accerlator, String pressure, String temperature, String fault_message, String region){
+    @Cacheable(value = "sensorAbnormalSearch", key = "'SASearch' + (#sensorData != null ? #sensorData : '') + (#region != null ? #region : '')")
+    public List<SensorAbnormalDTO> searchSensorAbnormal(String sensorData, String region){
         Specification<SensorAbnormal> spec = (root, query, criteriaBuilder) -> {
             root.fetch("sensorInfo", JoinType.LEFT);
             return criteriaBuilder.and();
         };
-        if(accerlator != null)
-            spec = spec.and(SensorAbnorSpecification.hasAcceleratorData());
-        if(pressure != null)
-            spec = spec.and(SensorAbnorSpecification.hasPressureData());
-        if(temperature != null)
-            spec = spec.and(SensorAbnorSpecification.hasTemperatureData());
-        if(fault_message != null)
-            spec = spec.and(SensorAbnorSpecification.hasFaultMessageData());
+
+        if(sensorData != null){
+            if(sensorData.equals("accelerator")){
+                spec = spec.and(SensorAbnorSpecification.hasAcceleratorData());
+            }
+            else if(sensorData.equals("pressure")){
+                spec = spec.and(SensorAbnorSpecification.hasPressureData());
+            }
+            else if(sensorData.equals("temperature")){
+                spec = spec.and(SensorAbnorSpecification.hasTemperatureData());
+            }
+            else if(sensorData.equals("fault_message")){
+                spec = spec.and(SensorAbnorSpecification.hasFaultMessageData());
+            }
+        }
         if(region != null)
             spec = spec.and(SensorAbnorSpecification.equalRegion(region));
 

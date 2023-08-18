@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
+import 'package:dio/dio.dart';
+import 'package:eqms_test/Api/Retrofit/RestClient.dart';
 import 'package:eqms_test/Widgets/LoginAndRegister/register_agree.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -5,28 +9,44 @@ import '../../style/text_style.dart';
 import '../../style/color_guide.dart';
 
 class Login extends StatelessWidget {
-  final String
-      nextRoute; // The next route to navigate to after a successful login.
+  final String nextRoute; // The next route to navigate to after a successful login.
+  final TextEditingController _idController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
-  const Login({Key? key, required this.nextRoute}) : super(key: key);
+  Login({Key? key, required this.nextRoute}) : super(key: key);
   // TODO: 로그인 아이디 비번 관련 validation(아예 입력하지 않은 경우)
   void _loginAction(BuildContext context) async {
     // Get the NavigatorState before the async operation
     final NavigatorState navigatorState = Navigator.of(context);
+    final dio = Dio();
+    late RestClient client = RestClient(dio);
+    bool isLoggedIn = false;
 
-    // TODO: 로그인 관련 유저정보 검증 및 확인 실시
-    bool isLoggedIn = true; // For demonstration purposes
+    final password = _passwordController.value.text;
 
-    if (isLoggedIn) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setBool('isLoggedIn', true);
+    final uniqueKey = "EQSI@A";
+    final bytes = utf8.encode(password + uniqueKey);
+    final hash = sha256.convert(bytes);
 
-      // Use navigatorState to navigate, ensuring you're not using context after the async gap
-      navigatorState.pushReplacementNamed(nextRoute);
-    } else {
-      // Handle login failure
-      // ...
+
+    final login = {
+      "identification": _idController.value.text,
+      "password": hash.toString()
+    };
+
+    try {
+      final value = await client.getRegisterInfo(login);
+      if (value.contains("로그인")){
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setBool('isLoggedIn', true);
+        prefs.setString("username", value.split(":")[1]);
+        // Use navigatorState to navigate, ensuring you're not using context after the async gap
+        navigatorState.pushReplacementNamed(nextRoute);
+      }
+    } catch (error) {
+
     }
+
   }
 
 
@@ -65,8 +85,9 @@ class Login extends StatelessWidget {
                 border: Border.all(),
                 borderRadius: BorderRadius.circular(4),
               ),
-              child: const TextField(
-                decoration: InputDecoration(
+              child: TextField(
+                controller: _idController,
+                decoration: const InputDecoration(
                   hintText: '아이디',
                   hintStyle: kHintTextStyle,
                   border: InputBorder.none,
@@ -80,8 +101,9 @@ class Login extends StatelessWidget {
                 border: Border.all(),
                 borderRadius: BorderRadius.circular(4),
               ),
-              child: const TextField(
-                decoration: InputDecoration(
+              child: TextField(
+                controller: _passwordController,
+                decoration: const InputDecoration(
                   hintText: '비밀번호',
                   hintStyle: kHintTextStyle,
                   border: InputBorder.none,

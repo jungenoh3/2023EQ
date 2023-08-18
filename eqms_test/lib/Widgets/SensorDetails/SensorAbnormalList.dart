@@ -87,7 +87,7 @@ class _SensorAbnormalListState extends State<SensorAbnormalList> {
                                 if (value! == '전체' &&
                                     queryParameter.keys.contains('region')) {
                                   queryParameter.remove('region');
-                                } else {
+                                } else if (value! != '전체' ){
                                   queryParameter['region'] = value;
                                 }
                               });
@@ -113,25 +113,24 @@ class _SensorAbnormalListState extends State<SensorAbnormalList> {
                               onChanged: (String? value) {
                                 setState(() {
                                   abnormalValue = value!;
-                                  String? regionValue = queryParameter["region"];
-                                  queryParameter.clear();
-                                  if (regionValue != null) {
-                                    queryParameter["region"] = regionValue;
+                                  if (value! == '전체' && queryParameter.keys.contains('sensorData')) {
+                                    queryParameter.remove('sensorData');
                                   }
-                                  if (value! != '전체') {
+                                  else if (value! != '전체') {
                                     switch (value!) {
                                       case "가속도":
-                                        queryParameter["accelerator"] = "Y";
+                                        queryParameter["sensorData"] = "accelerator";
                                         break;
                                       case "기압계":
-                                        queryParameter["pressure"] = "Y";
+                                        queryParameter["sensorData"] = "pressure";
                                         break;
                                       case "온도계":
-                                        queryParameter["temperature"] = "Y";
+                                        queryParameter["sensorData"] = "temperature";
                                         break;
                                       case "Fault Message":
-                                        queryParameter["fault_message"] = "Y";
+                                        queryParameter["sensorData"] = "fault_message";
                                         break;
+
                                     }
                                   }
                                 });

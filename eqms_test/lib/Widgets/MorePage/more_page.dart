@@ -126,7 +126,7 @@ class MorePageState extends State<MorePage> {
             } else {
               return Column(
                 children: [
-                  const MorePageButton(
+                  MorePageButton(
                       title: '로그인 및 계정 추가',
                       route: Login(nextRoute: '/morepage')),
                   const SegmentH(size: 1),

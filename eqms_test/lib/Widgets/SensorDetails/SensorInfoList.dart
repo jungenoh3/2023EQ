@@ -134,7 +134,7 @@ class _SensorInfoListState extends State<SensorInfoList> {
                               regionValue = value!;
                               if (value! == '전체' && queryParameter.keys.contains('region')){
                                 queryParameter.remove('region');
-                              } else {
+                              } else if (value! != '전체') {
                                 queryParameter['region'] = value;
                               }
                             });
@@ -161,11 +161,12 @@ class _SensorInfoListState extends State<SensorInfoList> {
                                 );
                               }).toList(),
                               onChanged: (String? value) {
+                              print("onChanged value: ${value}");
                                 setState(() {
                                   facilityValue = value!;
                                   if (value! == '전체' && queryParameter.keys.contains('facility')){
                                     queryParameter.remove('facility');
-                                  } else {
+                                  } else if (value! != '전체') {
                                     queryParameter['facility'] = value;
                                   }
                                 });

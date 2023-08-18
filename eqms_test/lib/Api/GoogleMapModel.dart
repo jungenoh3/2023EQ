@@ -168,7 +168,7 @@ class GoogleMapModel with ChangeNotifier {
           _markerItems.add(ClusterData(
             id: value[i].id.toString(),
             latLng: LatLng(value[i].latitude, value[i].longitude),
-            name: value[i].institution,
+            name: "[${value[i].med_category}]  ${value[i].institution}",
             address: value[i].address,
             detail: null,
           ));

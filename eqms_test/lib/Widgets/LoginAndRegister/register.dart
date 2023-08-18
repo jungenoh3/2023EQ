@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
+import 'package:dio/dio.dart';
+import 'package:eqms_test/Api/Retrofit/RestClient.dart';
 import 'package:flutter/material.dart';
 import './login.dart';
 import './register_black_alert.dart';
@@ -22,6 +26,8 @@ class RegisterState extends State<Register> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _adminApprovalController =
       TextEditingController();
+  final dio = Dio();
+  late RestClient client = RestClient(dio);
 
   bool _isNameValid = true;
   bool _isIdValid = true;
@@ -270,34 +276,50 @@ class RegisterState extends State<Register> {
                         ), // Horizontal padding
                       ),
                       onPressed: _isButtonEnabled
-                          ? () async {
-                              //TODO:서버 요청 및 오류 메시지 업데이트
-                              try {
-                                // 서버 요청 수행 (예: 계정 생성)
-                                // 서버 응답에 따라 _serverErrorMessage 업데이트
+                          ? () {
+                        final password = _passwordController.value.text;
 
-                                // TODO: 서버 응답이 성공이면 로그인 화면으로 전환
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const Login(nextRoute: '')));
-                              } catch (error) {
-                                // 서버에서 오류가 발생한 경우
-                                setState(() {
-                                  _serverErrorMessage =
-                                      '서버에서 오류가 발생했습니다'; // 원하는 오류 메시지로 설정
-                                  _isErrorMessageVisible = true; // 페이드인 시작
-                                });
-                                // 일정 시간 후 메시지 숨기기
-                                Future.delayed(const Duration(milliseconds: 1500),
-                                    () {
-                                  setState(() {
-                                    _isErrorMessageVisible = false; // 페이드아웃 시작
-                                  });
-                                });
-                              }
-                            }
-                          : null,
+                        final uniqueKey = "EQSI@A";
+                        final bytes = utf8.encode(password + uniqueKey);
+                        final hash = sha256.convert(bytes);
+
+                        final user = {
+                          "name": _nameController.value.text,
+                          "identification": _idController.value.text,
+                          "password": hash.toString(),
+                          "phone_number": _phoneController.value.text,
+                          "email": _emailController.value.text,
+                        };
+
+                        client.postUserInfo(user).then((value) {
+                          print('value: ${value}');
+                          if (value == "회원 등록이 되었습니다.") {
+                            // 서버 응답이 성공이면 로그인 화면으로 전환
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Login(nextRoute: '')));
+                          }
+                          else if(value == "같은 아이디가 있습니다."){
+                            throw ArgumentError("같은 아이디가 있습니다.");
+                          }
+                          else {
+                            // 기타 에러
+                          }
+                        }).catchError((onError){
+                          setState(() {
+                            _serverErrorMessage = onError.toString();
+                            _isErrorMessageVisible = true; // 페이드인 시작
+                          });
+                          // 일정 시간 후 메시지 숨기기
+                          Future.delayed(
+                              const Duration(milliseconds: 1500), () {
+                            setState(() {
+                              _isErrorMessageVisible = false; // 페이드아웃 시작
+                            });
+                          });
+                        });
+                      } : null,
                       child: Text('계정 추가',
                           style: (_isButtonEnabled)
                               ? kButtonTextStyle
