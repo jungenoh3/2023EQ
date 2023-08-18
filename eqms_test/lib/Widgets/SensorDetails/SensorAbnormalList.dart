@@ -130,6 +130,7 @@ class _SensorAbnormalListState extends State<SensorAbnormalList> {
                                       case "Fault Message":
                                         queryParameter["sensorData"] = "fault_message";
                                         break;
+
                                     }
                                   }
                                 });
