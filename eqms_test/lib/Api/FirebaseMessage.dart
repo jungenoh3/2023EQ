@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 Future<void> handleBackgroundMessage(RemoteMessage message) async {
@@ -106,14 +107,23 @@ class FirebaseMessageApi {
     }
   }
 
+  Future<bool> _getAlarmSetting() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('isAlarmEnabled') ?? true;
+  }
+
   Future<void> initNotifications() async {
+    bool isAlarmEnabled = await _getAlarmSetting();
+    if (!isAlarmEnabled) {
+      print('Notifications are disabled in settings.');
+      return;
+    }
+
     final isMessageEnabled = await _firebaseMessaging.requestPermission();
-    if (isMessageEnabled.authorizationStatus == AuthorizationStatus.authorized
-    || isMessageEnabled.authorizationStatus == AuthorizationStatus.provisional
-    ){
+    if (isMessageEnabled.authorizationStatus == AuthorizationStatus.authorized ||
+        isMessageEnabled.authorizationStatus == AuthorizationStatus.provisional) {
       print('메세지 권한이 허가되었습니다.');
       check_initNotifiaction();
-      //TODO: isAlarmEnabled 받아와서 설정에 따라 알림 보낼지 말지
     } else {
       print('메세지 권한을 허가해주세요.');
     }

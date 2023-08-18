@@ -42,10 +42,12 @@ class InitialIntroductionState extends State<InitialIntroduction> {
   Widget build(BuildContext context) {
     // 예시 이미지 리스트
     final List<String> images = [
-      'images/image1.jpg',
-      'images/image1.jpg',
-      'images/image1.jpg',
-      // add other image paths
+      'images/Intro1.png',
+      'images/Intro2.png',
+      'images/Intro3.png',
+      'images/Intro4.png',
+      'images/Intro5.png',
+      'images/Intro6.png',// add other image paths
     ];
 
     return Scaffold(
@@ -53,7 +55,7 @@ class InitialIntroductionState extends State<InitialIntroduction> {
         child: Column(
           children: [
             Expanded(
-              flex: 6,
+              flex: 7,
               child: Stack(
                 alignment: Alignment.bottomCenter,
                 children: [
@@ -82,7 +84,7 @@ class InitialIntroductionState extends State<InitialIntroduction> {
                               decoration: BoxDecoration(
                                 color: index == value
                                     ? primaryOrange
-                                    : Colors.white,
+                                    : mediumGray,
                                 shape: BoxShape.circle,
                               ),
                             );
@@ -104,7 +106,7 @@ class InitialIntroductionState extends State<InitialIntroduction> {
                     shadowColor: Colors.transparent,
                     fixedSize: Size(
                       MediaQuery.of(context).size.width * 0.7,
-                      MediaQuery.of(context).size.height * 0.08,
+                      MediaQuery.of(context).size.height * 0.07,
                     ),
                   ),
                   onPressed: () async {
