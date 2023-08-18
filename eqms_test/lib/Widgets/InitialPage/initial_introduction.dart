@@ -31,23 +31,24 @@ class InitialIntroductionState extends State<InitialIntroduction> {
   Future<void> requestNotificationPermission() async {
     await Permission.notification.request();
   }
+  late PageController _pageController;
 
   @override
   void initState() {
     super.initState();
+    _pageController = PageController();
     requestNotificationPermission();
   }
 
   @override
   Widget build(BuildContext context) {
-    // 예시 이미지 리스트
     final List<String> images = [
       'images/Intro1.png',
       'images/Intro2.png',
       'images/Intro3.png',
       'images/Intro4.png',
       'images/Intro5.png',
-      'images/Intro6.png',// add other image paths
+      'images/Intro6.png', // add other image paths
     ];
 
     return Scaffold(
@@ -60,6 +61,7 @@ class InitialIntroductionState extends State<InitialIntroduction> {
                 alignment: Alignment.bottomCenter,
                 children: [
                   PageView.builder(
+                    controller: _pageController,
                     itemBuilder: (context, index) {
                       final image = images[index % images.length];
                       return Image.asset(image, fit: BoxFit.cover);

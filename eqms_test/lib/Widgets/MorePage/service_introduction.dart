@@ -1,24 +1,41 @@
 import 'package:flutter/material.dart';
-import '../CommonWidgets/segment.dart';
-import '../../style/text_style.dart';
-import '../../style/color_guide.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
-class ServiceIntroduction extends StatelessWidget {
+class ServiceIntroduction extends StatefulWidget {
   const ServiceIntroduction({Key? key}) : super(key: key);
 
   @override
+  _ServiceIntroductionState createState() => _ServiceIntroductionState();
+}
+
+class _ServiceIntroductionState extends State<ServiceIntroduction> {
+  final List<String> images = [
+    'images/Intro1.png',
+    'images/Intro2.png',
+    'images/Intro3.png',
+    'images/Intro4.png',
+    'images/Intro5.png',
+    'images/Intro6.png',
+  ];
+  int selectedIndex = 0;
+  @override
+  void initState() {
+    super.initState();
+    _preloadImages();
+  }
+
+  _preloadImages() {
+    for (var imagePath in images) {
+      precacheImage(AssetImage(imagePath), context);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // 예시 이미지 리스트
-    final List<String> images = [
-      'images/Intro1.png',
-      'images/Intro2.png',
-      'images/Intro3.png',
-      'images/Intro4.png',
-      'images/Intro5.png',
-      'images/Intro6.png',
-    ];
+    final primaryOrange = Color(0xFFFFA726);
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
         elevation: 0.0,
@@ -26,92 +43,70 @@ class ServiceIntroduction extends StatelessWidget {
           icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('서비스 소개', style: kAppBarTitleTextStyle),
+        title: const Text('서비스 소개', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.white,
       ),
       body: Column(
         children: [
           Expanded(
-            flex: 8,
-            child: Stack(
-              alignment: Alignment.bottomCenter,
-              children: [
-                PageView.builder(
-                  itemBuilder: (context, index) {
-                    final image = images[index % images.length];
-                    return Image.asset(image, fit: BoxFit.cover);
-                  },
-                  itemCount: null,
-                  onPageChanged: (index) {
-                    selectedIndex.value = index % images.length;
-                  },
-                ),
-                ValueListenableBuilder<int>(
-                  valueListenable: selectedIndex,
-                  builder: (context, value, child) {
-                    return Container(
-                      margin: const EdgeInsets.only(bottom: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(images.length, (index) {
-                          return Container(
-                            width: 8,
-                            height: 8,
-                            margin: const EdgeInsets.symmetric(horizontal: 2),
-                            decoration: BoxDecoration(
-                              color:
-                                  index == value ? primaryOrange : Colors.white,
-                              shape: BoxShape.circle,
-                            ),
-                          );
-                        }),
-                      ),
-                    );
-                  },
-                ),
-              ],
+            flex: 2,
+            child: CarouselSlider(
+              items: images.map((item) => Image.asset(item, fit: BoxFit.fitWidth)).toList(),
+              options: CarouselOptions(
+                enlargeCenterPage: true,
+                height: double.infinity,
+                aspectRatio: 16 / 9,
+                viewportFraction: 1.2,
+                autoPlay: true,
+                onPageChanged: (index, reason) {
+                  setState(() {
+                    selectedIndex = index;
+                  });
+                },
+              ),
             ),
           ),
-          const SegmentH(size: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(images.length, (index) {
+              return Container(
+                width: 8,
+                height: 8,
+                margin: const EdgeInsets.symmetric(horizontal: 2),
+                decoration: BoxDecoration(
+                  color: index == selectedIndex ? primaryOrange : Colors.grey,
+                  shape: BoxShape.circle,
+                ),
+              );
+            }),
+          ),
           Expanded(
-            flex: 2,
             child: Container(
               padding: const EdgeInsets.all(20),
-              child: const Column(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Image(
-                          image: AssetImage('images/초연결융합기술연구소로고세로.png'),
-                          fit: BoxFit.cover, // 이 부분이 이미지 크기를 조정합니다.
-                        ),
-                      ),
-                      SizedBox(width: 20),
-                      SegmentV(size: 100),
-                      SizedBox(width: 20),
-                      Expanded(
-                        child: Image(
-                          height: 100,
-                          image: AssetImage('images/LOGO.png'),
-                          fit: BoxFit.fitHeight, // 이 부분이 이미지 크기를 조정합니다.
-                        ),
-                      ),
-                    ],
+                  Expanded(
+                    child: Image(
+                      image: AssetImage('images/초연결융합기술연구소로고세로.png'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  SizedBox(width: 20),
+                  Expanded(
+                    child: Image(
+                      height: 100,
+                      image: AssetImage('images/LOGO.png'),
+                      fit: BoxFit.fitHeight,
+                    ),
                   ),
                 ],
               ),
             ),
           ),
-
         ],
       ),
     );
   }
 }
-
-// Create a ValueNotifier to hold the index of the selected image
-final selectedIndex = ValueNotifier<int>(0);
