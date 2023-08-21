@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
+import '../Widgets/InitialPage/splashscreen.dart';
 Future<void> handleBackgroundMessage(RemoteMessage message) async {
   print('Title: ${message.notification?.title}');
   print('Body: ${message.notification?.body}');
@@ -13,15 +14,27 @@ Future<void> handleBackgroundMessage(RemoteMessage message) async {
 }
 
 class FirebaseMessageApi {
+  final GlobalKey<NavigatorState> navigatorKey;
   final _firebaseMessaging = FirebaseMessaging.instance;
   final _localNotifications = FlutterLocalNotificationsPlugin();
+
+  FirebaseMessageApi({required this.navigatorKey});
 
   void handleMessage(RemoteMessage? message){
     if (message == null ) return;
     print('Title: ${message.notification?.title}');
     print('Body: ${message.notification?.body}');
     print('Payload: ${message?.data}');
+
+    final navigator = navigatorKey.currentState;
+    if (navigator != null && message.data.containsKey('route')) {
+      final routeName = message.data['route'];
+      navigator.pushReplacement(MaterialPageRoute(
+        builder: (context) => SplashScreen(routeName: routeName), // pass route name to SplashScreen
+      ));
+    }
   }
+
 
   final _androidChannel = const AndroidNotificationChannel(
     'high_importance_channel', // id
@@ -80,31 +93,37 @@ class FirebaseMessageApi {
     });
   }
 
-  Future<void> check_initNotifiaction() async {
+  Future<void> checkInitNotifiaction() async {
     final fCMToken = await _firebaseMessaging.getToken();
     print('Token: ${fCMToken}');
 
     final url = Uri.parse('http://155.230.118.78:1234/FCMToken/check');
     try {
-      final http.Response response = await http
-          .post(url, body: fCMToken)
-          .timeout(const Duration(seconds: 10),
-          onTimeout: () { throw TimeoutException('10초가 지났습니다.');
-          });
-      if (response.body == "subscribed"){
-        // _firebaseMessaging.subscribeToTopic("EQMS-1");
+      final http.Response response = await http.post(url, body: fCMToken)
+          .timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException('10초가 지났습니다.');
+      });
+
+      if (response.statusCode >= 500) {
+        print('Server error. Status code: ${response.statusCode}');
+        return;
+      }
+
+      final responseBody = response.body;
+      if (responseBody == "subscribed") {
         print("subscribed");
-      } else if (response.body == "already subscribed"){
+      } else if (responseBody == "already subscribed") {
         print("already subscribed");
       }
       initPushNotifications();
-    } on TimeoutException {
-      print('Timeout Exception: $TimeoutException');
+    } on TimeoutException catch (e) {
+      print('Timeout Exception: $e');
       return;
-    } on SocketException {
-      print('Socket Exception. error code: $SocketException');
+    } on SocketException catch (e) {
+      print('Socket Exception. error code: $e');
       return;
     }
+
   }
 
   Future<bool> _getAlarmSetting() async {
@@ -123,7 +142,7 @@ class FirebaseMessageApi {
     if (isMessageEnabled.authorizationStatus == AuthorizationStatus.authorized ||
         isMessageEnabled.authorizationStatus == AuthorizationStatus.provisional) {
       print('메세지 권한이 허가되었습니다.');
-      check_initNotifiaction();
+      checkInitNotifiaction();
     } else {
       print('메세지 권한을 허가해주세요.');
     }

@@ -6,13 +6,15 @@ import 'package:page_transition/page_transition.dart';
 import 'dart:async';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}): super(key:key);
+  final String? routeName;
+  const SplashScreen({Key? key, this.routeName}): super(key:key);
   @override
   SplashScreenState createState() => SplashScreenState();
 }
 
 class SplashScreenState extends State<SplashScreen> {
   late bool isFirstTime;
+  String? get routeName => widget.routeName;
 
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
@@ -43,11 +45,15 @@ class SplashScreenState extends State<SplashScreen> {
             child: const InitialIntroduction(),
           ));
         } else {
-          _navigatorKey.currentState!.pushReplacement(PageTransition(
-            type: PageTransitionType.fade,
-            duration: const Duration(milliseconds: 1000),
-            child: const RootScreen(),
-          ));
+          if (routeName != null) {
+            _navigatorKey.currentState!.pushReplacementNamed(routeName!);
+          } else {
+            _navigatorKey.currentState!.pushReplacement(PageTransition(
+              type: PageTransitionType.fade,
+              duration: const Duration(milliseconds: 1000),
+              child: const RootScreen(),
+            ));
+          }
         }
       },
     );

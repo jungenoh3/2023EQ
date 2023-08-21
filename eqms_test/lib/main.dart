@@ -1,14 +1,18 @@
 import 'package:eqms_test/Api/FirebaseMessage.dart';
+import 'package:eqms_test/Widgets/EqOccur/eq_ocuur.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 import 'firebase_options.dart';
 import './Widgets/InitialPage/splashscreen.dart';
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await FirebaseMessageApi().initNotifications();
+  await FirebaseMessageApi(navigatorKey: navigatorKey).initNotifications();
 
   // android 환경의 java.lang.NullPointerException 오류 해결
   final GoogleMapsFlutterPlatform mapsImplementation =
@@ -18,8 +22,12 @@ void main() async {
     mapsImplementation.initializeWithRenderer(AndroidMapRenderer.latest);
   }
 
-  runApp(const MaterialApp(
-    home: SplashScreen(),
+  runApp(MaterialApp(
+    navigatorKey: navigatorKey,
+    home: const SplashScreen(),
+    routes: {
+      '/eqoccur': (context) => const EqOccur(),
+    },
     debugShowCheckedModeBanner: false,
   ));
 }
