@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:eqms_test/Api/DraggableSheetModel.dart';
 import 'package:eqms_test/Api/GoogleMapModel.dart';
 import 'package:eqms_test/Widgets/EQInfo/EQInfo.dart';
@@ -22,13 +24,19 @@ class RootScreen extends StatefulWidget {
 class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
   late final PageController _controller;
   int selectedIndex = 0;
-  final GlobalKey<NavigatorState> eqInfoNavigatorKey = GlobalKey<NavigatorState>();
-  final GlobalKey<NavigatorState> eqSafetyNavigatorKey = GlobalKey<NavigatorState>();
-  final GlobalKey<NavigatorState> sensorMapNavigatorKey = GlobalKey<NavigatorState>();
-  final GlobalKey<NavigatorState> sensorDetailsNavigatorKey = GlobalKey<NavigatorState>();
-  final GlobalKey<NavigatorState> morePageNavigatorKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> eqInfoNavigatorKey =
+      GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> eqSafetyNavigatorKey =
+      GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> sensorMapNavigatorKey =
+      GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> sensorDetailsNavigatorKey =
+      GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> morePageNavigatorKey =
+      GlobalKey<NavigatorState>();
   late List<Widget> widgetOptions;
   DateTime? currentBackPressTime;
+  var currentTime;
 
   final List<BottomNavigationBarItem> bottomItems = [
     BottomNavigationBarItem(
@@ -58,8 +66,6 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
     ),
   ];
 
-
-
   @override
   void initState() {
     super.initState();
@@ -69,8 +75,7 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
       Navigator(
           key: eqInfoNavigatorKey,
           onGenerateRoute: (settings) {
-            return MaterialPageRoute(
-                builder: (context) => const EQInfo());
+            return MaterialPageRoute(builder: (context) => const EQInfo());
           }),
       Navigator(
           key: eqSafetyNavigatorKey,
@@ -78,32 +83,27 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
             return MaterialPageRoute(
                 builder: (context) => EQSafety(goToEQInfo: goToEQInfo));
           }),
-
       Navigator(
           key: sensorMapNavigatorKey,
           onGenerateRoute: (settings) {
-            return MaterialPageRoute(
-                builder: (context) => const SensorMap());
+            return MaterialPageRoute(builder: (context) => const SensorMap());
           }),
       Navigator(
           key: sensorDetailsNavigatorKey,
           onGenerateRoute: (settings) {
-            return MaterialPageRoute(
-                builder: (context) => const SensorInfo());
+            return MaterialPageRoute(builder: (context) => const SensorInfo());
           }),
       Navigator(
           key: morePageNavigatorKey,
           onGenerateRoute: (settings) {
-            return MaterialPageRoute(
-                builder: (context) => const MorePage());
+            return MaterialPageRoute(builder: (context) => const MorePage());
           }),
     ];
   }
 
-
   @override
   void dispose() {
-    _controller.dispose();  // Dispose of the controller when not needed
+    _controller.dispose(); // Dispose of the controller when not needed
     super.dispose();
   }
 
@@ -120,10 +120,11 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
 
     setState(() => selectedIndex = index);
   }
+
   void goToEQInfo() {
     if (!mounted) return;
 
-    _controller.jumpToPage(0);  // 0은 EQInfo 페이지의 인덱스입니다.
+    _controller.jumpToPage(0); // 0은 EQInfo 페이지의 인덱스입니다.
     setState(() {
       selectedIndex = 0; // 바텀바의 선택된 아이템을 EQInfo로 업데이트합니다.
     });
@@ -146,46 +147,49 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<GoogleMapModel>(create: (context) => GoogleMapModel()),
-        ChangeNotifierProvider<DraggableSheetModel>(create: (context) => DraggableSheetModel()),
+        ChangeNotifierProvider<GoogleMapModel>(
+            create: (context) => GoogleMapModel()),
+        ChangeNotifierProvider<DraggableSheetModel>(
+            create: (context) => DraggableSheetModel()),
       ],
-      child: Scaffold(
-        body: WillPopScope(
-          onWillPop: onWillPop,
-          child: PageView(
+      child: WillPopScope(
+        onWillPop: () async {
+          await _onBackPressed(context);
+          return false;
+        },
+        child: Scaffold(
+          body: PageView(
             controller: _controller,
-            onPageChanged: onPageChanged,  // Use onPageChanged here
+            onPageChanged: onPageChanged, // Use onPageChanged here
             children: widgetOptions,
           ),
+          bottomNavigationBar: SafeArea(
+            child: SizedBox(height: 58, child: renderBottomNavigationBar()),
+          ),
+          extendBody: false,
+          extendBodyBehindAppBar: true,
         ),
-        bottomNavigationBar: SafeArea(
-          child: SizedBox(
-              height: 58,
-              child: renderBottomNavigationBar()),
-        ),
-        extendBody: false,
-        extendBodyBehindAppBar: true,
       ),
     );
   }
+}
 
-  Future<bool> onWillPop() async {
-    DateTime currentTime = DateTime.now();
-
-    //Statement 1 Or statement2
-    if (currentBackPressTime == null ||
-        currentTime.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
-      currentBackPressTime = currentTime;
-      Fluttertoast.showToast(
-          msg: "'뒤로' 버튼을 한번 더 누르시면 종료됩니다.",
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: const Color(0xff6E6E6E),
-          fontSize: 20,
-          toastLength: Toast.LENGTH_SHORT);
-      return false;
-    }
-    return true;
-
-    SystemNavigator.pop();
-  }
+Future<void> _onBackPressed(BuildContext context) async {
+  print('onBackPressed');
+  await showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('Do you want to exit?'),
+      actions: <Widget>[
+        TextButton(
+          child: const Text('No'),
+          onPressed: () => Navigator.pop(context),
+        ),
+        TextButton(
+          child: const Text('Yes'),
+          onPressed: () => SystemNavigator.pop(),
+        ),
+      ],
+    ),
+  );
 }

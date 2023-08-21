@@ -6,7 +6,7 @@ import 'package:syncfusion_flutter_core/theme.dart';
 // https://help.syncfusion.com/flutter/datagrid/paging
 
 List<Sensor> sensors = <Sensor>[];
-const int _rowsPerPage = 6;
+const int _rowsPerPage = 7;
 
 class SensorInfoTable extends StatefulWidget {
   final List<SensorInfo> sensorValue;
@@ -38,13 +38,11 @@ class SensorInfoTableState extends State<SensorInfoTable> {
     if (widget.sensorValue.isEmpty){
       return const Center(child: Text('데이터가 없습니다.'));
     }
-
     return LayoutBuilder(builder: (context, constraint) {
       return Column(
         mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(
-                height: 350,
+              Expanded(
                 child: SfDataGrid(
                   source: sensorDataSource,
                   columnWidthMode: ColumnWidthMode.fill,

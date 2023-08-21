@@ -6,8 +6,7 @@ import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
 import com.junge.api.Model.server.Earthquake;
-import com.junge.api.Model.server.EarthquakeProjection;
-import com.junge.api.Model.server.EarthquakeSpecific;
+import com.junge.api.Service.DataService;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.JSONObject;
 import com.junge.api.Model.server.FCMNotification;
@@ -21,8 +20,6 @@ import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.model.response.BotApiResponse;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.json.simple.parser.ParseException;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -32,7 +29,6 @@ import reactor.core.publisher.Sinks;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -40,6 +36,7 @@ import java.util.concurrent.ExecutionException;
 @RequestMapping()
 public class KafkaController {
     private KafkaService kafkaService;
+    private DataService dataService;
     private final SensorDataRep sensorDataRep;
     private final EarthquakeDataRep earthQuakeDataRep;
     private final FirebaseMessaging firebaseMessaging;
@@ -47,8 +44,9 @@ public class KafkaController {
     private Sinks.Many<String> realTimeDataMany = Sinks.many().multicast().onBackpressureBuffer();
 
 
-    public KafkaController(KafkaService kafkaService, SensorDataRep sensorDataRep, EarthquakeDataRep earthQuakeDataRep, FirebaseMessaging firebaseMessaging) {
+    public KafkaController(KafkaService kafkaService, DataService dataService, SensorDataRep sensorDataRep, EarthquakeDataRep earthQuakeDataRep, FirebaseMessaging firebaseMessaging) {
         this.kafkaService = kafkaService;
+        this.dataService = dataService;
         this.sensorDataRep = sensorDataRep;
         this.earthQuakeDataRep = earthQuakeDataRep;
         this.firebaseMessaging = firebaseMessaging;
@@ -108,6 +106,7 @@ public class KafkaController {
                 .builder()
                 .setTopic("EQMS-1")
                 .setNotification(notification)
+                .putData("route", "/eqoccur")
                 .build();
 
         try {
@@ -152,29 +151,8 @@ public class KafkaController {
         Earthquake earthquake = new Earthquake(ts, lat, lng, event_occurred_msec, alert_created_msec, associated_sensors, stage, assoc_id);
         this.earthQuakeDataRep.save(earthquake);
 
-        cacheputEarthquake();
-        cacheputEarthquakeOngoign();
-    }
-
-    @CachePut(value = "earthquakeOngoing")
-    List<EarthquakeProjection> cacheputEarthquakeOngoign() {
-        List<EarthquakeSpecific> earthquakeSpecifics = this.earthQuakeDataRep.findAllOngoing();
-        List<EarthquakeProjection> earthquakeProjections = new ArrayList<EarthquakeProjection>();
-
-        for (EarthquakeSpecific earthquakeSpecific : earthquakeSpecifics){
-            earthquakeProjections.add(new EarthquakeProjection(earthquakeSpecific.getId(),
-                    earthquakeSpecific.getLat(),
-                    earthquakeSpecific.getLng(),
-                    earthquakeSpecific.getUpdate_time(),
-                    earthquakeSpecific.getAssoc_id()
-            ));
-        }
-        return earthquakeProjections;
-    }
-
-    @CachePut(value = "earthquakeAll")
-    List<Earthquake> cacheputEarthquake() {
-        return this.earthQuakeDataRep.findAll();
+        dataService.cacheputEarthquake();
+        dataService.cacheputEarthquakeOngoign();
     }
 
     @KafkaListener(topics = "cr-assoc-results-integration-test", groupId = "cr-alert-mobile")

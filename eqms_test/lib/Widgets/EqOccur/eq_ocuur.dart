@@ -10,7 +10,7 @@ class _EqOccurState extends State<EqOccur> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      backgroundColor: Colors.red,
+      backgroundColor: Colors.blueGrey,
       body: Center(),
     );
   }

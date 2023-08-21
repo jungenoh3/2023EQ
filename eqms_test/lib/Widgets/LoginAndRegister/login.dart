@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:eqms_test/Api/Retrofit/RestClient.dart';
+import 'package:eqms_test/Widgets/LoginAndRegister/ToastMessage.dart';
 import 'package:eqms_test/Widgets/LoginAndRegister/register_agree.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../style/text_style.dart';
 import '../../style/color_guide.dart';
@@ -41,10 +43,13 @@ class Login extends StatelessWidget {
         prefs.setBool('isLoggedIn', true);
         prefs.setString("username", value.split(":")[1]);
         // Use navigatorState to navigate, ensuring you're not using context after the async gap
+        alertMessage("로그인되었습니다.");
         navigatorState.pushReplacementNamed(nextRoute);
+      } else {
+        alertMessage("이메일과 비밀번호를 확인해주세요.");
       }
     } catch (error) {
-
+      // TODO: 기타등등 에러...
     }
 
   }

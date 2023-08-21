@@ -7,6 +7,7 @@ import com.junge.api.Model.server.EarthquakeSpecific;
 import com.junge.api.Repository.application.*;
 import com.junge.api.Repository.server.EarthquakeDataRep;
 import jakarta.persistence.criteria.JoinType;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -110,6 +111,26 @@ public class DataService {
     public List<Earthquake> getEarthquakeList() { return this.earthQuakeDataRep.findAll(); }
     @Cacheable(value = "earthquakeOngoing")
     public List<EarthquakeProjection> getEarthquakeOngoing() {
+        List<EarthquakeSpecific> earthquakeSpecifics = this.earthQuakeDataRep.findAllOngoing();
+        List<EarthquakeProjection> earthquakeProjections = new ArrayList<EarthquakeProjection>();
+
+        for (EarthquakeSpecific earthquakeSpecific : earthquakeSpecifics){
+            earthquakeProjections.add(new EarthquakeProjection(earthquakeSpecific.getId(),
+                    earthquakeSpecific.getLat(),
+                    earthquakeSpecific.getLng(),
+                    earthquakeSpecific.getUpdate_time(),
+                    earthquakeSpecific.getAssoc_id()
+            ));
+        }
+        return earthquakeProjections;
+    }
+
+    @CachePut(value = "earthquakeAll")
+    public List<Earthquake> cacheputEarthquake() {
+        return this.earthQuakeDataRep.findAll();
+    }
+    @CachePut(value = "earthquakeOngoing")
+    public List<EarthquakeProjection> cacheputEarthquakeOngoign() {
         List<EarthquakeSpecific> earthquakeSpecifics = this.earthQuakeDataRep.findAllOngoing();
         List<EarthquakeProjection> earthquakeProjections = new ArrayList<EarthquakeProjection>();
 

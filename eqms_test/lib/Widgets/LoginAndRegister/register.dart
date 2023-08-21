@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:eqms_test/Api/Retrofit/RestClient.dart';
+import 'package:eqms_test/Widgets/LoginAndRegister/ToastMessage.dart';
 import 'package:flutter/material.dart';
 import './login.dart';
 import './register_black_alert.dart';
@@ -294,6 +295,7 @@ class RegisterState extends State<Register> {
                         client.postUserInfo(user).then((value) {
                           print('value: ${value}');
                           if (value == "회원 등록이 되었습니다.") {
+                            alertMessage("회원 등록이 되었습니다.");
                             // 서버 응답이 성공이면 로그인 화면으로 전환
                             Navigator.pushReplacement(
                                 context,
@@ -307,17 +309,7 @@ class RegisterState extends State<Register> {
                             // 기타 에러
                           }
                         }).catchError((onError){
-                          setState(() {
-                            _serverErrorMessage = onError.toString();
-                            _isErrorMessageVisible = true; // 페이드인 시작
-                          });
-                          // 일정 시간 후 메시지 숨기기
-                          Future.delayed(
-                              const Duration(milliseconds: 1500), () {
-                            setState(() {
-                              _isErrorMessageVisible = false; // 페이드아웃 시작
-                            });
-                          });
+                          alertMessage(onError.toString());
                         });
                       } : null,
                       child: Text('계정 추가',
@@ -329,9 +321,6 @@ class RegisterState extends State<Register> {
                 ],
               ),
             ),
-            RegisterBlackWidget(
-                isErrorMessageVisible: _isErrorMessageVisible,
-                serverErrorMessage: _serverErrorMessage),
           ]),
         ),
       ),

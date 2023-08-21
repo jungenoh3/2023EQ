@@ -6,11 +6,14 @@ import 'package:http/http.dart' as http;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import '../Widgets/InitialPage/splashscreen.dart';
+
 Future<void> handleBackgroundMessage(RemoteMessage message) async {
+  print('handleBackgroundMessage');
+
   print('Title: ${message.notification?.title}');
   print('Body: ${message.notification?.body}');
   print('Payload: ${message?.data}');
+
 }
 
 class FirebaseMessageApi {
@@ -21,20 +24,24 @@ class FirebaseMessageApi {
   FirebaseMessageApi({required this.navigatorKey});
 
   void handleMessage(RemoteMessage? message){
-    if (message == null ) return;
-    print('Title: ${message.notification?.title}');
-    print('Body: ${message.notification?.body}');
-    print('Payload: ${message?.data}');
+    print('handleMessage');
 
-    final navigator = navigatorKey.currentState;
-    if (navigator != null && message.data.containsKey('route')) {
-      final routeName = message.data['route'];
-      navigator.pushReplacement(MaterialPageRoute(
-        builder: (context) => SplashScreen(routeName: routeName), // pass route name to SplashScreen
-      ));
+    if (message == null ){ return; }
+    else {
+      print('message: ${message}');
+      print('Title: ${message.notification?.title}');
+      print('Body: ${message.notification?.body}');
+      print('Payload: ${message?.data}');
+
+      // 지금은 에러가 나서 닫았습니다.
+
+      // final navigator = navigatorKey.currentState;
+      // if (navigator != null) {
+      //   final routeName = '/eqoccur';
+      //   navigator.pushNamed(routeName);
+      // }
     }
   }
-
 
   final _androidChannel = const AndroidNotificationChannel(
     'high_importance_channel', // id
@@ -51,7 +58,7 @@ class FirebaseMessageApi {
     await _localNotifications.initialize(
         settings,
         onDidReceiveNotificationResponse: (payload) {
-          final message = RemoteMessage.fromMap(jsonDecode(payload.toString()));
+          final message = RemoteMessage.fromMap(jsonDecode(payload.payload.toString()));
           handleMessage(message);
         }
     );
@@ -69,27 +76,32 @@ class FirebaseMessageApi {
       sound: true,
     );
 
-    FirebaseMessaging.instance.getInitialMessage().then(handleMessage);
-    FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
+    FirebaseMessaging.instance.getInitialMessage().then(handleMessage); // terminated -> open
+    FirebaseMessaging.onMessageOpenedApp.listen(handleMessage); // background -> open
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Message data: ${message.data}');
+
       final notification = message.notification;
-      if (notification == null) return;
-      _localNotifications.show(
-        notification.hashCode,
-        notification.title,
-        notification.body,
-        NotificationDetails(
-          android: AndroidNotificationDetails(
-            _androidChannel.id,
-            _androidChannel.name,
-            channelDescription: _androidChannel.description,
-            icon: '@drawable/ic_launcher',
-            // other properties...
+      if (notification == null) { return; }
+      else {
+        _localNotifications.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          NotificationDetails(
+              android: AndroidNotificationDetails(
+                _androidChannel.id,
+                _androidChannel.name,
+                channelDescription: _androidChannel.description,
+                icon: '@drawable/ic_launcher',
+                // other properties...
+              ),
+              iOS: DarwinNotificationDetails()
           ),
-        ),
-        payload: jsonEncode(message.toMap()),
-      );
+          payload: jsonEncode(message.toMap()),
+        );
+      }
     });
   }
 
@@ -116,6 +128,7 @@ class FirebaseMessageApi {
         print("already subscribed");
       }
       initPushNotifications();
+      initLocalNotification();
     } on TimeoutException catch (e) {
       print('Timeout Exception: $e');
       return;
@@ -137,7 +150,6 @@ class FirebaseMessageApi {
       print('Notifications are disabled in settings.');
       return;
     }
-
     final isMessageEnabled = await _firebaseMessaging.requestPermission();
     if (isMessageEnabled.authorizationStatus == AuthorizationStatus.authorized ||
         isMessageEnabled.authorizationStatus == AuthorizationStatus.provisional) {

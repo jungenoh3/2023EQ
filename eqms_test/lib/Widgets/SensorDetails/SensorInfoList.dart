@@ -55,12 +55,11 @@ class _SensorInfoListState extends State<SensorInfoList> {
           print('길이: ${snapshot.data.length}');
           print('쿼리파라미터 ${queryParameter}');
 
-          return Wrap(
-            direction: Axis.horizontal,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
+          return Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              children: [
+                Row(
                   children: <Widget>[
                     Flexible(
                       child: TextField(
@@ -96,93 +95,83 @@ class _SensorInfoListState extends State<SensorInfoList> {
                         ))
                   ],
                 ),
-              ),
-              const Divider(
-                color: Colors.grey,
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-                child: Column(
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "조회현황",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        const Text("행정구역", style: TextStyle(fontSize: 15)),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        DropdownButton(
-                          value: regionValue,
-                          items: regionData
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          onChanged: (String? value) {
-                            setState(() {
-                              regionValue = value!;
-                              if (value! == '전체' && queryParameter.keys.contains('region')){
-                                queryParameter.remove('region');
-                              } else if (value! != '전체') {
-                                queryParameter['region'] = value;
-                              }
-                            });
-                          },
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        const Text("시설"),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        SizedBox(
-                          width: 75,
-                          child: DropdownButton(
-                            isExpanded: true,
-                              value: facilityValue,
-                              style: const TextStyle(color: Colors.black, fontSize: 14),
-                              items: facilityData
-                                  .map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (String? value) {
-                              print("onChanged value: ${value}");
-                                setState(() {
-                                  facilityValue = value!;
-                                  if (value! == '전체' && queryParameter.keys.contains('facility')){
-                                    queryParameter.remove('facility');
-                                  } else if (value! != '전체') {
-                                    queryParameter['facility'] = value;
-                                  }
-                                });
-                              },
-                          ),
-                        ),
-                      ],
+                    const Text(
+                      "조회현황",
+                      style: TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                    Divider(color: Colors.grey[800]),
-                    SensorInfoTable(
-                      sensorValue: snapshot.data,
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    const Text("행정구역", style: TextStyle(fontSize: 15)),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    DropdownButton(
+                      value: regionValue,
+                      items: regionData
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (String? value) {
+                        setState(() {
+                          regionValue = value!;
+                          if (value! == '전체' && queryParameter.keys.contains('region')){
+                            queryParameter.remove('region');
+                          } else if (value! != '전체') {
+                            queryParameter['region'] = value;
+                          }
+                        });
+                      },
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    const Text("시설"),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    SizedBox(
+                      width: 75,
+                      child: DropdownButton(
+                        isExpanded: true,
+                        value: facilityValue,
+                        style: const TextStyle(color: Colors.black, fontSize: 14),
+                        items: facilityData
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (String? value) {
+                          print("onChanged value: ${value}");
+                          setState(() {
+                            facilityValue = value!;
+                            if (value! == '전체' && queryParameter.keys.contains('facility')){
+                              queryParameter.remove('facility');
+                            } else if (value! != '전체') {
+                              queryParameter['facility'] = value;
+                            }
+                          });
+                        },
+                      ),
                     ),
                   ],
                 ),
-              ),
-            ],
+                Expanded(
+                  child: SensorInfoTable(
+                    sensorValue: snapshot.data,
+                  ),
+                ),
+              ],
+            ),
           );
         }
         return const LoadingIndicator();

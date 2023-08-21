@@ -10,7 +10,8 @@ const int _rowsPerPage = 8;
 
 class SensorAbnormalTable extends StatefulWidget {
   final List<SensorAbnormal> sensorValue;
-  const SensorAbnormalTable({required this.sensorValue, Key? key}) : super(key: key);
+  const SensorAbnormalTable({required this.sensorValue, Key? key})
+      : super(key: key);
 
   @override
   SensorAbnormalTableState createState() => SensorAbnormalTableState();
@@ -38,96 +39,101 @@ class SensorAbnormalTableState extends State<SensorAbnormalTable> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.sensorValue.isEmpty){
+    if (widget.sensorValue.isEmpty) {
       return const Center(child: Text('데이터가 없습니다.'));
     }
-
-
     return LayoutBuilder(builder: (context, constraint) {
       return Column(
-        mainAxisSize: MainAxisSize.min,
-            children: [
-              if (widget.sensorValue.isEmpty) const Center(child: Text("데이터가 없습니다."),) else SizedBox(
-                height: 450,
-                child: SfDataGrid(
-                  source: sensorDataSource,
-                  columnWidthMode: ColumnWidthMode.fill,
-                  columns: <GridColumn>[
-                    GridColumn(
-                        columnName: 'id',
-                        autoFitPadding: const EdgeInsets.all(5.0),
-                        label: Container(
-                            padding: const EdgeInsets.all(5.0),
-                            alignment: Alignment.center,
-                            child: const Text(
-                              '단말번호',
-                            ))),
-                    GridColumn(
-                        columnName: 'address',
-                        autoFitPadding: const EdgeInsets.all(5.0),
-                        label: Container(
-                            padding: const EdgeInsets.all(8.0),
-                            alignment: Alignment.center,
-                            child: const Text('주소 (상세)', overflow: TextOverflow.clip,))),
-                    GridColumn(
-                        columnName: 'accelerator',
-                        label: Container(
-                            padding: const EdgeInsets.all(8.0),
-                            alignment: Alignment.center,
-                            child: const Text(
-                              '가속도',
-                              overflow: TextOverflow.ellipsis,
-                            ))),
-                    GridColumn(
-                        columnName: 'pressure',
-                        label: Container(
-                            padding: const EdgeInsets.all(8.0),
-                            alignment: Alignment.center,
-                            child: const Text('온도'))),
-                    GridColumn(
-                        columnName: 'temperature',
-                        label: Container(
-                            padding: const EdgeInsets.all(8.0),
-                            alignment: Alignment.center,
-                            child: const Text('기압계'))),
-                    GridColumn(
-                        columnName: 'fault_message',
-                        label: Container(
-                            padding: const EdgeInsets.all(8.0),
-                            alignment: Alignment.center,
-                            child: const Text('Fault Message'))),
-                  ],
-                ),
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Expanded(
+            child: SfDataGrid(
+              source: sensorDataSource,
+              columnWidthMode: ColumnWidthMode.fill,
+              columns: <GridColumn>[
+                GridColumn(
+                    columnName: 'id',
+                    autoFitPadding: const EdgeInsets.all(5.0),
+                    label: Container(
+                        padding: const EdgeInsets.all(5.0),
+                        alignment: Alignment.center,
+                        child: const Text(
+                          '단말번호',
+                        ))),
+                GridColumn(
+                    columnName: 'address',
+                    autoFitPadding: const EdgeInsets.all(5.0),
+                    label: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        alignment: Alignment.center,
+                        child: const Text(
+                          '주소 (상세)',
+                          overflow: TextOverflow.clip,
+                        ))),
+                GridColumn(
+                    columnName: 'accelerator',
+                    label: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        alignment: Alignment.center,
+                        child: const Text(
+                          '가속도',
+                          overflow: TextOverflow.ellipsis,
+                        ))),
+                GridColumn(
+                    columnName: 'pressure',
+                    label: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        alignment: Alignment.center,
+                        child: const Text('온도'))),
+                GridColumn(
+                    columnName: 'temperature',
+                    label: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        alignment: Alignment.center,
+                        child: const Text('기압계'))),
+                GridColumn(
+                    columnName: 'fault_message',
+                    label: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        alignment: Alignment.center,
+                        child: const Text('Fault Message'))),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 60,
+            child: SfDataPagerTheme(
+              data: SfDataPagerThemeData(
+                selectedItemColor: Colors.deepOrange,
+                itemBorderColor: Colors.transparent,
+                itemBorderRadius: BorderRadius.circular(5),
               ),
-              SizedBox(
-                height: 60,
-                child: SfDataPagerTheme(
-                  data: SfDataPagerThemeData(
-                    selectedItemColor: Colors.deepOrange,
-                    itemBorderColor: Colors.transparent,
-                    itemBorderRadius: BorderRadius.circular(5),
-                  ),
-                  child: SfDataPager(
-                    itemWidth: 30,
-                    itemHeight: 40,
-                    delegate: sensorDataSource,
-                    pageCount: (sensors.length / _rowsPerPage).ceilToDouble(), // employees.length / _rowsPerPage,
-                    direction: Axis.horizontal,
-                  ),
-                ),
-              )
-            ],
-          );
+              child: SfDataPager(
+                itemWidth: 30,
+                itemHeight: 40,
+                delegate: sensorDataSource,
+                pageCount: (sensors.length / _rowsPerPage)
+                    .ceilToDouble(), // employees.length / _rowsPerPage,
+                direction: Axis.horizontal,
+              ),
+            ),
+          )
+        ],
+      );
     });
   }
 
   List<Sensor> getSensorData() {
-    return widget.sensorValue.map((e) => Sensor(e.deviceid, e.address, e.accelerator, e.pressure, e.temperature, e.fault_message)).toList();
+    return widget.sensorValue
+        .map((e) => Sensor(e.deviceid, e.address, e.accelerator, e.pressure,
+            e.temperature, e.fault_message))
+        .toList();
   }
 }
 
 class Sensor {
-  Sensor(this.id, this.address, this.accelerator, this.pressure, this.temperature, this.faultMessage);
+  Sensor(this.id, this.address, this.accelerator, this.pressure,
+      this.temperature, this.faultMessage);
 
   final String id;
   final String address;
@@ -141,7 +147,8 @@ class SensorDataSource extends DataGridSource {
   List<Sensor> _paginatedSensors = [];
 
   SensorDataSource({required List<Sensor> sensorData}) {
-     _paginatedSensors = sensors.getRange(0, _rowsPerPage).toList(growable: false);
+    _paginatedSensors =
+        sensors.getRange(0, _rowsPerPage).toList(growable: false);
     buildPaginatedDataGridRows();
   }
 
@@ -157,7 +164,10 @@ class SensorDataSource extends DataGridSource {
       return Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.all(8.0),
-        child: Text(e.value.toString(), style: const TextStyle(fontSize: 11),),
+        child: Text(
+          e.value.toString(),
+          style: const TextStyle(fontSize: 11),
+        ),
       );
     }).toList());
   }
@@ -183,17 +193,19 @@ class SensorDataSource extends DataGridSource {
     return true;
   }
 
-  void buildPaginatedDataGridRows(){
+  void buildPaginatedDataGridRows() {
     dataGridRows = _paginatedSensors
         .map<DataGridRow>((e) => DataGridRow(cells: [
-      DataGridCell<String>(columnName: 'id', value: e.id),
-      DataGridCell<String>(columnName: 'address', value: e.address),
-      DataGridCell<String>(
-          columnName: 'accelerator', value: e.accelerator),
-      DataGridCell<String>(columnName: 'pressure', value: e.pressure),
-      DataGridCell<String>(columnName: 'temperature', value: e.temperature),
-      DataGridCell<String>(columnName: 'faultMessage', value: e.faultMessage),
-    ]))
+              DataGridCell<String>(columnName: 'id', value: e.id),
+              DataGridCell<String>(columnName: 'address', value: e.address),
+              DataGridCell<String>(
+                  columnName: 'accelerator', value: e.accelerator),
+              DataGridCell<String>(columnName: 'pressure', value: e.pressure),
+              DataGridCell<String>(
+                  columnName: 'temperature', value: e.temperature),
+              DataGridCell<String>(
+                  columnName: 'faultMessage', value: e.faultMessage),
+            ]))
         .toList();
   }
 }

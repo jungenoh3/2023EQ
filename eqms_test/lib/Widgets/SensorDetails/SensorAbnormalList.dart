@@ -45,36 +45,61 @@ class _SensorAbnormalListState extends State<SensorAbnormalList> {
         future: client.getSensorAbnormalSearch(queryParameter),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.hasData){
+            print('sensorabnormallist size: ${MediaQuery.of(context).size.height}');
 
             print(queryParameter);
-
-            return Wrap(
-              direction: Axis.horizontal,
-              children: [
-                Padding(
-                  padding:
-                  const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "현황",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          const Text("행정구역", style: TextStyle(fontSize: 15)),
-                          const SizedBox(width: 10),
-                          DropdownButton(
-                            value: regionValue,
-                            items: regionData
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              child: Column(
+                children: [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          "현황",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        const Text("행정구역", style: TextStyle(fontSize: 15)),
+                        const SizedBox(width: 10),
+                        DropdownButton(
+                          value: regionValue,
+                          items: regionData
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (String? value) {
+                            setState(() {
+                              regionValue = value!;
+                              if (value! == '전체' &&
+                                  queryParameter.keys.contains('region')) {
+                                queryParameter.remove('region');
+                              } else if (value! != '전체' ){
+                                queryParameter['region'] = value;
+                              }
+                            });
+                          },
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        const Text("이상정보필터"),
+                        const SizedBox(width: 10),
+                        Container(
+                          width: 75,
+                          child: DropdownButton(
+                            isExpanded: true,
+                            value: abnormalValue,
+                            items: abnormalData
                                 .map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
@@ -83,68 +108,36 @@ class _SensorAbnormalListState extends State<SensorAbnormalList> {
                             }).toList(),
                             onChanged: (String? value) {
                               setState(() {
-                                regionValue = value!;
-                                if (value! == '전체' &&
-                                    queryParameter.keys.contains('region')) {
-                                  queryParameter.remove('region');
-                                } else if (value! != '전체' ){
-                                  queryParameter['region'] = value;
+                                abnormalValue = value!;
+                                if (value! == '전체' && queryParameter.keys.contains('sensorData')) {
+                                  queryParameter.remove('sensorData');
+                                }
+                                else if (value! != '전체') {
+                                  switch (value!) {
+                                    case "가속도":
+                                      queryParameter["sensorData"] = "accelerator";
+                                      break;
+                                    case "기압계":
+                                      queryParameter["sensorData"] = "pressure";
+                                      break;
+                                    case "온도계":
+                                      queryParameter["sensorData"] = "temperature";
+                                      break;
+                                    case "Fault Message":
+                                      queryParameter["sensorData"] = "fault_message";
+                                      break;
+
+                                  }
                                 }
                               });
                             },
                           ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          const Text("이상정보필터"),
-                          const SizedBox(width: 10),
-                          Container(
-                            width: 75,
-                            child: DropdownButton(
-                              isExpanded: true,
-                              value: abnormalValue,
-                              items: abnormalData
-                                  .map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (String? value) {
-                                setState(() {
-                                  abnormalValue = value!;
-                                  if (value! == '전체' && queryParameter.keys.contains('sensorData')) {
-                                    queryParameter.remove('sensorData');
-                                  }
-                                  else if (value! != '전체') {
-                                    switch (value!) {
-                                      case "가속도":
-                                        queryParameter["sensorData"] = "accelerator";
-                                        break;
-                                      case "기압계":
-                                        queryParameter["sensorData"] = "pressure";
-                                        break;
-                                      case "온도계":
-                                        queryParameter["sensorData"] = "temperature";
-                                        break;
-                                      case "Fault Message":
-                                        queryParameter["sensorData"] = "fault_message";
-                                        break;
-
-                                    }
-                                  }
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      Divider(color: Colors.grey[400]),
-                      SensorAbnormalTable(sensorValue: snapshot.data),
-                    ],
-                  ),
-                )
-              ],
+                        ),
+                      ],
+                    ),
+                    Expanded(child: SensorAbnormalTable(sensorValue: snapshot.data)),
+                ],
+              ),
             );
           }
           return LoadingIndicator();
