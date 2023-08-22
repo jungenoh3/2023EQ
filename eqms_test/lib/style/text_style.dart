@@ -25,3 +25,4 @@ const kEqOccurDateTextStyle = TextStyle(color: Colors.white, fontSize: 20, fontW
 const kEqOccurTextStyle = TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold);
 const kEqOccurMagnituteTextStyle = TextStyle(color: secondaryRed, fontSize: 30, fontWeight: FontWeight.bold);
 const kEqOccurLocationTextStyle = TextStyle(color: Colors.white, fontSize: 16);
+const kEqOccurOrderTextStyle = TextStyle(color: primaryDark, fontSize: 30, fontWeight: FontWeight.bold);

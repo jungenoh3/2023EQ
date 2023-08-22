@@ -1,7 +1,8 @@
+import 'package:eqms_test/Widgets/RootScreen.dart';
 import 'package:eqms_test/style/color_guide.dart';
 import 'package:eqms_test/style/text_style.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
 
 class EqOccur extends StatefulWidget {
   const EqOccur({Key? key}) : super(key: key);
@@ -13,17 +14,18 @@ class EqOccur extends StatefulWidget {
 class _EqOccurState extends State<EqOccur> {
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: primaryOrange,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            flex: 1,
+            flex: 3,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                SvgPicture.asset('assets/Warning.svg', fit: BoxFit.fill),
+                Image.asset('assets/siren.gif',height: screenHeight * 0.1),
                 const SizedBox(height: 10),
                 const Text(
                   '2023년 8월 22일 (화) 13:39',
@@ -59,9 +61,9 @@ class _EqOccurState extends State<EqOccur> {
             ),
           ),
           Expanded(
-            flex: 2,
+            flex: 5,
             child: Container(
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
               decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -72,29 +74,64 @@ class _EqOccurState extends State<EqOccur> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Row(
-                    children: [
-                      Image.asset('images/Drop.png'),
-                      Text('숙이고')
-                    ],
+                  Expanded(
+                    flex:3,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Image.asset('images/Drop.png',fit: BoxFit.cover),
+                        Text('숙이고!',style: kEqOccurOrderTextStyle)
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 20),
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor:
-                        MaterialStateProperty.all<Color>(primaryOrange),
-                        elevation: MaterialStateProperty.all<double>(0),
-                        minimumSize: MaterialStateProperty.all<Size>(const Size(
-                            double.infinity,
-                            50)), // Width will be as wide as possible within the container
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                            const EdgeInsets.symmetric(
-                                horizontal: 5)), // Horizontal padding
+                  SizedBox(height:10),
+                  Expanded(
+                    flex:3,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Image.asset('images/Cover.png',fit: BoxFit.cover),
+                        Text('보호하고!',style: kEqOccurOrderTextStyle)
+                      ],
+                    ),
+                  ),
+                  SizedBox(height:10),
+                  Expanded(
+                    flex:3,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Image.asset('images/HoldOn.png', fit:BoxFit.cover),
+                        Text('지탱하세요!',style: kEqOccurOrderTextStyle)
+                      ],
+                    ),
+                  ),
+                  SizedBox(height:10),
+                  Expanded(
+                    flex: 2,
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 10, ),
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor:
+                          MaterialStateProperty.all<Color>(primaryOrange),
+                          elevation: MaterialStateProperty.all<double>(0),
+                          minimumSize: MaterialStateProperty.all<Size>(const Size(
+                              double.infinity,
+                              50)), // Width will be as wide as possible within the container
+                          padding: MaterialStateProperty.all<EdgeInsets>(
+                              const EdgeInsets.symmetric(
+                                  horizontal: 5)), // Horizontal padding
+                        ),
+                        onPressed: () {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => RootScreen()),
+                                (route) => false,
+                          );
+                        },
+                        child: const Text('지진 안전 정보', style: kButtonTextStyle),
                       ),
-                      onPressed: () {},
-                      child: const Text('지진 안전 정보', style: kButtonTextStyle),
                     ),
                   ),
                 ],
