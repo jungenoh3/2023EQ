@@ -10,6 +10,7 @@ class CustomFloatingButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.end, children: [
       FloatingActionButton(
+        heroTag: 'tag1',
         mini: true,
         onPressed: () {
           onMoveCamera();
@@ -20,6 +21,7 @@ class CustomFloatingButton extends StatelessWidget {
         height: 5,
       ),
       FloatingActionButton(
+        heroTag: 'tag2',
         mini: true,
         child: const Icon(Icons.refresh),
         onPressed: () {

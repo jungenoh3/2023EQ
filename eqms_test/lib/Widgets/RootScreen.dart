@@ -149,34 +149,17 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
         ChangeNotifierProvider<DraggableSheetModel>(
             create: (context) => DraggableSheetModel()),
       ],
-      child: WillPopScope(
-        onWillPop: () async {
-          print('onWillPop');
-          DateTime now = DateTime.now();
-          if (currentTime == null ||
-              now.difference(currentTime) > const Duration(seconds: 2)) {
-            currentTime = now;
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text(
-                    'Press again to exit')));
-            return Future.value(false);
-          } else {
-            SystemNavigator.pop();
-            exit(0);
-          }
-        },
-        child: Scaffold(
-          body: PageView(
-            controller: _controller,
-            onPageChanged: onPageChanged, // Use onPageChanged here
-            children: widgetOptions,
-          ),
-          bottomNavigationBar: SafeArea(
-            child: SizedBox(height: 58, child: renderBottomNavigationBar()),
-          ),
-          extendBody: false,
-          extendBodyBehindAppBar: true,
+      child: Scaffold(
+        body: PageView(
+          controller: _controller,
+          onPageChanged: onPageChanged, // Use onPageChanged here
+          children: widgetOptions,
         ),
+        bottomNavigationBar: SafeArea(
+          child: SizedBox(height: 58, child: renderBottomNavigationBar()),
+        ),
+        extendBody: false,
+        extendBodyBehindAppBar: true,
       ),
     );
   }
