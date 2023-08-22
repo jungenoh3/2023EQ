@@ -35,11 +35,11 @@ class FirebaseMessageApi {
 
       // 지금은 에러가 나서 닫았습니다.
 
-      // final navigator = navigatorKey.currentState;
-      // if (navigator != null) {
-      //   final routeName = '/eqoccur';
-      //   navigator.pushNamed(routeName);
-      // }
+      final navigator = navigatorKey.currentState;
+      if (navigator != null) {
+        final routeName = '/eqoccur';
+        navigator.pushNamed(routeName);
+      }
     }
   }
 

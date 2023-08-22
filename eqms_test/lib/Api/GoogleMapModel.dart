@@ -16,7 +16,6 @@ class GoogleMapModel with ChangeNotifier {
   String _bottomSheetTitle = "";
   String _iconAsset = "";
 
-
   List<CircleData> get circleItems => _circleItems;
   List<ClusterData> get markerItems => _markerItems;
   List<ScrollableSheetData> get sheetItems => _sheetItems;
@@ -24,17 +23,20 @@ class GoogleMapModel with ChangeNotifier {
   String get bottomSheetTitle => _bottomSheetTitle;
   String get iconAsset => _iconAsset;
 
-  void RemoveItems() {
+  Future<void> RemoveItems() async {
     _circleItems.clear();
     _markerItems.clear();
     _sheetItems.clear();
     _sheetTitle = "";
     _bottomSheetTitle = "";
     _iconAsset = "";
+
+    print('RemoveItems');
+
     notifyListeners();
   }
 
-  void EarthQuakeItems() async {
+  Future<void> EarthQuakeItems() async {
     print('EarthQuakeItems');
     _circleItems.clear();
     _markerItems.clear();
@@ -79,11 +81,13 @@ class GoogleMapModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void ShelterItems() async {
+  Future<void> ShelterItems() async {
+    print('ShelterItems');
     _circleItems.clear();
     _markerItems.clear();
     _sheetItems.clear();
     try {
+      print('ShelterItems sheet before: ${_sheetItems.length}');
       List<Shelter> value = await client.getShelter();
       if (value.isNotEmpty) {
         for (int i = 0; i < value.length; i++) {
@@ -115,10 +119,11 @@ class GoogleMapModel with ChangeNotifier {
     } catch (error) {
       // TODO
     }
+    print('ShelterItems sheet after: ${_sheetItems.length}');
     notifyListeners();
   }
 
-  void SensorItems() async {
+  Future<void> SensorItems() async {
     _circleItems.clear();
     _markerItems.clear();
     _sheetItems.clear();
@@ -157,11 +162,13 @@ class GoogleMapModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void EmergencyInstItems() async {
+  Future<void> EmergencyInstItems() async {
+    print('EmergencyInst');
     _circleItems.clear();
     _markerItems.clear();
     _sheetItems.clear();
     try {
+      print('Emergency sheet before: ${_sheetItems.length}');
       List<EmergencyInst> value = await client.getEmergencyInst();
       if (value.isNotEmpty) {
         for (int i = 0; i < value.length; i++) {
@@ -193,6 +200,7 @@ class GoogleMapModel with ChangeNotifier {
     } catch (error) {
       // TODO
     }
+    print('Emergency sheet after: ${_sheetItems.length}');
     notifyListeners();
   }
 }

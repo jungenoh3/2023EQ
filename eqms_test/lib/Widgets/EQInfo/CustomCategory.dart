@@ -1,9 +1,11 @@
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:eqms_test/Api/DraggableSheetModel.dart';
 import 'package:eqms_test/Api/GoogleMapModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import '../../style/color_guide.dart';
+
 class CustomCategory extends StatefulWidget {
   const CustomCategory({super.key});
 
@@ -26,11 +28,13 @@ class _CustomCategoryState extends State<CustomCategory> {
               ColorFiltered(
                 colorFilter: ColorFilter.mode(
                     _selectedIndex == i ? Colors.white : primaryDark,
-                    BlendMode.srcIn
-                ),
-                child: SvgPicture.asset(_choiceChipsList[i].iconPath, width: 20, height: 20),
+                    BlendMode.srcIn),
+                child: SvgPicture.asset(_choiceChipsList[i].iconPath,
+                    width: 20, height: 20),
               ),
-              const SizedBox(width: 7,),
+              const SizedBox(
+                width: 7,
+              ),
               Text(_choiceChipsList[i].label),
             ],
           ),
@@ -40,11 +44,14 @@ class _CustomCategoryState extends State<CustomCategory> {
           labelStyle: TextStyle(
             color: _selectedIndex == i ? Colors.white : Colors.black,
           ),
-          onSelected: (bool selected) {
+          onSelected: (bool selected) async {
             setState(() {
               _selectedIndex = selected ? i : null;
-              _handleSelection(_selectedIndex);
             });
+            _handleSelection(_selectedIndex);
+            // EasyDebounce.debounce('category-debounce', Duration(milliseconds: 200), () {
+            //   _handleSelection(_selectedIndex);
+            // });
           },
         ),
       );
@@ -81,10 +88,12 @@ class _CustomCategoryState extends State<CustomCategory> {
         draggModel.adjustDraggableSheetHeight();
         break;
       case 1:
+        print('mapModel.ShelterItems();');
         mapModel.ShelterItems();
         draggModel.adjustDraggableSheetHeight();
         break;
       case 2:
+        print('mapModel.EmergencyInstItems();');
         mapModel.EmergencyInstItems();
         draggModel.adjustDraggableSheetHeight();
       default:
@@ -93,7 +102,6 @@ class _CustomCategoryState extends State<CustomCategory> {
         break;
     }
   }
-
 }
 
 class ChipData {

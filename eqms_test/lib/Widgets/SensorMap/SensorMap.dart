@@ -16,6 +16,7 @@ class _SensorMapState extends State<SensorMap> {
 
   @override
   void initState() {
+    print('Sensor_map initState');
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       try {
@@ -25,12 +26,12 @@ class _SensorMapState extends State<SensorMap> {
         print('Error occurred: $e');
       }
     });
-    print('Sensor_map initState');
   }
 
 
   @override
   void deactivate() {
+    print('Sensor_map deactivate');
     final googleMapModel = context.read<GoogleMapModel>();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       googleMapModel.RemoveItems();
