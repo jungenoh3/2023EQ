@@ -33,7 +33,7 @@ class ServiceIntroductionState extends State<ServiceIntroduction> {
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text('서비스 소개',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black)),
         backgroundColor: Colors.white,
       ),
       body: Column(
