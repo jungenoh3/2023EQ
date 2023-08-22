@@ -24,7 +24,9 @@ void main() async {
 
   runApp(MaterialApp(
     navigatorKey: navigatorKey,
-    home: const SplashScreen(),
+    //잠시 알림앱 개발을 위해 이렇게 해놓음.
+    // home: const SplashScreen(),
+    home: const EqOccur(),
     routes: {
       '/eqoccur': (context) => const EqOccur(),
     },
