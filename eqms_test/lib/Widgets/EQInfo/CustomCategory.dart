@@ -75,30 +75,24 @@ class _CustomCategoryState extends State<CustomCategory> {
 
   void _handleSelection(int? selectedIndex) {
     final mapModel = context.read<GoogleMapModel>();
-    final draggModel = context.read<DraggableSheetModel>();
 
     switch (_selectedIndex) {
       case null:
       case 3:
         mapModel.RemoveItems();
-        draggModel.resetDraggableSheetHeight();
         break;
       case 0:
         mapModel.EarthQuakeItems();
-        draggModel.adjustDraggableSheetHeight();
         break;
       case 1:
         print('mapModel.ShelterItems();');
         mapModel.ShelterItems();
-        draggModel.adjustDraggableSheetHeight();
         break;
       case 2:
         print('mapModel.EmergencyInstItems();');
         mapModel.EmergencyInstItems();
-        draggModel.adjustDraggableSheetHeight();
       default:
         mapModel.RemoveItems();
-        draggModel.adjustDraggableSheetHeight();
         break;
     }
   }

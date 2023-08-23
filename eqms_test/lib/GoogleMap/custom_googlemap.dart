@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
-import 'package:eqms_test/Api/DraggableSheetModel.dart';
-import 'package:eqms_test/Api/GoogleMapModel.dart';
+import 'package:eqms_test/Api/SSE_api.dart';
 import 'package:eqms_test/GoogleMap/Widget/BottomSheets.dart';
 import 'package:eqms_test/GoogleMap/Models/MapItems.dart';
 import 'package:eqms_test/GoogleMap/widget/custom_groupbutton.dart';
@@ -14,7 +13,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:ui' as ui;
-import 'package:provider/provider.dart';
 
 class CustomGoogleMap extends StatefulWidget {
   final int mode;
@@ -38,7 +36,7 @@ class CustomGoogleMapState extends State<CustomGoogleMap> {
   bool _isPermissionGranted = false;
   Set<Marker> markers = {};
   Set<Circle> circles = {};
-  double widgetHeight = 0;
+  SensorSSE? sensorSSE;
 
   final CameraPosition _cameraPosition =
       const CameraPosition(target: LatLng(35.8881525, 128.6109335), zoom: 6.5);
@@ -89,6 +87,7 @@ class CustomGoogleMapState extends State<CustomGoogleMap> {
             BottomSheets.showItemBottomSheet(
                 context,
                 widget.mode,
+                null,
                 "진도: ${value[i].mangitude}",
                 "위치: (${value[i].latLng.latitude}, ${value[i].latLng.longitude})");
           },
@@ -114,17 +113,21 @@ class CustomGoogleMapState extends State<CustomGoogleMap> {
 
   @override
   void dispose() {
+    if (sensorSSE != null){
+      print('dispose: sensorSSE dispose');
+      sensorSSE!.stopListening();
+    }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    print('SSE: $sensorSSE');
     print('google_map build');
     return _isPermissionGranted ? buildGoogleMap() : buildPermissionDenied();
   }
 
   Widget buildGoogleMap() {
-    widgetHeight = MediaQuery.of(context).size.height;
     return Stack(
       children: [
         GoogleMap(
@@ -157,17 +160,10 @@ class CustomGoogleMapState extends State<CustomGoogleMap> {
             ),
           ),
         ),
-        Visibility(
-          visible:
-              0.5 > context.watch<DraggableSheetModel>().draggableSheetHeight,
-          child: Positioned(
-              right: 10,
-              bottom: context.watch<GoogleMapModel>().sheetItems.isEmpty
-                  ? 10
-                  : context.watch<DraggableSheetModel>().draggableSheetHeight *
-                      widgetHeight,
-              child: CustomFloatingButton(onMoveCamera: currentLocation)),
-        )
+        Positioned(
+            right: 10,
+            bottom: 400,
+            child: CustomFloatingButton(onMoveCamera: currentLocation)),
       ],
     );
   }
@@ -223,9 +219,14 @@ class CustomGoogleMapState extends State<CustomGoogleMap> {
           position: cluster.location,
           onTap: () {
             if (!cluster.isMultiple) {
+              sensorSSE = SensorSSE();
+              if(widget.mode == 1){
+                sensorSSE!.startListening(cluster.items.single.name!.split("(")[0]);
+              }
               BottomSheets.showItemBottomSheet(
                 context,
                 widget.mode,
+                sensorSSE,
                 cluster.items.single.name,
                 cluster.items.single.address,
               );

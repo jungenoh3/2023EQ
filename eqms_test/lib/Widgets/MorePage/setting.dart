@@ -108,7 +108,7 @@ class SettingState extends State<Setting> {
                       if (Platform.isAndroid) {
                         const AndroidIntent intent = AndroidIntent(
                           action: 'action_application_details_settings',
-                          package: 'com.yourapp.package',
+                          data: 'package:com.example.eqms_test',
                         );
                         await intent.launch();
                       } else if (Platform.isIOS) {

@@ -145,9 +145,7 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<GoogleMapModel>(
-            create: (context) => GoogleMapModel()),
-        ChangeNotifierProvider<DraggableSheetModel>(
-            create: (context) => DraggableSheetModel()),
+            create: (context) => GoogleMapModel())
       ],
       child: Scaffold(
         body: PageView(

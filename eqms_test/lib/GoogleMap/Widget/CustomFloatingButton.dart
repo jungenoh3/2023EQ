@@ -12,10 +12,13 @@ class CustomFloatingButton extends StatelessWidget {
       FloatingActionButton(
         heroTag: 'tag1',
         mini: true,
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(side: BorderSide(width: 2,color: Colors.deepOrange),borderRadius: BorderRadius.circular(100)),
+        elevation: 3,
         onPressed: () {
           onMoveCamera();
         },
-        child: const Icon(Icons.location_pin),
+        child: const Icon(Icons.location_pin, color: Colors.deepOrange,),
       ),
       const SizedBox(
         height: 5,
@@ -23,7 +26,10 @@ class CustomFloatingButton extends StatelessWidget {
       FloatingActionButton(
         heroTag: 'tag2',
         mini: true,
-        child: const Icon(Icons.refresh),
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(side: BorderSide(width: 2,color: Colors.deepOrange),borderRadius: BorderRadius.circular(100)),
+        elevation: 3,
+        child: const Icon(Icons.refresh, color: Colors.deepOrange,),
         onPressed: () {
           switch (context.read<GoogleMapModel>().sheetTitle) {
             case "내 주변 대피소":
@@ -40,7 +46,6 @@ class CustomFloatingButton extends StatelessWidget {
           }
         },
       ),
-      // 아마 이걸로 움직이는 거 생각할 수 있지 않을가??
     ]);
   }
 }

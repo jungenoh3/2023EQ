@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 
 
 class SensorSSE {
+  bool _isSubscribed = false;
   late StreamSubscription<String> _subscription;
   final StreamController<Map<String, dynamic>> _dataStreamController = StreamController<Map<String, dynamic>>();
   final client = http.Client();
@@ -15,6 +16,7 @@ class SensorSSE {
     final url = Uri.parse('http://155.230.118.78:1234/server-events?sensorId=$sensorId');
     final response = await client.send(http.Request('GET', url));
     if (response.statusCode == 200){
+      _isSubscribed = true;
       _subscription = response.stream.transform(utf8.decoder).listen((data) {
         if (data.length > 10) {
           final valueMap = jsonDecode(data);
@@ -33,8 +35,11 @@ class SensorSSE {
 
   void stopListening() {
     print('stopListening');
-    _subscription?.cancel();
-    _dataStreamController.close();
+    if(_isSubscribed){
+      _subscription?.cancel();
+      _dataStreamController.close();
+    }
+    _isSubscribed = false;
   }
 
 }

@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class BottomSheets {
-  static void showItemBottomSheet(BuildContext context, int mode, String? name, String location) {
-    final sensorSSE = SensorSSE();
+  static void showItemBottomSheet(BuildContext context, int mode, SensorSSE? sensorSSE, String? name, String location) {
+    // final sensorSSE = SensorSSE();
     print('mode: $mode');
 
-    if (mode == 1){
-      sensorSSE.startListening(name!.split("(")[0]);
-    }
+    // if (mode == 1){
+    //   sensorSSE.startListening(name!.split("(")[0]);
+    // }
 
     showModalBottomSheet(
       context: context,
@@ -68,7 +68,7 @@ class BottomSheets {
                 ),
                 Visibility(
                   visible: mode == 1,
-                  child: StreamBuilder(stream: sensorSSE.dataStream, builder: (BuildContext context, snapshot) {
+                  child: StreamBuilder(stream: sensorSSE!.dataStream, builder: (BuildContext context, snapshot) {
                     if (snapshot.hasData){
                       return Padding(
                         padding: const EdgeInsets.only(left: 20, right: 20, top: 2),
@@ -109,12 +109,12 @@ class BottomSheets {
       backgroundColor: Colors.transparent,
       barrierColor: Colors.black.withOpacity(0.2),
       // isScrollControlled: true,
-      // useRootNavigator: true,
+      // useRootNavigator: false,
       useSafeArea: true,
     ).whenComplete(() {
       print("Modal BottomSheet close");
       if (mode == 1){
-        sensorSSE.stopListening();
+        sensorSSE!.stopListening();
       }
     });
   }

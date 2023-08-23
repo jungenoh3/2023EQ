@@ -21,7 +21,6 @@ class _SensorMapState extends State<SensorMap> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       try {
         context.read<GoogleMapModel>().SensorItems();
-        context.read<DraggableSheetModel>().getDraggableSheetHeight(0.11);
       } catch (e) {
         print('Error occurred: $e');
       }
