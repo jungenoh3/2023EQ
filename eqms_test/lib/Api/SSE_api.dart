@@ -2,50 +2,39 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class SSE {
-  final url = Uri.parse('http://155.230.118.78:1234/server-events');
-  final client = http.Client();
 
-  Future<void> getData() async {
-    try {
-      final response = await client.send(http.Request('GET', url));
-      if (response.statusCode == 200){
-        final stream = response.stream;
-        stream.transform(utf8.decoder).listen((data) {
-          print('Received data: $data');
-        }, onError: (error) {
-          print('onError occurred: $error');
-        }, cancelOnError: true
-        );
-      } else {
-        print('Request failed with status: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Error occurred: $e');
+class SensorSSE {
+  late StreamSubscription<String> _subscription;
+  final StreamController<Map<String, dynamic>> _dataStreamController = StreamController<Map<String, dynamic>>();
+  final client = http.Client();
+  Stream<Map<String, dynamic>> get dataStream => _dataStreamController.stream;
+
+  Future<Map<String, dynamic>> startListening(String sensorId) async {
+    print('startListening: $sensorId');
+
+    final url = Uri.parse('http://155.230.118.78:1234/server-events?sensorId=$sensorId');
+    final response = await client.send(http.Request('GET', url));
+    if (response.statusCode == 200){
+      _subscription = response.stream.transform(utf8.decoder).listen((data) {
+        if (data.length > 10) {
+          final valueMap = jsonDecode(data);
+          print(valueMap);
+          _dataStreamController.add(valueMap);
+          // return valueMap;
+        }
+      }, onError: (error) {
+        print('onError occurred: $error');
+      });
+    } else {
+      print('Request failed with status: ${response.statusCode}');
     }
+    return {"x": 0, "y": 0, "z": 0};
+  }
+
+  void stopListening() {
+    print('stopListening');
+    _subscription?.cancel();
+    _dataStreamController.close();
   }
 
 }
-
-// Future<void> getServerData() async {
-//   try {
-//     final response = await client.send(http.Request('GET', url));
-//     if (response.statusCode == 200){
-//       final stream = response.stream;
-//       stream.transform(utf8.decoder).listen((data) {
-//         if (data.contains("Earthquake")){
-//           setState(() {
-//             mode = GoogleMapMode.EQupdate;
-//           });
-//         }
-//         print('Received data: $data');
-//       }, onError: (error) {
-//         print('onError occurred: $error');
-//       }, cancelOnError: true);
-//     } else {
-//       print('Request failed with status: ${response.statusCode}');
-//     }
-//   } catch (e) {
-//     print('Error occurred: $e');
-//   }
-// }

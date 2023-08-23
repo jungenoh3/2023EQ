@@ -88,6 +88,7 @@ class CustomGoogleMapState extends State<CustomGoogleMap> {
           onTap: () {
             BottomSheets.showItemBottomSheet(
                 context,
+                widget.mode,
                 "진도: ${value[i].mangitude}",
                 "위치: (${value[i].latLng.latitude}, ${value[i].latLng.longitude})");
           },
@@ -224,6 +225,7 @@ class CustomGoogleMapState extends State<CustomGoogleMap> {
             if (!cluster.isMultiple) {
               BottomSheets.showItemBottomSheet(
                 context,
+                widget.mode,
                 cluster.items.single.name,
                 cluster.items.single.address,
               );

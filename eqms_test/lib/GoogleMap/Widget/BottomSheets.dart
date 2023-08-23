@@ -1,10 +1,18 @@
 import 'package:eqms_test/Api/GoogleMapModel.dart';
+import 'package:eqms_test/Api/SSE_api.dart';
 import 'package:eqms_test/style/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class BottomSheets {
-  static void showItemBottomSheet(BuildContext context, String? name, String location) {
+  static void showItemBottomSheet(BuildContext context, int mode, String? name, String location) {
+    final sensorSSE = SensorSSE();
+    print('mode: $mode');
+
+    if (mode == 1){
+      sensorSSE.startListening(name!.split("(")[0]);
+    }
+
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -20,7 +28,7 @@ class BottomSheets {
                 ),
                 color: Colors.white,
                 ),
-            height: 130,
+            height: 140,
             width: MediaQuery.of(context).size.width,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -58,6 +66,41 @@ class BottomSheets {
                     ),
                   ),
                 ),
+                Visibility(
+                  visible: mode == 1,
+                  child: StreamBuilder(stream: sensorSSE.dataStream, builder: (BuildContext context, snapshot) {
+                    if (snapshot.hasData){
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 20, top: 2),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(width: 13, height: 13, child: Text("X: ", style: TextStyle(fontSize: 13),),),
+                            SizedBox(width: 40, height: 13, child: Text(snapshot.data!['x'].toString(), style: TextStyle(fontSize: 13),),),
+                            const SizedBox(width: 13, height: 13, child: Text("Y: ", style: TextStyle(fontSize: 13),),),
+                            SizedBox(width: 40, height: 13, child: Text(snapshot.data!['y'].toString(), style: TextStyle(fontSize: 13),),),
+                            const SizedBox(width: 13, height: 13, child: Text("Z: ", style: TextStyle(fontSize: 13),),),
+                            SizedBox(width: 40, height: 13, child: Text(snapshot.data!['z'].toString(), style: TextStyle(fontSize: 13),),),
+                          ],
+                        ),
+                      );
+                    }
+                    return const Padding(
+                      padding: EdgeInsets.only(left: 20, right: 20, top: 2),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(width: 13, height: 13, child: Text("X: ", style: TextStyle(fontSize: 13),),),
+                          SizedBox(width: 40, height: 13, child: Text("-", style: TextStyle(fontSize: 13),),),
+                          SizedBox(width: 13, height: 13, child: Text("Y: ", style: TextStyle(fontSize: 13),),),
+                          SizedBox(width: 40, height: 13, child: Text("-", style: TextStyle(fontSize: 13),),),
+                          SizedBox(width: 13, height: 13, child: Text("Z: ", style: TextStyle(fontSize: 13),),),
+                          SizedBox(width: 40, height: 13, child: Text("-", style: TextStyle(fontSize: 13),),),
+                        ],
+                      ),
+                    );
+                  }),
+                ),
               ],
             ),
           ),
@@ -68,6 +111,11 @@ class BottomSheets {
       // isScrollControlled: true,
       // useRootNavigator: true,
       useSafeArea: true,
-    );
+    ).whenComplete(() {
+      print("Modal BottomSheet close");
+      if (mode == 1){
+        sensorSSE.stopListening();
+      }
+    });
   }
 }

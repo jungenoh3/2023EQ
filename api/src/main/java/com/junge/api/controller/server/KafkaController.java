@@ -28,8 +28,12 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Sinks;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @RestController
@@ -41,7 +45,7 @@ public class KafkaController {
     private final EarthquakeDataRep earthQuakeDataRep;
     private final FirebaseMessaging firebaseMessaging;
     private final ObjectMapper mapper = new ObjectMapper();
-    private Sinks.Many<String> realTimeDataMany = Sinks.many().multicast().onBackpressureBuffer();
+    private Sinks.Many<Map<Object, Object>> realTimeDataMany = Sinks.many().multicast().onBackpressureBuffer(1000, false);
 
 
     public KafkaController(KafkaService kafkaService, DataService dataService, SensorDataRep sensorDataRep, EarthquakeDataRep earthQuakeDataRep, FirebaseMessaging firebaseMessaging) {
@@ -118,22 +122,50 @@ public class KafkaController {
         }
     }
 
-    public void sendData(String data) {
-        Sinks.EmitResult result = this.realTimeDataMany.tryEmitNext(data);
-//        if (result.isFailure()){
-//            result.orThrow();
-//        }
-    }
-
     @PostMapping("/publish")
     public ResponseEntity<String> publish(@RequestBody JSONObject earthquake){
         kafkaService.sendMessage(earthquake);
         return ResponseEntity.ok("Message sent to kafka topic");
     }
 
+    public void sendData(Map<Object, Object> data) {
+        Sinks.EmitResult result = this.realTimeDataMany.tryEmitNext(data);
+        if (result.isFailure()){
+            switch (result) {
+                case FAIL_OVERFLOW:
+                    System.out.println(result);
+                    break;
+                case FAIL_CANCELLED:
+                    System.out.println(result);
+                    break;
+                case FAIL_TERMINATED:
+                    System.out.println(result);
+                    break;
+                case FAIL_NON_SERIALIZED:
+                    System.out.println(result);
+                    break;
+                case FAIL_ZERO_SUBSCRIBER:
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
     @GetMapping(value = "/server-events", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<String> SendDataToClient() throws IOException {
-        return this.realTimeDataMany.asFlux();
+    public Flux<Map<Object, Object>> SendDataToClient(@RequestParam(required = false) String sensorId) throws IOException {
+
+        Flux<Map<Object, Object>> dataStream = this.realTimeDataMany.asFlux();
+
+        if (sensorId != null ) {
+            dataStream = dataStream.filter(data -> {
+                Object dataSensorId = data.get("sensorId");
+                return dataSensorId != null && dataSensorId.equals(Integer.parseInt(sensorId)); // 추후에 데이터가 없는 오류 처리하기
+            });
+        }
+
+        return dataStream;
+
     }
 
     void saveEarthquake(JSONObject jsonObject){
@@ -155,8 +187,8 @@ public class KafkaController {
         dataService.cacheputEarthquakeOngoign();
     }
 
-    @KafkaListener(topics = "cr-assoc-results-integration-test", groupId = "cr-alert-mobile")
-    void StringDeserializeListener(ConsumerRecord<String, String> record) throws ParseException {
+    @KafkaListener(topics = "cr-assoc-results-integration-test", containerFactory = "stringKafkaListenerContainerFactory")
+    void EarthquakeListener(ConsumerRecord<String, String> record) throws ParseException {
         JSONParser parser = new JSONParser();
         JSONObject jsonObject = (JSONObject) parser.parse(record.value());
 
@@ -172,6 +204,39 @@ public class KafkaController {
         System.out.println("LineAnswer" + LineAnswer);
     }
 
+    @KafkaListener(topics = "cr-raw-acc-packet", containerFactory = "byteArrayKafkaListenerContainerFactory")
+    void AccelerationListener(ConsumerRecord<byte[], byte[]> record) throws ParseException {
+        JSONObject obj = new JSONObject();
+        byte[] key = record.key();
+        ByteBuffer wrapped = ByteBuffer.wrap(key);
+        wrapped.order(ByteOrder.LITTLE_ENDIAN);
+        int sensorId = wrapped.getInt();
+        Map<Object, Object> map = new HashMap<>();
 
+        byte[] bytes = record.value();
+        ByteBuffer buffer = ByteBuffer.wrap(bytes);
+        buffer.order(ByteOrder.LITTLE_ENDIAN);
+
+
+        byte[] chunk = new byte[Math.min(7, buffer.remaining())];
+        buffer.get(chunk);
+        ByteBuffer chunkBuffer = ByteBuffer.wrap(chunk);
+        chunkBuffer.order(ByteOrder.LITTLE_ENDIAN);
+
+        int idx = chunkBuffer.get() & 0xFF;
+        Integer x = chunkBuffer.getShort() & 0xFFFF;
+        Integer y = chunkBuffer.getShort() & 0xFFFF;
+        Integer z = chunkBuffer.getShort() & 0xFFFF;
+
+        map.put("sensorId", sensorId);
+        // map.put("idx", idx); // 첫번째 인덱스만 받는다.
+        map.put("x", x);
+        map.put("y", y);
+        map.put("z", z);
+
+        // System.out.println(map);
+        sendData(map);
+
+    }
 }
 
