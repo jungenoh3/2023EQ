@@ -8,7 +8,7 @@ import com.junge.api.model.earthquake.Earthquake;
 import com.junge.api.model.earthquake.EarthquakeProjection;
 import com.junge.api.model.earthquake.EarthquakeSpecific;
 import com.junge.api.model.sensorabnormal.SensorAbnormal;
-import com.junge.api.model.sensorabnormal.SensorAbnormalDTO;
+import com.junge.api.model.sensorabnormal.SensorAbnormalProjection;
 import com.junge.api.model.shelter.Shelter;
 import com.junge.api.model.shelter.ShelterProjection;
 import com.junge.api.model.shelter.ShelterSpecific;
@@ -72,7 +72,7 @@ public class DataService {
     @Cacheable(value = "sensorAbnormalFacility")
     public List<String> getSensorAbnormalFacility() { return this.sensorAbnorRep.findAllFacility(); }
     @Cacheable(value = "sensorAbnormalSearch", key = "'SASearch' + (#sensorData != null ? #sensorData : '') + (#region != null ? #region : '')")
-    public List<SensorAbnormalDTO> searchSensorAbnormal(String sensorData, String region){
+    public List<SensorAbnormalProjection> searchSensorAbnormal(String sensorData, String region){
         Specification<SensorAbnormal> spec = (root, query, criteriaBuilder) -> {
             root.fetch("sensorInfo", JoinType.LEFT);
             return criteriaBuilder.and();
@@ -96,10 +96,10 @@ public class DataService {
             spec = spec.and(SensorAbnorSpecification.equalRegion(region));
 
         List<SensorAbnormal> sensorAbnormals = this.sensorAbnorRep.findAll(spec);
-        List<SensorAbnormalDTO> sensorAbnormalDTOS = sensorAbnormals.stream()
-                .map(sensorAbnormal -> new SensorAbnormalDTO(sensorAbnormal.getId(), sensorAbnormal.getSa_deviceid(), sensorAbnormal.getAccelerator(), sensorAbnormal.getPressure(), sensorAbnormal.getTemperature(), sensorAbnormal.getNoise_class(), sensorAbnormal.getFault_message(), sensorAbnormal.getSensorInfo().getAddress(), sensorAbnormal.getSensorInfo().getRegion()))
+        List<SensorAbnormalProjection> sensorAbnormalProjections = sensorAbnormals.stream()
+                .map(sensorAbnormal -> new SensorAbnormalProjection(sensorAbnormal.getId(), sensorAbnormal.getSa_deviceid(), sensorAbnormal.getAccelerator(), sensorAbnormal.getPressure(), sensorAbnormal.getTemperature(), sensorAbnormal.getNoise_class(), sensorAbnormal.getFault_message(), sensorAbnormal.getSensorInfo().getAddress(), sensorAbnormal.getSensorInfo().getRegion()))
                 .collect(Collectors.toList());
-        return sensorAbnormalDTOS;
+        return sensorAbnormalProjections;
     }
 
     @Cacheable(value = "shelterAll")

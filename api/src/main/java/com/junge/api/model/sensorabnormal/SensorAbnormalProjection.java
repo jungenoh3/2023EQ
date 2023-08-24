@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-public class SensorAbnormalDTO implements Serializable {
+public class SensorAbnormalProjection implements Serializable {
     private long id;
     private String deviceid;
     private String accelerator;
@@ -21,7 +21,7 @@ public class SensorAbnormalDTO implements Serializable {
     private String region;
 
 
-    public SensorAbnormalDTO(long id, String deviceid, String accelerator, String pressure, String temperature, String noise_class, String fault_message, String address, String region) {
+    public SensorAbnormalProjection(long id, String deviceid, String accelerator, String pressure, String temperature, String noise_class, String fault_message, String address, String region) {
         this.id = id;
         this.deviceid = deviceid;
         this.accelerator = accelerator;
