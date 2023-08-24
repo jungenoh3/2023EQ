@@ -27,7 +27,6 @@ class SensorInfoState extends State<SensorInfo> {
   @override
   void initState() {
     super.initState();
-    // _futureData = fetchData();
   }
   //TODO: 서버연결 후 활성화
   // Future<Map<String, dynamic>> fetchData() async {
@@ -96,13 +95,18 @@ class SensorInfoState extends State<SensorInfo> {
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else {
+
+              final all_sensor = snapshot.data!.all_sensor;
+              final abnormal_sensor = snapshot.data!.abnormal_sensor;
+              final normal_sensor = all_sensor - abnormal_sensor;
+
               return Column(
                 children: [
                   Container(
                     padding: const EdgeInsets.all(20),
                     child: AspectRatio(
                         aspectRatio: 1.4,
-                        child: SensorPieChart(dataValues: [snapshot.data!.normal_sensor.toDouble(), snapshot.data!.abnormal_sensor.toDouble(), 0, 0])),
+                        child: SensorPieChart(dataValues: [normal_sensor.toDouble(), abnormal_sensor.toDouble(), 0, 0])),
                   ),
                   const SegmentH(size: 4),
                   Container(
@@ -114,11 +118,11 @@ class SensorInfoState extends State<SensorInfo> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             SensorDescription(
-                                title: '전체센서', numOfSensors: snapshot.data!.normal_sensor + snapshot.data!.abnormal_sensor),
+                                title: '전체센서', numOfSensors: all_sensor.toInt()),
                             const SegmentV(size: 80),
                             SensorDescription(
                                 title: '정상작동',
-                                numOfSensors: snapshot.data?.normal_sensor ?? 0),
+                                numOfSensors: normal_sensor.toInt() ?? 0),
                           ],
                         ),
                         Row(
@@ -127,7 +131,7 @@ class SensorInfoState extends State<SensorInfo> {
                           children: [
                             SensorDescription(
                                 title: '이상동작',
-                                numOfSensors: snapshot.data?.abnormal_sensor ?? 0),
+                                numOfSensors: abnormal_sensor.toInt() ?? 0),
                             const SegmentV(size: 80),
                             SensorDescription(
                                 title: '연동확인',

@@ -24,13 +24,13 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
 
 SensorCount _$SensorCountFromJson(Map<String, dynamic> json) => SensorCount(
       abnormal_sensor: json['abnormal_sensor'] as int,
-      normal_sensor: json['normal_sensor'] as int,
+      all_sensor: json['all_sensor'] as int,
     );
 
 Map<String, dynamic> _$SensorCountToJson(SensorCount instance) =>
     <String, dynamic>{
       'abnormal_sensor': instance.abnormal_sensor,
-      'normal_sensor': instance.normal_sensor,
+      'normal_sensor': instance.all_sensor,
     };
 
 SensorInfo _$SensorInfoFromJson(Map<String, dynamic> json) => SensorInfo(

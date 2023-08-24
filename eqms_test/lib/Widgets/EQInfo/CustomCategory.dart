@@ -1,5 +1,3 @@
-import 'package:easy_debounce/easy_debounce.dart';
-import 'package:eqms_test/Api/DraggableSheetModel.dart';
 import 'package:eqms_test/Api/GoogleMapModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -40,7 +38,7 @@ class _CustomCategoryState extends State<CustomCategory> {
           ),
           backgroundColor: Colors.white,
           selected: _selectedIndex == i,
-          selectedColor: Colors.deepOrange,
+          selectedColor: primaryNewOrange,
           labelStyle: TextStyle(
             color: _selectedIndex == i ? Colors.white : Colors.black,
           ),
@@ -49,9 +47,6 @@ class _CustomCategoryState extends State<CustomCategory> {
               _selectedIndex = selected ? i : null;
             });
             _handleSelection(_selectedIndex);
-            // EasyDebounce.debounce('category-debounce', Duration(milliseconds: 200), () {
-            //   _handleSelection(_selectedIndex);
-            // });
           },
         ),
       );

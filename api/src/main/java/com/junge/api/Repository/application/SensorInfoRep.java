@@ -14,7 +14,7 @@ import java.util.Map;
 public interface SensorInfoRep extends JpaRepository<SensorInfo, Long>, JpaSpecificationExecutor<SensorInfo> {
     @Query(value = "SELECT" +
             "    (SELECT COUNT(*) FROM sensor_abnormal) AS abnormal_sensor," +
-            "    (SELECT COUNT(*) FROM sensor_info) - (SELECT COUNT(*) FROM sensor_abnormal) AS normal_sensor;", nativeQuery = true)
+            "    (SELECT COUNT(*) FROM sensor_info) AS all_sensor;", nativeQuery = true)
     Map<String, Long> getSensorCount();
 
     @Query(value = "select distinct si.region from SensorInfo si where si.region is not null")

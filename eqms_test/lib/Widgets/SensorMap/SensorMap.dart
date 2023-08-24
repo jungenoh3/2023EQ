@@ -1,5 +1,6 @@
-import 'package:eqms_test/Api/DraggableSheetModel.dart';
+import 'package:dio/dio.dart';
 import 'package:eqms_test/Api/GoogleMapModel.dart';
+import 'package:eqms_test/Api/Retrofit/RestClient.dart';
 import 'package:eqms_test/GoogleMap/custom_googlemap.dart';
 import 'package:eqms_test/GoogleMap/widget/custom_scrollablesheet.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,8 @@ class SensorMap extends StatefulWidget {
 }
 
 class _SensorMapState extends State<SensorMap> {
+  final dio = Dio();
+  late RestClient client = RestClient(dio);
 
   @override
   void initState() {
@@ -59,4 +62,6 @@ class _SensorMapState extends State<SensorMap> {
         ),
       );
   }
+
+
 }

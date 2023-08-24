@@ -1,6 +1,7 @@
 import 'package:eqms_test/Api/GoogleMapModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:eqms_test/style/color_guide.dart';
 
 class CustomFloatingButton extends StatelessWidget {
   final VoidCallback onMoveCamera;
@@ -13,12 +14,12 @@ class CustomFloatingButton extends StatelessWidget {
         heroTag: 'tag1',
         mini: true,
         backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(side: BorderSide(width: 2,color: Colors.deepOrange),borderRadius: BorderRadius.circular(100)),
+        shape: RoundedRectangleBorder(side: const BorderSide(width: 2,color: primaryNewOrange),borderRadius: BorderRadius.circular(100)),
         elevation: 3,
         onPressed: () {
           onMoveCamera();
         },
-        child: const Icon(Icons.location_pin, color: Colors.deepOrange,),
+        child: const Icon(Icons.location_pin, color: primaryNewOrange,),
       ),
       const SizedBox(
         height: 5,
@@ -27,9 +28,9 @@ class CustomFloatingButton extends StatelessWidget {
         heroTag: 'tag2',
         mini: true,
         backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(side: BorderSide(width: 2,color: Colors.deepOrange),borderRadius: BorderRadius.circular(100)),
+        shape: RoundedRectangleBorder(side: const BorderSide(width: 2,color: primaryNewOrange),borderRadius: BorderRadius.circular(100)),
         elevation: 3,
-        child: const Icon(Icons.refresh, color: Colors.deepOrange,),
+        child: const Icon(Icons.refresh, color: primaryNewOrange,),
         onPressed: () {
           switch (context.read<GoogleMapModel>().sheetTitle) {
             case "내 주변 대피소":

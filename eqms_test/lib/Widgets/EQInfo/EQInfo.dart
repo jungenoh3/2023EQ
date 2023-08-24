@@ -1,5 +1,5 @@
 import 'package:eqms_test/Api/GoogleMapModel.dart';
-import 'package:eqms_test/GoogleMap/Models/MapItems.dart';
+import 'package:eqms_test/GoogleMap/Models/google_maps_models.dart';
 import 'package:eqms_test/GoogleMap/Widget/custom_scrollablesheet.dart';
 import 'package:eqms_test/Widgets/EQInfo/CustomCategory.dart';
 import 'package:eqms_test/GoogleMap/custom_googlemap.dart';
@@ -47,8 +47,6 @@ class _EQInfoState extends State<EQInfo> {
   @override
   Widget build(BuildContext context) {
     final GoogleMapModelData = context.watch<GoogleMapModel>();
-
-    print('EQInfo markerItems: ${GoogleMapModelData.markerItems.length}');
 
     return SafeArea(
       child: Stack(

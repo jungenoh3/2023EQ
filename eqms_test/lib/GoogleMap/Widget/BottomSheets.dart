@@ -6,13 +6,6 @@ import 'package:provider/provider.dart';
 
 class BottomSheets {
   static void showItemBottomSheet(BuildContext context, int mode, SensorSSE? sensorSSE, String? name, String location) {
-    // final sensorSSE = SensorSSE();
-    print('mode: $mode');
-
-    // if (mode == 1){
-    //   sensorSSE.startListening(name!.split("(")[0]);
-    // }
-
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -68,7 +61,7 @@ class BottomSheets {
                 ),
                 Visibility(
                   visible: mode == 1,
-                  child: StreamBuilder(stream: sensorSSE!.dataStream, builder: (BuildContext context, snapshot) {
+                  child: StreamBuilder(stream: sensorSSE?.dataStream, builder: (BuildContext context, snapshot) {
                     if (snapshot.hasData){
                       return Padding(
                         padding: const EdgeInsets.only(left: 20, right: 20, top: 2),
@@ -76,11 +69,11 @@ class BottomSheets {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             const SizedBox(width: 13, height: 13, child: Text("X: ", style: TextStyle(fontSize: 13),),),
-                            SizedBox(width: 40, height: 13, child: Text(snapshot.data!['x'].toString(), style: TextStyle(fontSize: 13),),),
+                            SizedBox(width: 40, height: 13, child: Text(snapshot.data!['x'].toString(), style: const TextStyle(fontSize: 13),),),
                             const SizedBox(width: 13, height: 13, child: Text("Y: ", style: TextStyle(fontSize: 13),),),
-                            SizedBox(width: 40, height: 13, child: Text(snapshot.data!['y'].toString(), style: TextStyle(fontSize: 13),),),
+                            SizedBox(width: 40, height: 13, child: Text(snapshot.data!['y'].toString(), style: const TextStyle(fontSize: 13),),),
                             const SizedBox(width: 13, height: 13, child: Text("Z: ", style: TextStyle(fontSize: 13),),),
-                            SizedBox(width: 40, height: 13, child: Text(snapshot.data!['z'].toString(), style: TextStyle(fontSize: 13),),),
+                            SizedBox(width: 40, height: 13, child: Text(snapshot.data!['z'].toString(), style: const TextStyle(fontSize: 13),),),
                           ],
                         ),
                       );
@@ -113,8 +106,8 @@ class BottomSheets {
       useSafeArea: true,
     ).whenComplete(() {
       print("Modal BottomSheet close");
-      if (mode == 1){
-        sensorSSE!.stopListening();
+      if (mode == 1 && sensorSSE != null){
+        sensorSSE.stopListening();
       }
     });
   }

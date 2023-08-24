@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// 사용 안함
 class DraggableSheetModel with ChangeNotifier {
   double _draggableSheetHeight = 0;
   double get draggableSheetHeight => _draggableSheetHeight;

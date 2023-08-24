@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:eqms_test/Api/Retrofit/RestClient.dart';
-import 'package:eqms_test/GoogleMap/Models/MapItems.dart';
-import 'package:eqms_test/GoogleMap/Models/ScrollableSheetData.dart';
+import 'package:eqms_test/GoogleMap/Models/google_maps_models.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 

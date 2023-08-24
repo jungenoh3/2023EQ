@@ -22,3 +22,16 @@ class CircleData{
 
   CircleData({required this.id, required this.latLng,required this.detail, required this.mangitude});
 }
+
+class ScrollableSheetData {
+  String? leading;
+  final String title;
+  final String subtitle;
+  String? trailing;
+
+  ScrollableSheetData(
+      {required this.leading,
+        required this.title,
+        required this.subtitle,
+        required this.trailing});
+}

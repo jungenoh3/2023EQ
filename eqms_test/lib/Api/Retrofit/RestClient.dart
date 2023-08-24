@@ -72,9 +72,9 @@ class User {
 @JsonSerializable()
 class SensorCount {
   int abnormal_sensor;
-  int normal_sensor;
+  int all_sensor;
 
-  SensorCount({required this.abnormal_sensor, required this.normal_sensor});
+  SensorCount({required this.abnormal_sensor, required this.all_sensor});
   factory SensorCount.fromJson(Map<String, dynamic> json) => _$SensorCountFromJson(json);
   Map<String, dynamic> toJson() => _$SensorCountToJson(this);
 }
