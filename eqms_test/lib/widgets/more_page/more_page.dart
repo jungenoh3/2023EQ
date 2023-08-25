@@ -1,7 +1,7 @@
 import 'package:eqms_test/style/text_style.dart';
 import 'package:eqms_test/widgets/common_widgets/loading_widget.dart';
 import 'package:eqms_test/widgets/common_widgets/segment.dart';
-import 'package:eqms_test/widgets/login_register/login.dart';
+import 'package:eqms_test/widgets/more_page/widgets/login_register/login.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'widgets/service_introduction.dart';

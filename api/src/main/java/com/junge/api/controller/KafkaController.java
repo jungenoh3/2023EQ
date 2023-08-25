@@ -11,7 +11,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.JSONObject;
 import com.junge.api.model.FCMNotification;
 import com.junge.api.repository.EarthquakeDataRep;
-import com.junge.api.repository.SensorDataRep;
 import com.junge.api.service.KafkaService;
 import com.linecorp.bot.client.LineMessagingClient;
 import com.linecorp.bot.model.Broadcast;
@@ -41,17 +40,15 @@ import java.util.concurrent.ExecutionException;
 public class KafkaController {
     private KafkaService kafkaService;
     private DataService dataService;
-    private final SensorDataRep sensorDataRep;
     private final EarthquakeDataRep earthQuakeDataRep;
     private final FirebaseMessaging firebaseMessaging;
     private final ObjectMapper mapper = new ObjectMapper();
     private Sinks.Many<Map<Object, Object>> realTimeDataMany = Sinks.many().multicast().onBackpressureBuffer(1000, false);
 
 
-    public KafkaController(KafkaService kafkaService, DataService dataService, SensorDataRep sensorDataRep, EarthquakeDataRep earthQuakeDataRep, FirebaseMessaging firebaseMessaging) {
+    public KafkaController(KafkaService kafkaService, DataService dataService, EarthquakeDataRep earthQuakeDataRep, FirebaseMessaging firebaseMessaging) {
         this.kafkaService = kafkaService;
         this.dataService = dataService;
-        this.sensorDataRep = sensorDataRep;
         this.earthQuakeDataRep = earthQuakeDataRep;
         this.firebaseMessaging = firebaseMessaging;
     }

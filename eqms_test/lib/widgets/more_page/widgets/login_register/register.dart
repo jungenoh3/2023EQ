@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:eqms_test/api/retrofit/rest_client.dart';
+import 'package:eqms_test/style/color_guide.dart';
+import 'package:eqms_test/style/text_style.dart';
 import 'package:eqms_test/widgets/common_widgets/toast_message.dart';
 import 'package:flutter/material.dart';
-import './login.dart';
-import './register_textfield.dart';
-import '../../style/text_style.dart';
-import '../../style/color_guide.dart';
+import 'login.dart';
+import 'register_textfield.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);

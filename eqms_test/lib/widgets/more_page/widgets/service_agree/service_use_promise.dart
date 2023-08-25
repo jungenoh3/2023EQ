@@ -1,5 +1,6 @@
+import 'package:eqms_test/style/text_style.dart';
 import 'package:flutter/material.dart';
-import '../../style/text_style.dart';
+
 
 class ServiceUsePromise extends StatelessWidget {
   const ServiceUsePromise({super.key});

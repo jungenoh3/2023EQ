@@ -1,6 +1,6 @@
 import 'package:eqms_test/style/text_style.dart';
-import 'package:eqms_test/widgets/service_agree/privacy_policy.dart';
-import 'package:eqms_test/widgets/service_agree/service_use_promise.dart';
+import 'package:eqms_test/widgets/more_page/widgets/service_agree/privacy_policy.dart';
+import 'package:eqms_test/widgets/more_page/widgets/service_agree/service_use_promise.dart';
 import 'package:flutter/material.dart';
 import 'more_page_call.dart';
 

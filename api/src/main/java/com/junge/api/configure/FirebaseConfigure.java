@@ -25,11 +25,10 @@ public class FirebaseConfigure {
             FirebaseOptions firebaseOptions = FirebaseOptions
                     .builder()
                     .setCredentials(googleCredentials)
-                    .setDatabaseUrl("https://eq-64f1a-default-rtdb.firebaseio.com/")
+                    // .setDatabaseUrl("https://eq-64f1a-default-rtdb.firebaseio.com/") // 리얼 타임 데이터베이스 연결 시도. 사용하지말 것
                     .build();
             firebaseApp = FirebaseApp.initializeApp(firebaseOptions, "[DEFAULT]");
         } catch (IOException e) {
-            // Handle the exception properly, log it, or throw a custom exception.
             e.printStackTrace();
         }
     }
@@ -39,10 +38,8 @@ public class FirebaseConfigure {
         return FirebaseMessaging.getInstance(firebaseApp);
     }
 
-    @Bean
-    FirebaseDatabase firebaseDatabase() {
-        return FirebaseDatabase.getInstance(firebaseApp);
-    }
+    // @Bean
+    // FirebaseDatabase firebaseDatabase() { return FirebaseDatabase.getInstance(firebaseApp); }
 }
 
 

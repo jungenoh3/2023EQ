@@ -1,6 +1,6 @@
+import 'package:eqms_test/style/color_guide.dart';
+import 'package:eqms_test/style/text_style.dart';
 import 'package:flutter/material.dart';
-import '../../style/color_guide.dart';
-import '../../style/text_style.dart';
 
 class RegisterTextField extends StatelessWidget {
   final String label;

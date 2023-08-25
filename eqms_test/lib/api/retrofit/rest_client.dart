@@ -51,7 +51,6 @@ abstract class RestClient {
   @GET('/earthquake/all')
   Future<List<EarthQuake>> getEarthQuake();
 
-
   @GET('/emergency/specific')
   Future<List<EmergencyInst>> getEmergencyInst();
 }

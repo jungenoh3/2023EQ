@@ -1,8 +1,8 @@
 import 'package:eqms_test/style/color_guide.dart';
 import 'package:eqms_test/style/text_style.dart';
-import 'package:eqms_test/widgets/login_register/register.dart';
-import 'package:eqms_test/widgets/service_agree/privacy_policy.dart';
-import 'package:eqms_test/widgets/service_agree/service_use_promise.dart';
+import 'package:eqms_test/widgets/more_page/widgets/login_register/register.dart';
+import 'package:eqms_test/widgets/more_page/widgets/service_agree/privacy_policy.dart';
+import 'package:eqms_test/widgets/more_page/widgets/service_agree/service_use_promise.dart';
 import 'package:flutter/material.dart';
 
 class RegisterAgree extends StatefulWidget {

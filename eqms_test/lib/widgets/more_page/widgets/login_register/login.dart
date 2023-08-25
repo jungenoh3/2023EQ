@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:eqms_test/api/retrofit/rest_client.dart';
+import 'package:eqms_test/style/color_guide.dart';
+import 'package:eqms_test/style/text_style.dart';
 import 'package:eqms_test/widgets/common_widgets/toast_message.dart';
-import 'package:eqms_test/widgets/login_register/register_agree.dart';
+import 'package:eqms_test/widgets/more_page/widgets/login_register/register_agree.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../style/text_style.dart';
-import '../../style/color_guide.dart';
 
 class Login extends StatelessWidget {
   final String nextRoute; // The next route to navigate to after a successful login.

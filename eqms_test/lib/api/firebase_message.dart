@@ -52,7 +52,7 @@ class FirebaseMessageApi {
 
   Future initLocalNotification() async {
     const iOS = DarwinInitializationSettings();
-    const android = AndroidInitializationSettings('@drawable/ic_launcher');
+    const android = AndroidInitializationSettings('@drawable/ic_launcher2');
     const settings = InitializationSettings(android: android, iOS: iOS);
 
     await _localNotifications.initialize(
