@@ -1,5 +1,6 @@
-import 'package:eqms_test/api/google_map_model.dart';
+// import 'package:eqms_test/api/google_map_model.dart';
 import 'package:eqms_test/style/color_guide.dart';
+import 'package:eqms_test/widgets/common_widgets/toast_message.dart';
 import 'package:eqms_test/widgets/eq_info/eq_info.dart';
 import 'package:eqms_test/widgets/eq_safety/eq_safety.dart';
 import 'package:eqms_test/widgets/more_page/more_page.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RootScreen extends StatefulWidget {
   const RootScreen({Key? key}) : super(key: key);
@@ -103,11 +105,25 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  void onItemTapped(int index) {
+  Future<void> onItemTapped(int index) async {
     if (!mounted) return;
 
     if (selectedIndex != index) {
-      _controller.jumpToPage(index);
+      switch(index){
+        case 0:
+        case 1:
+        case 4:
+          _controller.jumpToPage(index);
+          break;
+        case 2:
+        case 3:
+          if (await isLoggedIn()){
+            _controller.jumpToPage(index);
+          } else {
+            alertMessage('로그인 후 사용 가능합니다.');
+          }
+      }
+      // _controller.jumpToPage(index);
     }
   }
 
@@ -126,6 +142,11 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
     });
   }
 
+  Future<bool> isLoggedIn() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('isLoggedIn') ?? false;
+  }
+
   BottomNavigationBar renderBottomNavigationBar() {
     return BottomNavigationBar(
       elevation: 0,
@@ -141,10 +162,23 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      body: PageView(
+        controller: _controller,
+        onPageChanged: onPageChanged, // Use onPageChanged here
+        children: widgetOptions,
+      ),
+      bottomNavigationBar: SafeArea(
+        child: SizedBox(height: 58, child: renderBottomNavigationBar()),
+      ),
+      extendBody: false,
+      extendBodyBehindAppBar: true,
+    );
+
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<GoogleMapModel>(
-            create: (context) => GoogleMapModel())
+        // ChangeNotifierProvider<GoogleMapModel>(
+        //     create: (context) => GoogleMapModel())
       ],
       child: Scaffold(
         body: PageView(

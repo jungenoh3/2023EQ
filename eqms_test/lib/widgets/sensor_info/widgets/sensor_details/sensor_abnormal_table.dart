@@ -195,8 +195,8 @@ class SensorDataSource extends DataGridSource {
   void buildPaginatedDataGridRows() {
     dataGridRows = _paginatedSensors
         .map<DataGridRow>((e) => DataGridRow(cells: [
-              DataGridCell<String>(columnName: 'id', value: e.id),
-              DataGridCell<String>(columnName: 'address', value: e.address),
+              DataGridCell<String>(columnName: 'id', value: '임의 아이디'),// e.id),
+              DataGridCell<String>(columnName: 'address', value: '임의 주소'),// e.address),
               DataGridCell<String>(
                   columnName: 'accelerator', value: e.accelerator),
               DataGridCell<String>(columnName: 'pressure', value: e.pressure),

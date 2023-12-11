@@ -1,18 +1,28 @@
 import 'package:eqms_test/api/google_map_model.dart';
+import 'package:eqms_test/custom_googlemap/models/google_maps_models.dart';
 import 'package:eqms_test/style/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
-
 class CustomScrollableSheet extends StatelessWidget {
+  final List<ScrollableSheetData> sheetItems;
+  final String sheetTitle;
+  final String iconAsset;
 
-  const CustomScrollableSheet({Key? key}) : super(key: key);
+  const CustomScrollableSheet(
+      {Key? key,
+      required this.sheetItems,
+      required this.sheetTitle,
+      required this.iconAsset})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final itemValue = context.watch<GoogleMapModel>();
+    // 이걸 변수로 받아오게 설정
+    // final itemValue = context.watch<GoogleMapModel>();
+
     return Visibility(
-      visible: itemValue.sheetItems.isNotEmpty,
+      visible: sheetItems.isNotEmpty,
       maintainState: false,
       child: DraggableScrollableSheet(
           initialChildSize: 0.11,
@@ -30,9 +40,9 @@ class CustomScrollableSheet extends StatelessWidget {
                 controller: scrollController,
                 separatorBuilder: (BuildContext context, int index) =>
                     const Divider(),
-                itemCount: itemValue.sheetItems.length,
+                itemCount: sheetItems.length,
                 itemBuilder: (BuildContext context, int index) {
-                  final data = itemValue.sheetItems[index];
+                  final data = sheetItems[index];
                   if (index == 0) {
                     return Column(
                       children: [
@@ -51,12 +61,12 @@ class CustomScrollableSheet extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              SvgPicture.asset(itemValue.iconAsset),
+                              SvgPicture.asset(iconAsset),
                               const SizedBox(
                                 width: 8,
                               ),
                               Text(
-                                itemValue.sheetTitle,
+                                sheetTitle,
                                 style: kCustomScrollableSheetTitleTextStyle,
                               ),
                             ],
@@ -87,11 +97,10 @@ class CustomScrollableSheet extends StatelessWidget {
                       subtitle: Text(
                         data.subtitle,
                         maxLines: 2,
-                        style:
-                            TextStyle(fontSize: 13, color: Colors.grey[700]),
+                        style: TextStyle(fontSize: 13, color: Colors.grey[700]),
                       ),
                       trailing: data.trailing == null
-                          ? const Text("")
+                          ? IconButton(onPressed: () {}, icon: Icon(Icons.double_arrow))
                           : Text(
                               data.trailing!,
                               style: const TextStyle(color: Colors.grey),

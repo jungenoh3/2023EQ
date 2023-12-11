@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 import 'package:http/http.dart' as http;
 
 
@@ -13,16 +14,22 @@ class SensorSSE {
   Future<Map<String, dynamic>> startListening(String sensorId) async {
     print('startListening: $sensorId');
 
-    final url = Uri.parse('http://155.230.118.78:1234/server-events?sensorId=$sensorId');
+    final url = Uri.parse('http://ingress-ngi-ingress-ngin-d7bea-21029333-dbc80b33461c.kr.lb.naverncp.com/sensor/sensorKafka/server-events?sensorId=$sensorId');
     final response = await client.send(http.Request('GET', url));
+    int temp_num = Random().nextInt(1000);
     if (response.statusCode == 200){
       _isSubscribed = true;
       _subscription = response.stream.transform(utf8.decoder).listen((data) {
-        if (data.length > 10) {
-          final valueMap = jsonDecode(data);
+        if (data.length > 10 && data.contains("data:{")) {
+          // print(data.trim().replaceAll('\n','').split("data:")[1]);
+          final valueMap = jsonDecode(data.trim().replaceAll('\n','').split("data:")[1]);
           print(valueMap);
+          valueMap['x'] -= temp_num;
+          valueMap['y'] -= temp_num;
+          valueMap['z'] -= temp_num;
+
           _dataStreamController.add(valueMap);
-          // return valueMap;
+          return valueMap;
         }
       }, onError: (error) {
         print('onError occurred: $error');

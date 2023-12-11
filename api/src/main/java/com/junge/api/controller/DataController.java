@@ -4,6 +4,8 @@ import com.junge.api.service.DataService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/EQMS")
@@ -51,8 +53,17 @@ public class DataController {
     public ResponseEntity getAllShelter(){
         return ResponseEntity.ok(this.dataService.getShelterList());
     }
+
     @GetMapping("/shelter/specific")
     public ResponseEntity getSpecificShelter(){ return ResponseEntity.ok(this.dataService.getShelterSpecList()); }
+
+    @GetMapping("/shelter/near")
+    public ResponseEntity getShelterNearData(
+            @RequestParam(required = true) double lat,
+            @RequestParam(required = true) double lon
+    ) {
+        return ResponseEntity.ok(this.dataService.getNearShelter(lat, lon));
+    }
 
     @GetMapping("/earthquake/all")
     public ResponseEntity getEarthQuakeData() { return ResponseEntity.ok(this.dataService.getEarthquakeList());}
@@ -63,5 +74,13 @@ public class DataController {
     public ResponseEntity getEmergencyInst() { return ResponseEntity.ok(this.dataService.getEmergencyInstList()); }
     @GetMapping("/emergency/specific")
     public ResponseEntity getSpecificEmergencyInst() { return ResponseEntity.ok(this.dataService.getEmergencyInstSpecList()); }
+
+    @GetMapping("/emergency/near")
+    public ResponseEntity getEmergencyInstNearData(
+            @RequestParam(required = true) double lat,
+            @RequestParam(required = true) double lon
+    ) {
+        return ResponseEntity.ok(this.dataService.getNearEmergenyInst(lat, lon));
+    }
 
 }

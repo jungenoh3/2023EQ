@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 
 
 class EqOccur extends StatefulWidget {
-  const EqOccur({Key? key}) : super(key: key);
+  final Map<String, dynamic>? messageData;
+  const EqOccur({Key? key, required this.messageData}) : super(key: key);
 
   @override
   State<EqOccur> createState() => _EqOccurState();
@@ -27,8 +28,8 @@ class _EqOccurState extends State<EqOccur> {
               children: [
                 Image.asset('assets/siren.gif',height: screenHeight * 0.1),
                 const SizedBox(height: 10),
-                const Text(
-                  '2023년 8월 22일 (화) 13:39',
+                Text(
+                  '${widget.messageData?['date']}',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20,
@@ -42,7 +43,7 @@ class _EqOccurState extends State<EqOccur> {
                     children: <TextSpan>[
                       TextSpan(text: '추정 규모 '),
                       TextSpan(
-                        text: '5.4',
+                        text: 'N',
                         style: kEqOccurMagnituteTextStyle,
                       ),
                     ],
@@ -52,8 +53,9 @@ class _EqOccurState extends State<EqOccur> {
                   '지진 발생!',
                   style: kEqOccurTextStyle,
                 ),
-                const Text(
-                  '대구 북구 대학로 80길 15KM',
+                Text(
+                  '임의 위치: (${widget.messageData?['lat']}, ${widget.messageData?['lng']})',
+                  // '대구 북구 대학로 80길 15KM (임의 주소)', // 여기에 위도 경도
                   style: kEqOccurLocationTextStyle,
                 ),
                 const SizedBox(height: 10)

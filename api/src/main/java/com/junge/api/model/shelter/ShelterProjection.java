@@ -14,5 +14,6 @@ public class ShelterProjection implements Serializable, ShelterSpecific {
     private String dtl_adres;
     private double xcord;
     private double ycord;
+
 }
 

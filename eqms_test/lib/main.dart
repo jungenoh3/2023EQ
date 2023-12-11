@@ -28,7 +28,7 @@ void main() async {
     home: const SplashScreen(),
     // home: const EqOccur(),
     routes: {
-      '/eqoccur': (context) => const EqOccur(),
+      '/eqoccur': (context) => EqOccur(messageData: null,),
     },
     debugShowCheckedModeBanner: false,
   ));

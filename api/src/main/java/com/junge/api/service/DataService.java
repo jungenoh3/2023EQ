@@ -47,13 +47,13 @@ public class DataService {
     }
 
     public Map<String, Long> getSensorCount() { return this.sensorInfoRep.getSensorCount(); }
-    @Cacheable(value = "sensorInfo")
+    // @Cacheable(value = "sensorInfo")
     public List<SensorInfo> getSensorInfoList() { return this.sensorInfoRep.findAll(); }
-    @Cacheable(value = "sensorInfoRegion")
+    // @Cacheable(value = "sensorInfoRegion")
     public List<String> getSensorInfoRegion() { return this.sensorInfoRep.findAllRegion(); }
-    @Cacheable(value = "sensorInfoFacility")
+    // @Cacheable(value = "sensorInfoFacility")
     public List<String> getSensorInfoFacility() { return this.sensorInfoRep.findAllFacility(); }
-    @Cacheable(value = "sensorInfoSearch", key = "'SISearch' + (#deviceid != null ? #deviceid : '') + (#facility != null ? #facility : '') + (#region != null ? #region : '')")
+    // @Cacheable(value = "sensorInfoSearch", key = "'SISearch' + (#deviceid != null ? #deviceid : '') + (#facility != null ? #facility : '') + (#region != null ? #region : '')")
     public List<SensorInfo> searchSensorInfo(String deviceid, String facility, String region) {
         Specification<SensorInfo> spec = (root, query, criteriaBuilder) -> null;
         if(deviceid != null)
@@ -65,13 +65,13 @@ public class DataService {
         return this.sensorInfoRep.findAll(spec);
     }
 
-    @Cacheable(value = "sensorAbnormal")
+    // @Cacheable(value = "sensorAbnormal")
     public List<SensorAbnormal> getSensorAbnormalList() { return this.sensorAbnorRep.getAbnormalWithInfo(); }
-    @Cacheable(value = "sensorAbnormalRegion")
+    // @Cacheable(value = "sensorAbnormalRegion")
     public List<String> getSensorAbnormalRegion() { return this.sensorAbnorRep.findAllRegion(); }
-    @Cacheable(value = "sensorAbnormalFacility")
+    // @Cacheable(value = "sensorAbnormalFacility")
     public List<String> getSensorAbnormalFacility() { return this.sensorAbnorRep.findAllFacility(); }
-    @Cacheable(value = "sensorAbnormalSearch", key = "'SASearch' + (#sensorData != null ? #sensorData : '') + (#region != null ? #region : '')")
+    // @Cacheable(value = "sensorAbnormalSearch", key = "'SASearch' + (#sensorData != null ? #sensorData : '') + (#region != null ? #region : '')")
     public List<SensorAbnormalProjection> searchSensorAbnormal(String sensorData, String region){
         Specification<SensorAbnormal> spec = (root, query, criteriaBuilder) -> {
             root.fetch("sensorInfo", JoinType.LEFT);
@@ -102,27 +102,32 @@ public class DataService {
         return sensorAbnormalProjections;
     }
 
-    @Cacheable(value = "shelterAll")
+    // @Cacheable(value = "shelterAll")
     public List<Shelter> getShelterList() { return this.shelterRep.findAll(); }
-    @Cacheable(value = "shelterSpecific")
-    public List<ShelterProjection> getShelterSpecList() {
+    // @Cacheable(value = "shelterSpecific")
+    public List<ShelterSpecific> getShelterSpecList() {
         List<ShelterSpecific> shelterSpecifics = this.shelterRep.findSpecific();
-        List<ShelterProjection> shelterProjections = new ArrayList<ShelterProjection>();
 
-        for (ShelterSpecific shelterSpecific : shelterSpecifics){
-            shelterProjections.add(new ShelterProjection(shelterSpecific.getId(),
-                    shelterSpecific.getVt_acmdfclty_nm(),
-                    shelterSpecific.getDtl_adres(),
-                    shelterSpecific.getXcord(),
-                    shelterSpecific.getYcord()
-                    ));
-        }
-        return shelterProjections;
+        return shelterSpecifics;
+
+//        List<ShelterProjection> shelterProjections = new ArrayList<ShelterProjection>();
+//
+//        for (ShelterSpecific shelterSpecific : shelterSpecifics){
+//            shelterProjections.add(new ShelterProjection(shelterSpecific.getId(),
+//                    shelterSpecific.getVt_acmdfclty_nm(),
+//                    shelterSpecific.getDtl_adres(),
+//                    shelterSpecific.getXcord(),
+//                    shelterSpecific.getYcord()
+//                    ));
+//        }
+//        return shelterProjections;
     }
+    public List<ShelterSpecific> getNearShelter(Double lat, Double lon){ return shelterRep.findAround(lat, lon); }
 
-    @Cacheable(value = "earthquakeAll")
+
+    // @Cacheable(value = "earthquakeAll")
     public List<Earthquake> getEarthquakeList() { return this.earthQuakeDataRep.findAll(); }
-    @Cacheable(value = "earthquakeOngoing")
+    // @Cacheable(value = "earthquakeOngoing")
     public List<EarthquakeProjection> getEarthquakeOngoing() {
         List<EarthquakeSpecific> earthquakeSpecifics = this.earthQuakeDataRep.findAllOngoing();
         List<EarthquakeProjection> earthquakeProjections = new ArrayList<EarthquakeProjection>();
@@ -138,11 +143,11 @@ public class DataService {
         return earthquakeProjections;
     }
 
-    @CachePut(value = "earthquakeAll")
+    // @CachePut(value = "earthquakeAll")
     public List<Earthquake> cacheputEarthquake() {
         return this.earthQuakeDataRep.findAll();
     }
-    @CachePut(value = "earthquakeOngoing")
+    // @CachePut(value = "earthquakeOngoing")
     public List<EarthquakeProjection> cacheputEarthquakeOngoign() {
         List<EarthquakeSpecific> earthquakeSpecifics = this.earthQuakeDataRep.findAllOngoing();
         List<EarthquakeProjection> earthquakeProjections = new ArrayList<EarthquakeProjection>();
@@ -158,23 +163,28 @@ public class DataService {
         return earthquakeProjections;
     }
 
-    @Cacheable(value = "emergencyInstAll")
+    // @Cacheable(value = "emergencyInstAll")
     public List<EmergencyInst> getEmergencyInstList() { return this.emergencyInstRep.findAll(); }
-    @Cacheable(value = "emergencyInstSpecific")
-    public List<EmerygencyInstProjection> getEmergencyInstSpecList() {
+    // @Cacheable(value = "emergencyInstSpecific")
+    public List<EmergencyInstSpecific> getEmergencyInstSpecList() {
         List<EmergencyInstSpecific> emergencyInstSpecifics = this.emergencyInstRep.findSpecific();
-        List<EmerygencyInstProjection> emerygencyInstProjections = new ArrayList<EmerygencyInstProjection>();
+        return emergencyInstSpecifics;
+//        List<EmerygencyInstProjection> emerygencyInstProjections = new ArrayList<EmerygencyInstProjection>();
+//
+//        for (EmergencyInstSpecific emergencyInstSpecific : emergencyInstSpecifics){
+//            emerygencyInstProjections.add(new EmerygencyInstProjection(emergencyInstSpecific.getId(),
+//                    emergencyInstSpecific.getInstitution(),
+//                    emergencyInstSpecific.getMed_category(),
+//                    emergencyInstSpecific.getAddress(),
+//                    emergencyInstSpecific.getLatitude(),
+//                    emergencyInstSpecific.getLongitude()
+//            ));
+//        }
+//        return emerygencyInstProjections;
+    }
 
-        for (EmergencyInstSpecific emergencyInstSpecific : emergencyInstSpecifics){
-            emerygencyInstProjections.add(new EmerygencyInstProjection(emergencyInstSpecific.getId(),
-                    emergencyInstSpecific.getInstitution(),
-                    emergencyInstSpecific.getMed_category(),
-                    emergencyInstSpecific.getAddress(),
-                    emergencyInstSpecific.getLatitude(),
-                    emergencyInstSpecific.getLongitude()
-            ));
-        }
-        return emerygencyInstProjections;
+    public List<EmergencyInstSpecific> getNearEmergenyInst(double lat, double lon) {
+        return emergencyInstRep.findAround(lat, lon);
     }
 
 }

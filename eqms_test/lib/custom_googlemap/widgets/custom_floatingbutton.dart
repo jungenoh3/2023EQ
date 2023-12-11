@@ -24,29 +24,30 @@ class CustomFloatingButton extends StatelessWidget {
       const SizedBox(
         height: 5,
       ),
-      FloatingActionButton(
-        heroTag: 'tag2',
-        mini: true,
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(side: const BorderSide(width: 2,color: primaryNewOrange),borderRadius: BorderRadius.circular(100)),
-        elevation: 3,
-        child: const Icon(Icons.refresh, color: primaryNewOrange,),
-        onPressed: () {
-          switch (context.read<GoogleMapModel>().sheetTitle) {
-            case "내 주변 대피소":
-              context.read<GoogleMapModel>().ShelterItems();
-              break;
-            case "최근 발생 지진":
-              context.read<GoogleMapModel>().EarthQuakeItems();
-              break;
-            case "센서":
-              context.read<GoogleMapModel>().SensorItems();
-              break;
-            default:
-              break;
-          }
-        },
-      ),
+      // FloatingActionButton(
+      //   heroTag: 'tag2',
+      //   mini: true,
+      //   backgroundColor: Colors.white,
+      //   shape: RoundedRectangleBorder(side: const BorderSide(width: 2,color: primaryNewOrange),borderRadius: BorderRadius.circular(100)),
+      //   elevation: 3,
+      //   child: const Icon(Icons.refresh, color: primaryNewOrange,),
+      //   onPressed: () {},
+      //   // onPressed: () {
+      //   //   switch (context.read<GoogleMapModel>().sheetTitle) {
+      //   //     case "내 주변 대피소":
+      //   //       context.read<GoogleMapModel>().ShelterItems();
+      //   //       break;
+      //   //     case "최근 발생 지진":
+      //   //       context.read<GoogleMapModel>().EarthQuakeItems();
+      //   //       break;
+      //   //     case "센서":
+      //   //       context.read<GoogleMapModel>().SensorItems();
+      //   //       break;
+      //   //     default:
+      //   //       break;
+      //   //   }
+      //   // },
+      // ),
     ]);
   }
 }

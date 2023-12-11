@@ -91,7 +91,7 @@ public class KafkaController {
         return botApiResponse.toString();
     }
 
-    public String EQMSFCMTopic(double lat, double lng) {
+    public String EQMSFCMTopic(double lat, double lng, Timestamp date) {
         FCMNotification fcmNotification = new FCMNotification();
 
         fcmNotification.setTitile("지진 알림");
@@ -103,11 +103,18 @@ public class KafkaController {
                 .setBody(fcmNotification.getBody())
                 .build();
 
+
+        Map<String, String> dataMap = new HashMap<>();
+        dataMap.put("route", "/eqoccur");
+        dataMap.put("lat", String.valueOf(lat));
+        dataMap.put("lng", String.valueOf(lng));
+        dataMap.put("date", date.toString());
+
         Message message = Message
                 .builder()
                 .setTopic("EQMS-1")
                 .setNotification(notification)
-                .putData("route", "/eqoccur")
+                .putAllData(dataMap)
                 .build();
 
         try {
@@ -189,13 +196,15 @@ public class KafkaController {
         JSONParser parser = new JSONParser();
         JSONObject jsonObject = (JSONObject) parser.parse(record.value());
 
+        Long event_occurred_msecValue = (Long) jsonObject.get("event_occurred_msec");
+        Timestamp event_occurred_msec = new Timestamp(event_occurred_msecValue);
         double lat = (double) jsonObject.get("lat");
         double lng = (double) jsonObject.get("lng");
 
         saveEarthquake(jsonObject);
 
         String LineAnswer = EQMSLineAPIBroadCast(lat, lng);
-        String FCMAnswer = EQMSFCMTopic(lat, lng);
+        String FCMAnswer = EQMSFCMTopic(lat, lng, event_occurred_msec);
         System.out.println("Record: " + record);
         System.out.println("Firebase" + FCMAnswer);
         System.out.println("LineAnswer" + LineAnswer);

@@ -39,7 +39,4 @@ public class Earthquake implements Serializable {
         this.assoc_id = assoc_id;
     }
 
-//    public Earthquake(EarthquakeRaw earthquakeRaw) {
-//        super(earthquakeRaw);
-//    }
 }

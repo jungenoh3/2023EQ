@@ -30,7 +30,7 @@ SensorCount _$SensorCountFromJson(Map<String, dynamic> json) => SensorCount(
 Map<String, dynamic> _$SensorCountToJson(SensorCount instance) =>
     <String, dynamic>{
       'abnormal_sensor': instance.abnormal_sensor,
-      'normal_sensor': instance.all_sensor,
+      'all_sensor': instance.all_sensor,
     };
 
 SensorInfo _$SensorInfoFromJson(Map<String, dynamic> json) => SensorInfo(
@@ -87,19 +87,17 @@ Map<String, dynamic> _$SensorAbnormalToJson(SensorAbnormal instance) =>
     };
 
 Shelter _$ShelterFromJson(Map<String, dynamic> json) => Shelter(
-      id: json['id'] as int,
-      vt_acmdfclty_nm: json['vt_acmdfclty_nm'] as String,
-      dtl_adres: json['dtl_adres'] as String,
-      xcord: (json['xcord'] as num).toDouble(),
-      ycord: (json['ycord'] as num).toDouble(),
+      shel_nm: json['shel_nm'] as String,
+      address: json['address'] as String,
+      lon: (json['lon'] as num).toDouble(),
+      lat: (json['lat'] as num).toDouble(),
     );
 
 Map<String, dynamic> _$ShelterToJson(Shelter instance) => <String, dynamic>{
-      'id': instance.id,
-      'vt_acmdfclty_nm': instance.vt_acmdfclty_nm,
-      'dtl_adres': instance.dtl_adres,
-      'xcord': instance.xcord,
-      'ycord': instance.ycord,
+      'shel_nm': instance.shel_nm,
+      'address': instance.address,
+      'lon': instance.lon,
+      'lat': instance.lat,
     };
 
 EarthQuake _$EarthQuakeFromJson(Map<String, dynamic> json) => EarthQuake(
@@ -121,7 +119,6 @@ Map<String, dynamic> _$EarthQuakeToJson(EarthQuake instance) =>
 
 EmergencyInst _$EmergencyInstFromJson(Map<String, dynamic> json) =>
     EmergencyInst(
-      id: json['id'] as int,
       institution: json['institution'] as String,
       address: json['address'] as String,
       med_category: json['med_category'] as String,
@@ -131,7 +128,6 @@ EmergencyInst _$EmergencyInstFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$EmergencyInstToJson(EmergencyInst instance) =>
     <String, dynamic>{
-      'id': instance.id,
       'institution': instance.institution,
       'address': instance.address,
       'med_category': instance.med_category,
@@ -150,12 +146,39 @@ class _RestClient implements RestClient {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://155.230.118.78:1234/EQMS';
+    baseUrl ??=
+        'http://ingress-ngi-ingress-ngin-d7bea-21029333-dbc80b33461c.kr.lb.naverncp.com';
   }
 
   final Dio _dio;
 
   String? baseUrl;
+
+  @override
+  Future<String> postFcmToken(String fcmToken) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = fcmToken;
+    final _result = await _dio.fetch<String>(_setStreamType<String>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/fcm/check',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+    final value = _result.data!;
+    return value;
+  }
 
   @override
   Future<String> postUserInfo(Map<String, String> registerData) async {
@@ -171,7 +194,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          '/user/register',
+          '/users/register',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -198,7 +221,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          '/user/login',
+          '/users/login',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -225,7 +248,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/sensor/count',
+              '/sensor/sensor/count',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -252,7 +275,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/sensor-info/all',
+              '/sensor/sensor-info/all',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -281,7 +304,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/sensor-info/region',
+              '/sensor/sensor-info/region',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -308,7 +331,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/sensor-info/facility',
+              '/sensor/sensor-info/facility',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -336,7 +359,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/sensor-info/search',
+              '/sensor/sensor-info/search',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -365,7 +388,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/sensor-abnormal/region',
+              '/sensor/sensor-abnormal/region',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -392,7 +415,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/sensor-abnormal/facility',
+              '/sensor/sensor-abnormal/facility',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -421,7 +444,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/sensor-abnormal/search',
+              '/sensor/sensor-abnormal/search',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -450,7 +473,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/shelter/specific',
+              '/data/shelterData',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -461,6 +484,96 @@ class _RestClient implements RestClient {
             ))));
     var value = _result.data!
         .map((dynamic i) => Shelter.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
+  Future<List<Shelter>> getShelterNear(Map<String, double> queries) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.addAll(queries);
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result =
+        await _dio.fetch<List<dynamic>>(_setStreamType<List<Shelter>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/data/shelterNearData',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    var value = _result.data!
+        .map((dynamic i) => Shelter.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
+  Future<List<EmergencyInst>> getEmergencyInst() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<List<dynamic>>(_setStreamType<List<EmergencyInst>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/data/emergencyData',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    var value = _result.data!
+        .map((dynamic i) => EmergencyInst.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
+  Future<List<EmergencyInst>> getEmergencyInstNear(
+      Map<String, double> queries) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.addAll(queries);
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<List<dynamic>>(_setStreamType<List<EmergencyInst>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/data/emergencyNearData',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    var value = _result.data!
+        .map((dynamic i) => EmergencyInst.fromJson(i as Map<String, dynamic>))
         .toList();
     return value;
   }
@@ -479,7 +592,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/earthquake/ongoing',
+              '/alarm/earthquake/ongoing',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -508,7 +621,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/earthquake/all',
+              '/alarm/earthquake/all',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -519,35 +632,6 @@ class _RestClient implements RestClient {
             ))));
     var value = _result.data!
         .map((dynamic i) => EarthQuake.fromJson(i as Map<String, dynamic>))
-        .toList();
-    return value;
-  }
-
-  @override
-  Future<List<EmergencyInst>> getEmergencyInst() async {
-    const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
-    final _result = await _dio
-        .fetch<List<dynamic>>(_setStreamType<List<EmergencyInst>>(Options(
-      method: 'GET',
-      headers: _headers,
-      extra: _extra,
-    )
-            .compose(
-              _dio.options,
-              '/emergency/specific',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    var value = _result.data!
-        .map((dynamic i) => EmergencyInst.fromJson(i as Map<String, dynamic>))
         .toList();
     return value;
   }

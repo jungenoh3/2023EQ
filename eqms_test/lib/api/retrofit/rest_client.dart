@@ -4,55 +4,66 @@ import 'package:dio/dio.dart';
 
 part 'rest_client.g.dart';
 
-@RestApi(baseUrl: 'http://155.230.118.78:1234/EQMS')
+@RestApi(baseUrl: 'http://ingress-ngi-ingress-ngin-d7bea-21029333-dbc80b33461c.kr.lb.naverncp.com')
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
-  @POST('/user/register')
+  @POST('/fcm/check')
+  Future<String> postFcmToken(@Body() String fcmToken);
+
+  @POST('/users/register')
   Future<String> postUserInfo(@Queries() Map<String, String> registerData);
 
-  @GET('/user/login')
+  @GET('/users/login')
   Future<String> getRegisterInfo(@Queries() Map<String, String> loginData);
 
 
-  @GET('/sensor/count')
+  @GET('/sensor/sensor/count')
   Future<SensorCount> getSensorCount();
 
-  @GET('/sensor-info/all')
+  @GET('/sensor/sensor-info/all')
   Future<List<SensorInfo>> getSensorInformation();
 
-  @GET('/sensor-info/region')
+  @GET('/sensor/sensor-info/region')
   Future<List<String>> getSensorInfoRegion();
 
-  @GET('/sensor-info/facility')
+  @GET('/sensor/sensor-info/facility')
   Future<List<String>> getSensorInfoFacility();
 
-  @GET('/sensor-info/search')
+  @GET('/sensor/sensor-info/search')
   Future<List<SensorInfo>> getSensorSearch(@Queries() Map<String, String> queries);
 
 
-  @GET('/sensor-abnormal/region')
+  @GET('/sensor/sensor-abnormal/region')
   Future<List<String>> getSensorAbnormalRegion();
 
-  @GET('/sensor-abnormal/facility')
+  @GET('/sensor/sensor-abnormal/facility')
   Future<List<String>> getSensorAbnormalFacility();
 
-  @GET('/sensor-abnormal/search')
+  @GET('/sensor/sensor-abnormal/search')
   Future<List<SensorAbnormal>> getSensorAbnormalSearch(@Queries() Map<String, String> queries);
 
 
-  @GET('/shelter/specific')
+  @GET('/data/shelterData')
   Future<List<Shelter>> getShelter();
 
+  @GET('/data/shelterNearData')
+  Future<List<Shelter>> getShelterNear(@Queries() Map<String, double> queries);
 
-  @GET('/earthquake/ongoing')
+  @GET('/data/emergencyData')
+  Future<List<EmergencyInst>> getEmergencyInst();
+
+  @GET('/data/emergencyNearData')
+  Future<List<EmergencyInst>> getEmergencyInstNear(@Queries() Map<String, double> queries);
+
+  @GET('/alarm/earthquake/ongoing')
   Future<List<EarthQuake>> getEarthQuakeOngoing();
 
-  @GET('/earthquake/all')
+  @GET('/alarm/earthquake/all')
   Future<List<EarthQuake>> getEarthQuake();
 
-  @GET('/emergency/specific')
-  Future<List<EmergencyInst>> getEmergencyInst();
+
+
 }
 
 @JsonSerializable()
@@ -119,13 +130,12 @@ class SensorAbnormal {
 
 @JsonSerializable()
 class Shelter {
-  int id;
-  String vt_acmdfclty_nm;
-  String dtl_adres;
-  double xcord;
-  double ycord;
+  String shel_nm;
+  String address;
+  double lon;
+  double lat;
 
-  Shelter({required this.id, required this.vt_acmdfclty_nm, required this.dtl_adres, required this.xcord, required this.ycord});
+  Shelter({required this.shel_nm, required this.address, required this.lon, required this.lat});
 
   factory Shelter.fromJson(Map<String, dynamic> json) => _$ShelterFromJson(json);
   Map<String, dynamic> toJson() => _$ShelterToJson(this);
@@ -147,14 +157,13 @@ class EarthQuake {
 
 @JsonSerializable()
 class EmergencyInst {
-  int id;
   String institution;
   String address;
   String med_category;
   double latitude;
   double longitude;
 
-  EmergencyInst({required this.id, required this.institution, required this.address, required this.med_category, required this.latitude, required this.longitude});
+  EmergencyInst({required this.institution, required this.address, required this.med_category, required this.latitude, required this.longitude});
 
   factory EmergencyInst.fromJson(Map<String, dynamic> json) => _$EmergencyInstFromJson(json);
   Map<String, dynamic> toJson() => _$EmergencyInstToJson(this);

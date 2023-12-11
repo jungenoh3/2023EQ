@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:dio/dio.dart';
+import 'package:eqms_test/Api/Retrofit/rest_client.dart';
+import 'package:eqms_test/widgets/eq_occur/eq_ocuur.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -20,11 +23,14 @@ class FirebaseMessageApi {
   final GlobalKey<NavigatorState> navigatorKey;
   final _firebaseMessaging = FirebaseMessaging.instance;
   final _localNotifications = FlutterLocalNotificationsPlugin();
+  final dio = Dio();
+  late RestClient client = RestClient(dio);
 
   FirebaseMessageApi({required this.navigatorKey});
 
   void handleMessage(RemoteMessage? message){
     print('handleMessage');
+    print('message:' + message.toString());
 
     if (message == null ){ return; }
     else {
@@ -37,8 +43,13 @@ class FirebaseMessageApi {
 
       final navigator = navigatorKey.currentState;
       if (navigator != null) {
-        final routeName = '/eqoccur';
-        navigator.pushNamed(routeName);
+        // final routeName = '/eqoccur';
+        navigator.push<Object>(
+          MaterialPageRoute(builder: (BuildContext context) {
+            return EqOccur(messageData: message.data,);
+          })
+        );
+        // navigator.pushNamed(routeName); // 이걸로 지진 데이터 전달하기
       }
     }
   }
@@ -106,36 +117,46 @@ class FirebaseMessageApi {
   }
 
   Future<void> checkInitNotifiaction() async {
-    final fCMToken = await _firebaseMessaging.getToken();
-    print('Token: ${fCMToken}');
+    final fcmToken = await _firebaseMessaging.getToken();
+    print('Token: ${fcmToken}');
 
-    final url = Uri.parse('http://155.230.118.78:1234/FCMToken/check');
-    try {
-      final http.Response response = await http.post(url, body: fCMToken)
-          .timeout(const Duration(seconds: 10), onTimeout: () {
-        throw TimeoutException('10초가 지났습니다.');
-      });
+    String result = await client.postFcmToken(fcmToken!);
 
-      if (response.statusCode >= 500) {
-        print('Server error. Status code: ${response.statusCode}');
-        return;
-      }
-
-      final responseBody = response.body;
-      if (responseBody == "subscribed") {
-        print("subscribed");
-      } else if (responseBody == "already subscribed") {
-        print("already subscribed");
-      }
-      initPushNotifications();
-      initLocalNotification();
-    } on TimeoutException catch (e) {
-      print('Timeout Exception: $e');
-      return;
-    } on SocketException catch (e) {
-      print('Socket Exception. error code: $e');
-      return;
+    if (result == "subscribed") {
+      print("subscribed");
+    } else if (result == "already subscribed") {
+      print("already subscribed");
     }
+    initPushNotifications();
+    initLocalNotification();
+
+    // final url = Uri.parse('http://192.168.0.12:1234/FCMToken/check');
+    // try {
+    //   final http.Response response = await http.post(url, body: fCMToken)
+    //       .timeout(const Duration(seconds: 10), onTimeout: () {
+    //     throw TimeoutException('10초가 지났습니다.');
+    //   });
+    //
+    //   if (response.statusCode >= 500) {
+    //     print('Server error. Status code: ${response.statusCode}');
+    //     return;
+    //   }
+    //
+    //   final responseBody = response.body;
+    //   if (responseBody == "subscribed") {
+    //     print("subscribed");
+    //   } else if (responseBody == "already subscribed") {
+    //     print("already subscribed");
+    //   }
+    //   initPushNotifications();
+    //   initLocalNotification();
+    // } on TimeoutException catch (e) {
+    //   print('Timeout Exception: $e');
+    //   return;
+    // } on SocketException catch (e) {
+    //   print('Socket Exception. error code: $e');
+    //   return;
+    // }
 
   }
 

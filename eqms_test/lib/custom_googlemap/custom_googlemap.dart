@@ -17,14 +17,16 @@ import 'dart:ui' as ui;
 
 class CustomGoogleMap extends StatefulWidget {
   final int mode;
+  final String bottomTitle;
   final List<CircleData> circleItems;
   final List<ClusterData> markerItems;
 
   const CustomGoogleMap(
       {required this.mode,
+      required this.bottomTitle,
       required this.circleItems,
       required this.markerItems,
-      Key? key})
+      Key? key,})
       : super(key: key);
 
   @override
@@ -62,7 +64,7 @@ class CustomGoogleMapState extends State<CustomGoogleMap> {
       widget.markerItems,
       _updateMarkers,
       markerBuilder: _markerBuilder,
-      levels: [1, 3, 6.8, 9, 11, 13, 15, 17, 19, 20],
+      levels: [1, 4, 6.8, 9, 11, 13, 15, 17, 19, 20],
     );
   }
 
@@ -88,6 +90,7 @@ class CustomGoogleMapState extends State<CustomGoogleMap> {
             BottomSheets.showItemBottomSheet(
                 context,
                 widget.mode,
+                widget.bottomTitle,
                 null,
                 "진도: ${value[i].mangitude}",
                 "위치: (${value[i].latLng.latitude}, ${value[i].latLng.longitude})");
@@ -219,13 +222,15 @@ class CustomGoogleMapState extends State<CustomGoogleMap> {
           position: cluster.location,
           onTap: () {
             if (!cluster.isMultiple) {
+              print('widget.mode: ${widget.mode}');
               if(widget.mode == 1){
                 sensorSSE = SensorSSE();
-                sensorSSE!.startListening(cluster.items.single.name!.split("(")[0]);
+                sensorSSE!.startListening("1232971431");
               }
               BottomSheets.showItemBottomSheet(
                 context,
                 widget.mode,
+                widget.bottomTitle,
                 sensorSSE,
                 cluster.items.single.name,
                 cluster.items.single.address,
