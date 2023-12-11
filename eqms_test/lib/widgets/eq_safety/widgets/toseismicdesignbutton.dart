@@ -1,3 +1,4 @@
+import 'package:eqms_test/widgets/eq_safety/widgets/youtube_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'seismic_design.dart';
@@ -14,7 +15,7 @@ class ToSeismicDesignButton extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => SeismicDesign(goToEQInfo: goToEQInfo),
+            builder: (context) => YoutubePlayerDemo(),// SeismicDesign(goToEQInfo: goToEQInfo),
           ),
         );
       },
@@ -49,7 +50,7 @@ class ToSeismicDesignButton extends StatelessWidget {
             const Positioned(
               left: 10,
               top: 10,
-              child: Text('내진설계', style: kInfoTitleTextStyle),
+              child: Text('지진안전영상', style: kInfoTitleTextStyle),
             ),
             const Positioned(
               left: 12,
@@ -57,8 +58,8 @@ class ToSeismicDesignButton extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('주소 검색으로', style: kInfoDescriptionTextStyle),
-                  Text('빠른 내진설계 확인', style: kInfoDescriptionTextStyle),
+                  Text('영상으로 보는', style: kInfoDescriptionTextStyle),
+                  Text('안전대피수칙', style: kInfoDescriptionTextStyle),
                 ],
               ),
             ),

@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 class SeismicDesign extends StatefulWidget {
   final Function goToEQInfo;
-  const SeismicDesign({Key? key, required this.goToEQInfo}): super(key: key);
+  const SeismicDesign({Key? key, required this.goToEQInfo}) : super(key: key);
 
   @override
   State<SeismicDesign> createState() => _SeismicDesignState();
@@ -24,30 +24,35 @@ class _SeismicDesignState extends State<SeismicDesign> {
           icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('내진설계확인', style: kAppBarTitleTextStyle),
+        title: const Text('지진안전영상', style: kAppBarTitleTextStyle),
         backgroundColor: Colors.white,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Expanded(
-            flex:3,
+            flex: 3,
             child: Container(
               margin: const EdgeInsets.only(bottom: 10),
               padding: const EdgeInsets.all(20),
               child: Column(
                 children: [
-                  const Align(alignment: Alignment.centerLeft, child: Text('주소 검색', style: kSeismicTitleTextStyle,)),
+                  const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '주소 검색',
+                        style: kSeismicTitleTextStyle,
+                      )),
                   const SizedBox(height: 5),
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 3, horizontal: 5),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all()),
-                    child: const Row(
-                        children: [
+                    child: const Row(children: [
                       Expanded(
-                        flex:8,
+                        flex: 8,
                         child: TextField(
                           decoration: InputDecoration(
                             hintText: '주소를 정확하게 입력해주세요',
@@ -56,15 +61,14 @@ class _SeismicDesignState extends State<SeismicDesign> {
                           ),
                         ),
                       ),
-                      Expanded(
-                          flex:1,
-                          child: Icon(Icons.search))
+                      Expanded(flex: 1, child: Icon(Icons.search))
                     ]),
                   ),
                   const SizedBox(height: 3),
                   const Align(
                     alignment: Alignment.topRight,
-                    child: Text('주소가 정확히 입력되지 않았습니다.',style: kWarningTextStyle),
+                    child:
+                        Text('주소가 정확히 입력되지 않았습니다.', style: kWarningTextStyle),
                   )
                 ],
               ),
@@ -72,7 +76,7 @@ class _SeismicDesignState extends State<SeismicDesign> {
           ),
           const SegmentH(size: 3),
           Expanded(
-            flex:4,
+            flex: 4,
             child: Container(
               margin: const EdgeInsets.only(top: 20),
               child: const Column(
@@ -115,7 +119,7 @@ class _SeismicDesignState extends State<SeismicDesign> {
             ),
           ),
           Expanded(
-            flex:3,
+            flex: 3,
             child: Container(
               margin: const EdgeInsets.only(bottom: 10),
               width: double.infinity,
@@ -124,8 +128,7 @@ class _SeismicDesignState extends State<SeismicDesign> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Expanded(
-                      child: ToActInfoButtonNoAni()),
+                  const Expanded(child: ToActInfoButtonNoAni()),
                   Expanded(child: ToEQMapButton(goToEQInfo: widget.goToEQInfo))
                 ],
               ),

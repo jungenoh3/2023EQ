@@ -1,6 +1,7 @@
 import 'package:eqms_test/api/google_map_model.dart';
 import 'package:eqms_test/custom_googlemap/models/google_maps_models.dart';
 import 'package:eqms_test/style/text_style.dart';
+import 'package:eqms_test/widgets/common_widgets/toast_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -100,7 +101,7 @@ class CustomScrollableSheet extends StatelessWidget {
                         style: TextStyle(fontSize: 13, color: Colors.grey[700]),
                       ),
                       trailing: data.trailing == null
-                          ? IconButton(onPressed: () {}, icon: Icon(Icons.double_arrow))
+                          ? IconButton(onPressed: () {alertMessage('추가 예정입니다.');}, icon: Icon(Icons.double_arrow))
                           : Text(
                               data.trailing!,
                               style: const TextStyle(color: Colors.grey),

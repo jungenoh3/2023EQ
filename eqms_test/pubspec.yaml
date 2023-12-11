@@ -51,6 +51,8 @@ dependencies:
   carousel_slider: ^4.2.1
   fluttertoast: ^8.2.2
   easy_debounce: ^2.0.3
+  youtube_player_iframe: ^4.0.0
+  cached_network_image: ^3.3.0
 
 dev_dependencies:
   flutter_test:

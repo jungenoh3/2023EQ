@@ -171,7 +171,7 @@ class _EQInfoState extends State<EQInfo> {
             sheetItems.add(ScrollableSheetData(
               leading: null,
               title: value[i].shel_nm,
-              subtitle: value[i].address,
+              subtitle: '${value[i].address} (${(i+1)*5}m 거리)',
               trailing: null,
             ));
           }
@@ -217,7 +217,7 @@ class _EQInfoState extends State<EQInfo> {
             sheetItems.add(ScrollableSheetData(
               leading: null,
               title: "[${value[i].med_category}]  ${value[i].institution}",
-              subtitle: value[i].address,
+              subtitle: '${value[i].address} (${(i+1)*5}m 거리)',
               trailing: null,
             ));
           }
