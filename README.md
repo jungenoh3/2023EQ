@@ -29,6 +29,7 @@ DB 소유자: eqms
 Redis 서버는 Docker로 실행하고 있습니다. Spring boot 서버를 키기 전에 해당 서버부터 켜주세요. (컨테이너 없으면 redis 공식 이미지 풀해서 만들고 port 번호만 맞춰주세요.)
 
 Postgresql DB는 본 컴퓨터(DESKTOP-PPSKGF3) 내에 저장되어 있습니다.
+
 # 2023.08.25 개발 보고서
-노션에 작성한 개발 보고서입니다. https://www.notion.so/5a0dee5c460d4c439eb1ad2bd4da2e45?pvs=4
+노션에 작성한 현장실습용 개발 보고서입니다. https://www.notion.so/5a0dee5c460d4c439eb1ad2bd4da2e45?pvs=4
 
